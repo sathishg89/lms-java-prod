@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: lms
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    # volumes:
+    #   - mysql_data:/var/lib/mysql
+    # Commenting out volumes for future reference
+
+  backend:
+    build: 
+      context: ./lms-be # Path to the backend Dockerfile location
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/lms?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&useSSL=false"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+
+  frontend:
+    build:
+      context: ./lms-fe/lmsv1 # Path to the frontend Dockerfile location
+    ports:
+      - "80:80" # Assuming the React app serves on port 80 within the container
+    environment:
+      REACT_APP_BACKEND_URL: "http://backend:8080" # Set backend URL for frontend
+
+# volumes:
+#   mysql_data:
+# Commenting out the volumes section for future reference

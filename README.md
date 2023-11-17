@@ -20,7 +20,7 @@
 
 ## BACKEND BUILD:
     NOTE: update database details in **cd LMS-BE/src/main/resource/application.properties**
-    **databse url: ip:3306**
+    **databse url:mysql://**34.242.172.238**:3306/**
     **databse pw:password**
     cd lms-spring/lms-be
     docker build -t muralialakuntla3/lms-be .

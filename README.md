@@ -1,4 +1,4 @@
-# LMS new Application VM Deployment
+# LMS-JAVA Application VM Deployment
 ## Server setup:
     Server type: T2.medium server
     Database: mysql 

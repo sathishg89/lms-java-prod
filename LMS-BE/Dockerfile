@@ -10,8 +10,10 @@ COPY . .
 # Grant execute permission to Maven wrapper
 # RUN chmod +x mvnw
 
-# to pick credentials from .env
-# RUN export $(cat .env | xargs)
+# to pass database credentials using docker arguments
+ARG SPRING_DATASOURCE_URL
+ARG SPRING_DATASOURCE_USERNAME
+ARG RING_DATASOURCE_PASSWORD
 
 # Build the application using Maven wrapper
 RUN ./mvnw package

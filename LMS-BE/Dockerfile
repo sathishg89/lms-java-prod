@@ -11,9 +11,9 @@ COPY . .
 # RUN chmod +x mvnw
 
 # to pass database credentials using docker arguments
-ARG SPRING_DATASOURCE_URL
-ARG SPRING_DATASOURCE_USERNAME
-ARG RING_DATASOURCE_PASSWORD
+# ARG SPRING_DATASOURCE_URL
+# ARG SPRING_DATASOURCE_USERNAME
+# ARG SPRING_DATASOURCE_PASSWORD
 
 # Build the application using Maven wrapper
 RUN ./mvnw package

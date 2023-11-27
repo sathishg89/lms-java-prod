@@ -92,8 +92,15 @@ public class UserController {
 				Optional<User> output = lus.fingbyemail(jwt.getEmail());
 
 				byte[] downloadImage = lus.downloadImage(jwt.getEmail());
-				String encodeToString = Base64.getEncoder().encodeToString(downloadImage);
-				String img = "data:image/png;base64 " + encodeToString;
+				String encodeToString = "";
+				String img = "";
+
+				if (downloadImage != null) {
+					encodeToString = Base64.getEncoder().encodeToString(downloadImage);
+					img = "data:image/png;base64 " + encodeToString;
+				} else {
+					img = output.get().getName().substring(0, 2).toUpperCase();
+				}
 
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.APPLICATION_JSON);
@@ -158,8 +165,15 @@ public class UserController {
 	public ResponseEntity<String> downloadImage(@PathVariable("email") String email)
 			throws IOException, DataFormatException {
 		byte[] imageData = lus.downloadImage(email);
-		String encodeToString = Base64.getEncoder().encodeToString(imageData);
-		String img = "data:image/png;base64 " + encodeToString;
+		String encodeToString = "";
+		String img = "";
+
+		if (imageData != null) {
+			encodeToString = Base64.getEncoder().encodeToString(imageData);
+			img = "data:image/png;base64 " + encodeToString;
+		} else {
+			img = email.substring(0, 2).toUpperCase();
+		}
 		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_HTML).body(img);
 
 	}

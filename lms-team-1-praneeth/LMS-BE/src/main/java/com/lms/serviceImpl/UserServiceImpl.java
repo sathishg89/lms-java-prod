@@ -113,9 +113,16 @@ public class UserServiceImpl implements UserService {
 
 		User img = lur.findByemail(email).orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
 
-		byte[] img2 = img.getImg();
+		if(img.getImg()!=null)
+		{
+			return img.getImg();
+		}
+		else
+		{
+			return null;
+		}
+	
 
-		return img2;
 	}
 
 	@Override

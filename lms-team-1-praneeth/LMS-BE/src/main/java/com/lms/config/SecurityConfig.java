@@ -47,7 +47,7 @@ public class SecurityConfig {
 				cfg.setAllowedOrigins(listoforigin);
 				cfg.setAllowedMethods(listofmethods);
 				cfg.setAllowedHeaders(listofheaders);
-			//	cfg.setAllowCredentials(true);
+				// cfg.setAllowCredentials(true);
 				return cfg;
 			}
 		}));
@@ -57,8 +57,8 @@ public class SecurityConfig {
 				auth ->
 
 				{
-					auth.requestMatchers("/user/connect", "/user/signup").authenticated();
-					auth.requestMatchers("user/login", "/user/upload", "/user/{email}", "/user/getotp",
+					auth.requestMatchers("/admin/signup").authenticated();
+					auth.requestMatchers("/user/connect", "user/login", "/user/upload", "/user/{email}", "/user/getotp",
 							"/user/verifyacc", "/user/resetpassword", "/user/verifyemail").permitAll();
 
 				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

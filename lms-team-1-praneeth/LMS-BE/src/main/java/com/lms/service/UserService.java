@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.dto.UserVerifyDto;
+import com.lms.entity.Courses;
 import com.lms.entity.User;
+import com.lms.entity.UserCourse;
 
 public interface UserService {
 
@@ -37,6 +39,14 @@ public interface UserService {
 
 	boolean saveotp(UserVerifyDto uvt);
 
-	boolean resetPassword(String password, String verifypassword,long id);
+	boolean resetPassword(String password, String verifypassword, long id);
+
+	boolean saveUserCourse(UserCourse uc);
+
+	boolean saveCourses(Courses cc);
+
+	boolean accessTocoures(String name, String cname);
+
+	UserCourse getUserCourses(String name);
 
 }

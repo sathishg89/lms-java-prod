@@ -29,7 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lms.dto.UserDto;
 import com.lms.dto.UserResponseDto;
 import com.lms.dto.UserVerifyDto;
+import com.lms.entity.Courses;
 import com.lms.entity.User;
+import com.lms.entity.UserCourse;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
 import com.lms.service.UserService;
@@ -227,6 +229,48 @@ public class UserController {
 			return new ResponseEntity<String>("Unable To Reset Password", HttpStatus.BAD_REQUEST);
 		}
 
+	}
+
+	@PostMapping("/usercourse")
+	public ResponseEntity<?> userCourseSave(@RequestBody UserCourse uc) {
+
+		boolean saveUserCourse = lus.saveUserCourse(uc);
+
+		if (saveUserCourse) {
+			return new ResponseEntity<String>("UserCourses Saved", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>("Unable To Save UserCourses", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PostMapping("/savecourse")
+	public ResponseEntity<?> CourseSave(@RequestBody Courses cc) {
+
+		boolean saveUserCourse = lus.saveCourses(cc);
+
+		if (saveUserCourse) {
+			return new ResponseEntity<String>("Courses Saved", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>("Unable To Save Courses", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PostMapping("/accesstocourse")
+	public ResponseEntity<?> accessTocoures(@RequestParam String name, @RequestParam String cname) {
+		boolean accessTocoures = lus.accessTocoures(name, cname);
+
+		if (accessTocoures) {
+			return new ResponseEntity<String>("Course Added To User", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("Course Unable To Add User", HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	@GetMapping("/course")
+	public UserCourse getcourse(@RequestParam String name) {
+
+		return lus.getUserCourses(name);
 	}
 
 }

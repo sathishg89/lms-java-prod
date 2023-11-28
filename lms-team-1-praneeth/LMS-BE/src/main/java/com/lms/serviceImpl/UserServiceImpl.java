@@ -15,14 +15,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.dto.UserVerifyDto;
+import com.lms.entity.Courses;
 import com.lms.entity.User;
+import com.lms.entity.UserCourse;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
+import com.lms.repository.CoursesRepo;
 import com.lms.repository.OtpRepo;
+import com.lms.repository.UserCourseRepo;
 import com.lms.repository.UserRepo;
 import com.lms.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -33,6 +40,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private OtpRepo or;
+
+	@Autowired
+	private UserCourseRepo ucr;
+
+	@Autowired
+	private CoursesRepo cr;
 
 	@Override
 	public User saveLU(User lu) {
@@ -113,15 +126,11 @@ public class UserServiceImpl implements UserService {
 
 		User img = lur.findByemail(email).orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
 
-		if(img.getImg()!=null)
-		{
+		if (img.getImg() != null) {
 			return img.getImg();
-		}
-		else
-		{
+		} else {
 			return null;
 		}
-	
 
 	}
 
@@ -192,6 +201,63 @@ public class UserServiceImpl implements UserService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean saveUserCourse(UserCourse uc) {
+
+		UserCourse save = ucr.save(uc);
+		if (save == null) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
+	@Override
+	public boolean saveCourses(Courses cc) {
+
+		Courses save = cr.save(cc);
+		if (save == null) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
+	@Override
+	public boolean accessTocoures(String name, String cname) {
+
+		boolean userExists = ucr.existsByusername(name);
+
+		boolean courseExists = cr.existsBycoursename(cname);
+
+		log.info("Accessing courses for user: {}", userExists + " " + courseExists);
+
+		if (userExists && courseExists) {
+
+			UserCourse fun = ucr.findByusername(name);
+			Courses fcn = cr.findBycoursename(cname);
+
+			if (!fun.getListcourses().contains(fcn)) {
+				fun.getListcourses().add(fcn);
+				ucr.save(fun);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public UserCourse getUserCourses(String name) {
+		UserCourse findByusername = ucr.findByusername(name);
+
+		return findByusername;
 	}
 
 }

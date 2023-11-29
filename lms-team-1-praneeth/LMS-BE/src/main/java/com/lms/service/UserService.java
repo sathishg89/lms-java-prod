@@ -12,7 +12,7 @@ import com.lms.dto.UserVerifyDto;
 import com.lms.dto.VideoDto;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
-import com.lms.entity.CourseUser;
+import com.lms.entity.CourseUsers;
 
 public interface UserService {
 
@@ -42,13 +42,13 @@ public interface UserService {
 
 	boolean resetPassword(String password, String verifypassword, long id);
 
-	boolean saveUserCourse(CourseUser uc);
+	boolean saveUserCourse(CourseUsers uc);
 
 	boolean saveCourses(Courses cc);
 
 	boolean accessTocoures(String name, String cname);
 
-	CourseUser getUserCourses(String name);
+	CourseUsers getUserCourses(String name);
 
 	String addVideoLink(VideoDto vd);
 

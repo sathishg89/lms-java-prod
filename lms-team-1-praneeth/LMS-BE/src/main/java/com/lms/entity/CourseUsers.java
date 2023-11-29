@@ -25,11 +25,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "corseusers")
-public class CourseUser {
+public class CourseUsers {
 
 	@Id
 	@JsonProperty(access = Access.WRITE_ONLY)
-	private int uid;
+	private int userid;
 	@NotEmpty
 	private String username;
 	@NotEmpty
@@ -38,6 +38,6 @@ public class CourseUser {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "courses_users", joinColumns = @JoinColumn(name = "fk_userid"), inverseJoinColumns = @JoinColumn(name = "fk_courseid"))
 	@JsonIgnoreProperties("uc")
-	private List<Courses> listcourses;
+	private List<Courses> courseslist;
 
 }

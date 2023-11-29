@@ -20,7 +20,7 @@ import com.lms.dto.VideoDto;
 import com.lms.entity.CourseModules;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
-import com.lms.entity.CourseUser;
+import com.lms.entity.CourseUsers;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
 import com.lms.repository.CoursesRepo;
@@ -211,9 +211,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean saveUserCourse(CourseUser uc) {
+	public boolean saveUserCourse(CourseUsers uc) {
 
-		CourseUser save = ucr.save(uc);
+		CourseUsers save = ucr.save(uc);
 		if (save == null) {
 			return false;
 		} else {
@@ -245,11 +245,11 @@ public class UserServiceImpl implements UserService {
 
 		if (userExists && courseExists) {
 
-			CourseUser fun = ucr.findByusername(name);
+			CourseUsers fun = ucr.findByusername(name);
 			Courses fcn = cr.findBycoursename(cname);
 
-			if (!fun.getListcourses().contains(fcn)) {
-				fun.getListcourses().add(fcn);
+			if (!fun.getCourseslist().contains(fcn)) {
+				fun.getCourseslist().add(fcn);
 				ucr.save(fun);
 				return true;
 			} else {
@@ -261,10 +261,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public CourseUser getUserCourses(String name) {
+	public CourseUsers getUserCourses(String name) {
 
 		try {
-			CourseUser findByusername = ucr.findByusername(name);
+			CourseUsers findByusername = ucr.findByusername(name);
 			return findByusername;
 		} catch (Exception e) {
 			throw new CustomException("No User" + name);

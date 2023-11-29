@@ -44,5 +44,5 @@ public class Courses {
 	private List<CourseModules> coursemodule;
 
 	@ManyToMany(mappedBy = "listcourses", cascade = CascadeType.ALL)
-	private List<CourseUser> uc;
+	private List<CourseUsers> cu;
 }

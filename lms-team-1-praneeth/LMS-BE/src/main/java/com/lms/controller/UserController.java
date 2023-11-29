@@ -32,7 +32,7 @@ import com.lms.dto.UserVerifyDto;
 import com.lms.dto.VideoDto;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
-import com.lms.entity.CourseUser;
+import com.lms.entity.CourseUsers;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
 import com.lms.service.UserService;
@@ -233,7 +233,7 @@ public class UserController {
 	}
 
 	@PostMapping("/usercourse")
-	public ResponseEntity<?> userCourseSave(@RequestBody CourseUser uc) {
+	public ResponseEntity<?> userCourseSave(@RequestBody CourseUsers uc) {
 
 		boolean saveUserCourse = lus.saveUserCourse(uc);
 
@@ -269,14 +269,14 @@ public class UserController {
 	}
 
 	@GetMapping("/course")
-	public ResponseEntity<CourseUser> UserCoursegetcourse(@RequestParam String name) {
+	public ResponseEntity<CourseUsers> UserCoursegetcourse(@RequestParam String name) {
 
-		CourseUser uc = lus.getUserCourses(name);
+		CourseUsers uc = lus.getUserCourses(name);
 
 		if (uc == null) {
 			throw new CustomException("No User Found");
 		} else {
-			return new ResponseEntity<CourseUser>(uc, HttpStatus.OK);
+			return new ResponseEntity<CourseUsers>(uc, HttpStatus.OK);
 		}
 
 	}

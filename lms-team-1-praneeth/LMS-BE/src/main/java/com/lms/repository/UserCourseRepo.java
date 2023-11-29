@@ -2,11 +2,11 @@ package com.lms.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.lms.entity.CourseUser;
+import com.lms.entity.CourseUsers;
 
-public interface UserCourseRepo extends JpaRepository<CourseUser, Integer> {
+public interface UserCourseRepo extends JpaRepository<CourseUsers, Integer> {
 
-	CourseUser findByusername(String name);
+	CourseUsers findByusername(String name);
 
 	boolean existsByusername(String name);
 

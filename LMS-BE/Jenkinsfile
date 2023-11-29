@@ -10,7 +10,7 @@ pipeline {
           }
         stage('Docker remove') {
             steps {
-                sh 'sudo docker container rm -f backend'
+                sh 'sudo docker container rm -f be'
                 sh 'sudo docker image rm -f backend'
             }
           }

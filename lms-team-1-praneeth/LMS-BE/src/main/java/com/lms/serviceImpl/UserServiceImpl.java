@@ -20,11 +20,11 @@ import com.lms.dto.VideoDto;
 import com.lms.entity.CourseModules;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
-import com.lms.entity.UserCourse;
+import com.lms.entity.CourseUser;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
 import com.lms.repository.CoursesRepo;
-import com.lms.repository.ModuleRepo;
+import com.lms.repository.ModulesRepo;
 import com.lms.repository.OtpRepo;
 import com.lms.repository.UserCourseRepo;
 import com.lms.repository.UserRepo;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 	private CoursesRepo cr;
 
 	@Autowired
-	private ModuleRepo mr;
+	private ModulesRepo mr;
 
 	@Override
 	public User saveLU(User lu) {
@@ -211,9 +211,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean saveUserCourse(UserCourse uc) {
+	public boolean saveUserCourse(CourseUser uc) {
 
-		UserCourse save = ucr.save(uc);
+		CourseUser save = ucr.save(uc);
 		if (save == null) {
 			return false;
 		} else {
@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService {
 
 		if (userExists && courseExists) {
 
-			UserCourse fun = ucr.findByusername(name);
+			CourseUser fun = ucr.findByusername(name);
 			Courses fcn = cr.findBycoursename(cname);
 
 			if (!fun.getListcourses().contains(fcn)) {
@@ -261,10 +261,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserCourse getUserCourses(String name) {
+	public CourseUser getUserCourses(String name) {
 
 		try {
-			UserCourse findByusername = ucr.findByusername(name);
+			CourseUser findByusername = ucr.findByusername(name);
 			return findByusername;
 		} catch (Exception e) {
 			throw new CustomException("No User" + name);
@@ -279,7 +279,7 @@ public class UserServiceImpl implements UserService {
 		List<CourseModules> lcm = new ArrayList<>();
 		lcm.add(cm);
 		Courses fcn = cr.findBycoursename(vd.getCname());
-		fcn.setCmodule(lcm);
+		fcn.setCoursemodule(lcm);
 
 		mr.save(cm);
 

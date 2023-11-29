@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import com.lms.serviceImpl.UserUds;
+import com.lms.serviceImpl.UserUserdetailsService;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class SecurityConfig {
 
 	@Autowired
-	private JwtFilter jfl;
+	private JwtFilterConfig jfl;
 
 	@Bean
 	SecurityFilterChain sfc(HttpSecurity http) throws Exception {
@@ -72,7 +72,7 @@ public class SecurityConfig {
 
 	@Bean
 	UserDetailsService uds() {
-		return new UserUds();
+		return new UserUserdetailsService();
 	}
 
 	@Bean

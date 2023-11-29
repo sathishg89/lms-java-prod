@@ -13,7 +13,7 @@ import com.lms.exception.details.EmailNotFoundException;
 import com.lms.repository.UserRepo;
 
 @Service
-public class UserUds implements UserDetailsService {
+public class UserUserdetailsService implements UserDetailsService {
 
 	@Autowired
 	private UserRepo lur;
@@ -23,7 +23,7 @@ public class UserUds implements UserDetailsService {
 
 		Optional<User> findByemail = lur.findByemail(username);
 
-		return findByemail.map(details -> new UserUd(details)).orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
+		return findByemail.map(details -> new UserUserDetails(details)).orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
 	}
 
 }

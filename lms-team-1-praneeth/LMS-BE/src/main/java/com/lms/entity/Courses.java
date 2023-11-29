@@ -3,7 +3,6 @@ package com.lms.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -32,7 +31,7 @@ public class Courses {
 	@Id
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cid;
+	private int courseid;
 
 	private String coursename;
 
@@ -41,10 +40,9 @@ public class Courses {
 	private LocalDateTime courseinsertdate;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "fk_cid", referencedColumnName = "cid")
-	private List<CourseModules> cmodule;
+	@JoinColumn(name = "fk_courseid", referencedColumnName = "courseid")
+	private List<CourseModules> coursemodule;
 
 	@ManyToMany(mappedBy = "listcourses", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("courses")
-	private List<UserCourse> uc;
+	private List<CourseUser> uc;
 }

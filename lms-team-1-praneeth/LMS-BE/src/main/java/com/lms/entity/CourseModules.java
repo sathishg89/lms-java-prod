@@ -21,10 +21,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@Entity
-@Table(name = "coursemodules")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "coursemodules")
 public class CourseModules {
 
 	@Id
@@ -34,10 +34,8 @@ public class CourseModules {
 
 	private int modulenum;
 
-	
-	
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "courselinks", joinColumns = @JoinColumn(name = "fk_cmid"))
+	@CollectionTable(name = "courselinks", joinColumns = @JoinColumn(name = "fk_coursemoduleid"))
 	private Set<String> clinks;
 
 }

@@ -24,8 +24,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "usercourses")
-public class UserCourse {
+@Table(name = "corseusers")
+public class CourseUser {
 
 	@Id
 	@JsonProperty(access = Access.WRITE_ONLY)
@@ -36,7 +36,7 @@ public class UserCourse {
 	private String useremail;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "usercourses_courses", joinColumns = @JoinColumn(name = "fk_ucid"), inverseJoinColumns = @JoinColumn(name = "fk_cid"))
+	@JoinTable(name = "courses_users", joinColumns = @JoinColumn(name = "fk_userid"), inverseJoinColumns = @JoinColumn(name = "fk_courseid"))
 	@JsonIgnoreProperties("uc")
 	private List<Courses> listcourses;
 

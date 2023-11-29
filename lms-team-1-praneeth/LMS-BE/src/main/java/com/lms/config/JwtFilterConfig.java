@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.lms.serviceImpl.JwtService;
-import com.lms.serviceImpl.UserUds;
+import com.lms.serviceImpl.UserUserdetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,13 +19,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtFilterConfig extends OncePerRequestFilter {
 
 	@Autowired
 	private JwtService js;
 
 	@Autowired
-	private UserUds uds;
+	private UserUserdetailsService uds;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.lms.entity.User;
 
-public class UserUd implements UserDetails {
+public class UserUserDetails implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,7 +19,7 @@ public class UserUd implements UserDetails {
 	private String pass;
 	private List<GrantedAuthority> authorites;
 
-	public UserUd(User lud) {
+	public UserUserDetails(User lud) {
 		email = lud.getEmail();
 		pass = lud.getPassword();
 		authorites = Arrays.stream(lud.getRoles().split(",")).map(role -> new SimpleGrantedAuthority("ROLE_" + role))

@@ -8,7 +8,12 @@ pipeline {
                 sh 'sudo docker container run -d --name mysql -e MYSQL_ROOT_PASSWORD=Qwerty@123 -p 3306:3306 mysql:latest'
              }
           }
-
+        stage('Docker remove') {
+            steps {
+                sh 'sudo docker container rm -f be'
+                sh 'sudo docker image rm -f backend'
+            }
+          }
         stage('Docker build') {
             steps {
                 sh 'cd LMS-BE && sudo docker build -t backend .'

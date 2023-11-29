@@ -3,6 +3,7 @@ package com.lms.serviceImpl;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.zip.DataFormatException;
@@ -15,12 +16,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.dto.UserVerifyDto;
+import com.lms.dto.VideoDto;
+import com.lms.entity.CourseModules;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
 import com.lms.entity.UserCourse;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
 import com.lms.repository.CoursesRepo;
+import com.lms.repository.ModuleRepo;
 import com.lms.repository.OtpRepo;
 import com.lms.repository.UserCourseRepo;
 import com.lms.repository.UserRepo;
@@ -46,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private CoursesRepo cr;
+
+	@Autowired
+	private ModuleRepo mr;
 
 	@Override
 	public User saveLU(User lu) {
@@ -255,9 +262,30 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserCourse getUserCourses(String name) {
-		UserCourse findByusername = ucr.findByusername(name);
 
-		return findByusername;
+		try {
+			UserCourse findByusername = ucr.findByusername(name);
+			return findByusername;
+		} catch (Exception e) {
+			throw new CustomException("No User" + name);
+		}
+
+	}
+
+	@Override
+	public String addVideoLink(VideoDto vd) {
+
+		CourseModules cm = CourseModules.builder().modulenum(vd.getModulenum()).clinks(vd.getVideolink()).build();
+		List<CourseModules> lcm = new ArrayList<>();
+		lcm.add(cm);
+		Courses fcn = cr.findBycoursename(vd.getCname());
+		fcn.setCmodule(lcm);
+
+		mr.save(cm);
+
+		cr.save(fcn);
+
+		return "saved";
 	}
 
 }

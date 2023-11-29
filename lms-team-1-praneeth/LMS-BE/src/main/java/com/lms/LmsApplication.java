@@ -1,6 +1,5 @@
 package com.lms;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -9,7 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class LmsApplication {
 
-	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(LmsApplication.class);
+	//private static final org.slf4j.Logger logger = LoggerFactory.getLogger(LmsApplication.class);
 
 	public static void main(String[] args) {
 

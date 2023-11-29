@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lms.dto.UserDto;
 import com.lms.dto.UserResponseDto;
 import com.lms.dto.UserVerifyDto;
+import com.lms.dto.VideoDto;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
 import com.lms.entity.UserCourse;
@@ -268,9 +269,23 @@ public class UserController {
 	}
 
 	@GetMapping("/course")
-	public UserCourse getcourse(@RequestParam String name) {
+	public ResponseEntity<UserCourse> UserCoursegetcourse(@RequestParam String name) {
 
-		return lus.getUserCourses(name);
+		UserCourse uc = lus.getUserCourses(name);
+
+		if (uc == null) {
+			throw new CustomException("No User Found");
+		} else {
+			return new ResponseEntity<UserCourse>(uc, HttpStatus.OK);
+		}
+
+	}
+
+	@PostMapping("/addvideolink")
+	public String addVideolink(@RequestBody @Valid VideoDto vd) {
+		lus.addVideoLink(vd);
+
+		return "saved";
 	}
 
 }

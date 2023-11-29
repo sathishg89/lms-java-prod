@@ -4,14 +4,12 @@ pipeline {
     stages{
         stage('database container') {
             steps {
-                sh 'docker container run -d --name mysql -e MYSQL_ROOT_PASSWORD=Qwerty@123 -p 3306:3306 mysql:latest
-'
+                sh 'docker container run -d --name mysql -e MYSQL_ROOT_PASSWORD=Qwerty@123 -p 3306:3306 mysql:latest'
              }
           }
         stage('Docker build') {
             steps {
-                sh 'cd LMS-BE'
-                sh 'docker build -t backend .'
+                sh 'cd LMS-BE && docker build -t backend .'
             }
           }
         stage('Docker container') {

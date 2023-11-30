@@ -3,6 +3,7 @@ package com.lms.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import java.util.zip.DataFormatException;
 
@@ -26,13 +27,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lms.dto.AllCourseUsersDto;
+import com.lms.dto.UserCoursesDto;
 import com.lms.dto.UserDto;
 import com.lms.dto.UserResponseDto;
 import com.lms.dto.UserVerifyDto;
 import com.lms.dto.VideoDto;
+import com.lms.entity.CourseModules;
+import com.lms.entity.CourseUsers;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
-import com.lms.entity.CourseUsers;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
 import com.lms.service.UserService;
@@ -98,7 +102,7 @@ public class UserController {
 
 				if (downloadImage != null) {
 					encodeToString = Base64.getEncoder().encodeToString(downloadImage);
-					img = "data:image/png;base64 " + encodeToString;
+					img = "data:image/png;base64" + encodeToString;
 				} else {
 					img = output.get().getName().substring(0, 2).toUpperCase();
 				}
@@ -232,20 +236,20 @@ public class UserController {
 
 	}
 
-	@PostMapping("/usercourse")
-	public ResponseEntity<?> userCourseSave(@RequestBody CourseUsers uc) {
+	@PostMapping("/addcourseuser")
+	public ResponseEntity<?> addCourseUser(@RequestBody CourseUsers uc) {
 
-		boolean saveUserCourse = lus.saveUserCourse(uc);
+		boolean saveUserCourse = lus.saveCourseUser(uc);
 
 		if (saveUserCourse) {
-			return new ResponseEntity<String>("UserCourses Saved", HttpStatus.CREATED);
+			return new ResponseEntity<String>("CourseUsers Saved", HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<String>("Unable To Save UserCourses", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Unable To Save CourseUsers", HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@PostMapping("/savecourse")
-	public ResponseEntity<?> CourseSave(@RequestBody Courses cc) {
+	@PostMapping("/addcourse")
+	public ResponseEntity<?> addCourse(@RequestBody Courses cc) {
 
 		boolean saveUserCourse = lus.saveCourses(cc);
 
@@ -256,9 +260,10 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/accesstocourse")
-	public ResponseEntity<?> accessTocoures(@RequestParam String name, @RequestParam String cname) {
-		boolean accessTocoures = lus.accessTocoures(name, cname);
+	@PostMapping("/accesscoursetouser")
+	public ResponseEntity<?> accessCouresToUser(@RequestParam String name, @RequestParam String cname,
+			@RequestParam String trainername) {
+		boolean accessTocoures = lus.accessCouresToUser(name, cname, trainername);
 
 		if (accessTocoures) {
 			return new ResponseEntity<String>("Course Added To User", HttpStatus.OK);
@@ -268,24 +273,47 @@ public class UserController {
 
 	}
 
-	@GetMapping("/course")
-	public ResponseEntity<CourseUsers> UserCoursegetcourse(@RequestParam String name) {
-
-		CourseUsers uc = lus.getUserCourses(name);
-
-		if (uc == null) {
-			throw new CustomException("No User Found");
-		} else {
-			return new ResponseEntity<CourseUsers>(uc, HttpStatus.OK);
-		}
-
-	}
-
 	@PostMapping("/addvideolink")
 	public String addVideolink(@RequestBody @Valid VideoDto vd) {
 		lus.addVideoLink(vd);
 
 		return "saved";
+	}
+
+	@GetMapping("/getcourseusers")
+	public ResponseEntity<UserCoursesDto> getCourseUsers(@RequestParam String cuname) {
+
+		// done
+		UserCoursesDto uc = lus.getCourseUsers(cuname);
+
+		if (uc == null) {
+			throw new CustomException("No User Found");
+		} else {
+			return new ResponseEntity<UserCoursesDto>(uc, HttpStatus.OK);
+		}
+
+	}
+
+	@GetMapping("/getcourse")
+	public ResponseEntity<List<AllCourseUsersDto>> getCourses(@RequestParam String cname, String fname) {
+
+		List<AllCourseUsersDto> uc = lus.getCourses(cname, fname);
+
+		if (uc == null) {
+			throw new CustomException("No User Found");
+		} else {
+			return new ResponseEntity<List<AllCourseUsersDto>>(uc, HttpStatus.OK);
+		}
+
+	}
+
+	@GetMapping("/getvideos")
+	public ResponseEntity<List<CourseModules>> gsvh(@RequestParam String name, @RequestParam String cname,
+			@RequestParam String tname) {
+
+		List<CourseModules> videoLink = lus.getVideoLink(name, cname, tname);
+
+		return new ResponseEntity<List<CourseModules>>(videoLink, HttpStatus.OK);
 	}
 
 }

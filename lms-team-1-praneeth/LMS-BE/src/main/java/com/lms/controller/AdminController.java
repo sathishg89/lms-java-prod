@@ -33,7 +33,7 @@ public class AdminController {
 	public ResponseEntity<User> signUp(@RequestBody @Valid User lu) {
 
 		User saveLU = lus.saveLU(lu);
-		if (saveLU.equals(null)) {
+		if (saveLU == null) {
 			throw new NameFoundException();
 		} else {
 			return new ResponseEntity<User>(saveLU, HttpStatus.CREATED);

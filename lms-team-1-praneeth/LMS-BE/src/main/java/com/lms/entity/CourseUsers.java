@@ -8,10 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -28,16 +31,20 @@ import lombok.NoArgsConstructor;
 public class CourseUsers {
 
 	@Id
+	@GeneratedValue(generator = "cuseqgen")
+	@SequenceGenerator(name = "cuseqgen", sequenceName = "cusg", initialValue = 1001,allocationSize = 1)
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private int userid;
-	@NotEmpty
+	
+	@NotEmpty(message = "username cannot be empty")
 	private String username;
-	@NotEmpty
+	
+	@NotEmpty(message = "useremail cannot be empty")
 	private String useremail;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinTable(name = "courses_users", joinColumns = @JoinColumn(name = "fk_userid"), inverseJoinColumns = @JoinColumn(name = "fk_courseid"))
-	@JsonIgnoreProperties("uc")
+	@JsonIgnoreProperties({"courseusers","courseinsertdate"})
 	private List<Courses> courseslist;
 
 }

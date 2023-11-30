@@ -40,14 +40,14 @@ public class SecurityConfig {
 		http.cors(cor -> cor.configurationSource(new CorsConfigurationSource() {
 			@Override
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-				List<String> listoforigin = List.of("*");
+				List<String> listoforigin = List.of("http://localhost:8080/");
 				List<String> listofmethods = List.of("GET", "POST", "PUT", "DELETE");
 				List<String> listofheaders = List.of("*");
 				CorsConfiguration cfg = new CorsConfiguration();
 				cfg.setAllowedOrigins(listoforigin);
 				cfg.setAllowedMethods(listofmethods);
 				cfg.setAllowedHeaders(listofheaders);
-				// cfg.setAllowCredentials(true);
+				cfg.setAllowCredentials(true);
 				return cfg;
 			}
 		}));
@@ -59,7 +59,9 @@ public class SecurityConfig {
 				{
 					auth.requestMatchers("/admin/signup").authenticated();
 					auth.requestMatchers("/user/connect", "user/login", "/user/upload", "/user/{email}", "/user/getotp",
-							"/user/verifyacc", "/user/resetpassword", "/user/verifyemail").permitAll();
+							"/user/verifyacc", "/user/resetpassword", "/user/verifyacc", "/user/resetpassword",
+							"/user/addcourseuser", "/user/addcourse", "/user/accesscoursetouser", "/user/addvideolink",
+							"/user/getcourseusers", "/user/getcourse", "/user/getvideos").permitAll();
 
 				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(ap()).addFilterBefore((Filter) jfl, UsernamePasswordAuthenticationFilter.class);

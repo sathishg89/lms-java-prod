@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.lms.entity.CourseUsers;
 
-public interface UserCourseRepo extends JpaRepository<CourseUsers, Integer> {
+public interface CourseUsersRepo extends JpaRepository<CourseUsers, Integer> {
 
 	CourseUsers findByusername(String name);
 

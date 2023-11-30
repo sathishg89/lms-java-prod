@@ -26,4 +26,7 @@ public class VideoDto {
 	@NotEmpty(message = "videolink cannot be empty")
 	private Set<String> videolink;
 
+	@NotEmpty(message = "tname cannot be empty")
+	private String tname;
+
 }

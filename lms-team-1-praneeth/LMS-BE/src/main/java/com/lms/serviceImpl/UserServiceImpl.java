@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,25 +16,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lms.dto.AllCourseUsersDto;
+import com.lms.dto.UserCoursesDto;
 import com.lms.dto.UserVerifyDto;
 import com.lms.dto.VideoDto;
 import com.lms.entity.CourseModules;
+import com.lms.entity.CourseUsers;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
-import com.lms.entity.CourseUsers;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
+import com.lms.repository.CourseUsersRepo;
 import com.lms.repository.CoursesRepo;
-import com.lms.repository.ModulesRepo;
 import com.lms.repository.OtpRepo;
-import com.lms.repository.UserCourseRepo;
 import com.lms.repository.UserRepo;
 import com.lms.service.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
+//@Slf4j
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -46,13 +46,13 @@ public class UserServiceImpl implements UserService {
 	private OtpRepo or;
 
 	@Autowired
-	private UserCourseRepo ucr;
+	private CourseUsersRepo ucr;
 
 	@Autowired
 	private CoursesRepo cr;
 
-	@Autowired
-	private ModulesRepo mr;
+//	@Autowired
+//	private ModulesRepo mr;
 
 	@Override
 	public User saveLU(User lu) {
@@ -211,7 +211,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean saveUserCourse(CourseUsers uc) {
+	public boolean saveCourseUser(CourseUsers uc) {
 
 		CourseUsers save = ucr.save(uc);
 		if (save == null) {
@@ -225,7 +225,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean saveCourses(Courses cc) {
 
+		cc.setCourseinsertdate(LocalDateTime.now());
 		Courses save = cr.save(cc);
+
 		if (save == null) {
 			return false;
 		} else {
@@ -235,21 +237,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean accessTocoures(String name, String cname) {
+	public boolean accessCouresToUser(String name, String cname, String trainername) {
 
 		boolean userExists = ucr.existsByusername(name);
-
 		boolean courseExists = cr.existsBycoursename(cname);
-
-		log.info("Accessing courses for user: {}", userExists + " " + courseExists);
 
 		if (userExists && courseExists) {
 
 			CourseUsers fun = ucr.findByusername(name);
-			Courses fcn = cr.findBycoursename(cname);
+			List<Courses> fcn = cr.findBycoursename(cname);
 
-			if (!fun.getCourseslist().contains(fcn)) {
-				fun.getCourseslist().add(fcn);
+			Optional<Courses> findFirst = fcn.stream().filter(course -> course.getCoursetrainer().equals(trainername))
+					.findFirst();
+
+			if (!fun.getCourseslist().containsAll(fcn)) {
+				fun.getCourseslist().add(findFirst.get());
 				ucr.save(fun);
 				return true;
 			} else {
@@ -261,11 +263,31 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public CourseUsers getUserCourses(String name) {
+	public UserCoursesDto getCourseUsers(String name) {
 
 		try {
-			CourseUsers findByusername = ucr.findByusername(name);
-			return findByusername;
+			CourseUsers fun = ucr.findByusername(name);
+			UserCoursesDto ucd = UserCoursesDto.builder().username(fun.getUsername()).useremail(fun.getUseremail())
+					.courseslist(fun.getCourseslist()).build();
+
+			return ucd;
+		} catch (Exception e) {
+			throw new CustomException("No User" + name);
+		}
+
+	}
+
+	@Override
+	public List<AllCourseUsersDto> getCourses(String name, String fname) {
+
+		try {
+			List<Courses> findByusername = cr.findBycoursename(name);
+
+			List<AllCourseUsersDto> collect = findByusername.stream()
+					.filter(fil -> fil.getCoursetrainer().equals(fname))
+					.map(c -> new AllCourseUsersDto(c.getCoursename(), c.getCoursetrainer(), c.getCourseusers()))
+					.collect(Collectors.toList());
+			return collect;
 		} catch (Exception e) {
 			throw new CustomException("No User" + name);
 		}
@@ -276,16 +298,44 @@ public class UserServiceImpl implements UserService {
 	public String addVideoLink(VideoDto vd) {
 
 		CourseModules cm = CourseModules.builder().modulenum(vd.getModulenum()).clinks(vd.getVideolink()).build();
-		List<CourseModules> lcm = new ArrayList<>();
-		lcm.add(cm);
-		Courses fcn = cr.findBycoursename(vd.getCname());
-		fcn.setCoursemodule(lcm);
 
-		mr.save(cm);
+		List<Courses> fcn = cr.findBycoursename(vd.getCname());
 
-		cr.save(fcn);
+		if (fcn.size() > 0) {
+			Courses courses = fcn.stream().filter(course -> course.getCoursetrainer().equals(vd.getTname())).findFirst()
+					.get();
 
-		return "saved";
+			List<CourseModules> list = new ArrayList<>();
+			list.add(cm);
+			courses.setCoursemodule(list);
+			cr.save(courses);
+
+			return "Video Saved";
+		} else {
+			return "Video Not Saved";
+		}
+
+	}
+
+	@Override
+	public List<CourseModules> getVideoLink(String name, String cname, String tname) {
+
+		try {
+			CourseUsers courseUsers = ucr.findByusername(name);
+
+			List<CourseModules> collect = courseUsers.getCourseslist().stream()
+					.filter(fil -> fil.getCoursename().equals(cname) && fil.getCoursetrainer().equals(tname))
+					.flatMap(courses -> courses.getCoursemodule().stream()).collect(Collectors.toList());
+
+			if (collect.size() > 0) {
+				return collect;
+			} else {
+				throw new CustomException("No Videos Available");
+			}
+		} catch (Exception e) {
+			throw new CustomException("Name or Cname or Trainername Not Found");
+		}
+
 	}
 
 }

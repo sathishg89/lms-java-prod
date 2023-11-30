@@ -8,10 +8,13 @@ import java.util.zip.DataFormatException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lms.dto.AllCourseUsersDto;
+import com.lms.dto.UserCoursesDto;
 import com.lms.dto.UserVerifyDto;
 import com.lms.dto.VideoDto;
 import com.lms.entity.Courses;
 import com.lms.entity.User;
+import com.lms.entity.CourseModules;
 import com.lms.entity.CourseUsers;
 
 public interface UserService {
@@ -42,14 +45,18 @@ public interface UserService {
 
 	boolean resetPassword(String password, String verifypassword, long id);
 
-	boolean saveUserCourse(CourseUsers uc);
+	boolean saveCourseUser(CourseUsers uc);
 
 	boolean saveCourses(Courses cc);
 
-	boolean accessTocoures(String name, String cname);
+	boolean accessCouresToUser(String name, String cname, String trainername);
 
-	CourseUsers getUserCourses(String name);
+	UserCoursesDto getCourseUsers(String name);
 
 	String addVideoLink(VideoDto vd);
+
+	List<AllCourseUsersDto> getCourses(String name, String fname);
+
+	List<CourseModules> getVideoLink(String name, String cname, String tname);
 
 }

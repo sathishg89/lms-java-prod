@@ -16,14 +16,15 @@ import com.lms.repository.UserRepo;
 public class UserUserdetailsService implements UserDetailsService {
 
 	@Autowired
-	private UserRepo lur;
+	private UserRepo ur;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		Optional<User> findByemail = lur.findByemail(username);
+		Optional<User> findByemail = ur.findByemail(username);
 
-		return findByemail.map(details -> new UserUserDetails(details)).orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
+		return findByemail.map(details -> new UserUserDetails(details))
+				.orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
 	}
 
 }

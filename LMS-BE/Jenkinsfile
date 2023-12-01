@@ -28,6 +28,18 @@ pipeline {
             }
         }
         
+        stage('Old container') {
+            steps {
+                script {
+                    def containerRunning = sh(script: 'docker inspect -f {{.State.Running}} be', returnStatus: true)
+                    if (containerRunning == 0) {
+                        sh 'docker container stop be' // Stop the existing container
+                        sh 'docker container rm be' // Remove the existing container
+                    }
+                }
+            }
+        }
+        
         stage('Docker Build') {
             steps {
                 script {
@@ -42,14 +54,7 @@ pipeline {
         
         stage('Docker Container') {
             steps {
-                script {
-                    def containerRunning = sh(script: 'docker inspect -f {{.State.Running}} be', returnStatus: true)
-                    if (containerRunning == 0) {
-                        sh 'docker stop be' // Stop the existing container
-                        sh 'docker rm be' // Remove the existing container
-                    }
-                    sh 'docker container run -dt --name be --network lmsnetwork -p 9090:8080 backend'
-                }
+                sh 'docker container run -dt --name be --network lmsnetwork -p 9090:8080 backend'
             }
         }
     }

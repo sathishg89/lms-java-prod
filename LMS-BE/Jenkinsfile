@@ -46,7 +46,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    def imageExists = sh(script: 'docker images -q backend', returnStatus: true)
+                    def imageExists = sh(script: 'docker images backend', returnStatus: true)
                     if (imageExists == 0) {
                         sh 'docker rmi backend' // Remove the existing image
                     }

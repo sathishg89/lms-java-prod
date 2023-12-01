@@ -2,10 +2,15 @@ pipeline {
     agent any
   
     stages{
+        stage('Docker network') {
+            steps {
+                sh 'docker network create -d bridge lmsnetwork '
+               }
+          }
         stage('database container') {
             steps {
                 
-                sh 'sudo docker container run -d --name mysql -e MYSQL_ROOT_PASSWORD=Qwerty@123 -p 3306:3306 mysql:latest'
+                sh 'sudo docker container run -d --name mysql --network lmsnetwork -e MYSQL_ROOT_PASSWORD=Qwerty@123 -p 3306:3306 mysql:latest'
              }
           }
         stage('Docker build') {
@@ -15,13 +20,8 @@ pipeline {
           }
         stage('Docker container') {
             steps {
-                sh 'sudo docker container run -dt --name be -p 9090:8080 backend'
+                sh 'sudo docker container run -dt --name be --network lmsnetwork -p 9090:8080 backend'
             }
         }
-        stage('Docker') {
-            steps {
-                sh 'echo deployment done'
-               }
-          }
     }
 }

@@ -50,7 +50,9 @@ pipeline {
                     if (imageExists == 0) {
                         sh 'docker rmi backend' // Remove the existing image
                     }
-                    sh 'cd LMS-BE && docker build -t backend .'
+                    else {
+                        sh 'cd LMS-BE && docker build -t backend .'
+                    }
                 }
             }
         }

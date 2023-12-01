@@ -1,26 +1,55 @@
 pipeline {
     agent any
   
-    stages{
-        stage('Docker network') {
+    stages {
+        stage('Check Docker Network') {
             steps {
-                sh 'docker network create -d bridge lmsnetwork '
-               }
-          }
-        stage('database container') {
-            steps {
-                
-                sh 'sudo docker container run -d --name mysql --network lmsnetwork -e MYSQL_ROOT_PASSWORD=Qwerty@123 -p 3306:3306 mysql:latest'
-             }
-          }
-        stage('Docker build') {
-            steps {
-                sh 'cd LMS-BE && sudo docker build -t backend .'
+                script {
+                    def networkExists = sh(script: 'docker network inspect lmsnetwork > /dev/null 2>&1', returnStatus: true)
+                    if (networkExists == 0) {
+                        echo 'Docker network lmsnetwork already exists'
+                    } else {
+                        sh 'docker network create -d bridge lmsnetwork'
+                    }
+                }
             }
-          }
-        stage('Docker container') {
+        }
+        
+        stage('Check Database Container') {
             steps {
-                sh 'sudo docker container run -dt --name be --network lmsnetwork -p 9090:8080 backend'
+                script {
+                    def containerExists = sh(script: 'docker inspect -f {{.State.Running}} mysql', returnStatus: true)
+                    if (containerExists == 0) {
+                        echo 'MySQL container already exists'
+                    } else {
+                        sh 'docker container run -d --name mysql --network lmsnetwork -e MYSQL_ROOT_PASSWORD=Qwerty@123 -p 3306:3306 mysql:latest'
+                    }
+                }
+            }
+        }
+        
+        stage('Docker Build') {
+            steps {
+                script {
+                    def imageExists = sh(script: 'docker images -q backend', returnStatus: true)
+                    if (imageExists == 0) {
+                        sh 'docker rmi backend' // Remove the existing image
+                    }
+                    sh 'cd LMS-BE && docker build -t backend .'
+                }
+            }
+        }
+        
+        stage('Docker Container') {
+            steps {
+                script {
+                    def containerRunning = sh(script: 'docker inspect -f {{.State.Running}} be', returnStatus: true)
+                    if (containerRunning == 0) {
+                        sh 'docker stop be' // Stop the existing container
+                        sh 'docker rm be' // Remove the existing container
+                    }
+                    sh 'docker container run -dt --name be --network lmsnetwork -p 9090:8080 backend'
+                }
             }
         }
     }

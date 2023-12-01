@@ -41,22 +41,12 @@ pipeline {
                     }
                 }
             }
-        }
-        
+        }        
         stage('Docker Build') {
             steps {
-                script {
-                    def imageExists = sh(script: 'docker image ls --format "{{.Repository}}" | grep backend', returnStatus: true)
-                    if (imageExists == 0) {
-                        sh 'docker rmi backend' // Remove the existing image
-                    }
-                    else {
-                        sh 'cd LMS-BE && docker build -t backend .'
-                    }
-                }
+                sh 'cd LMS-BE && docker build -t backend .'
             }
-        }
-        
+        }        
         stage('Docker Container') {
             steps {
                 sh 'docker container run -dt --name be --network lmsnetwork -p 9090:8080 backend'

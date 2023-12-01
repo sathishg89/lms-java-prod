@@ -283,7 +283,6 @@ public class UserController {
 	@GetMapping("/getcourseusers")
 	public ResponseEntity<UserCoursesDto> getCourseUsers(@RequestParam String cuname) {
 
-		// done
 		UserCoursesDto uc = lus.getCourseUsers(cuname);
 
 		if (uc == null) {

@@ -32,7 +32,7 @@ public class CourseUsers {
 
 	@Id
 	@GeneratedValue(generator = "cuseqgen")
-	@SequenceGenerator(name = "cuseqgen", sequenceName = "cusg", initialValue = 1001,allocationSize = 1)
+	@SequenceGenerator(name = "cuseqgen", sequenceName = "LMS.cusg", initialValue = 1001,allocationSize = 1,schema = "LMS")
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private int userid;
 	

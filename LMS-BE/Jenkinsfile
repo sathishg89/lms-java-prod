@@ -36,6 +36,9 @@ pipeline {
                         sh 'docker container stop be' // Stop the existing container
                         sh 'docker container rm be' // Remove the existing container
                     }
+                    else {
+                        sh 'echo container not exist'
+                    }
                 }
             }
         }

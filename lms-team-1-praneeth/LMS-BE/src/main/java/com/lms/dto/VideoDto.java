@@ -18,6 +18,7 @@ public class VideoDto {
 
 	@NotEmpty(message = "name cannot be empty")
 	private String name;
+	
 	@NotEmpty(message = "videoname cannot be empty")
 	private String videoname;
 

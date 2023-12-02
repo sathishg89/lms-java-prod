@@ -3,7 +3,7 @@ package com.lms.serviceImpl;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -225,7 +225,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean saveCourses(Courses cc) {
 
-		cc.setCourseinsertdate(LocalDateTime.now());
+		cc.setCoursecreatedate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
+
 		Courses save = cr.save(cc);
 
 		if (save == null) {
@@ -247,11 +248,11 @@ public class UserServiceImpl implements UserService {
 			CourseUsers fun = ucr.findByusername(name);
 			List<Courses> fcn = cr.findBycoursename(cname);
 
-			Optional<Courses> findFirst = fcn.stream().filter(course -> course.getCoursetrainer().equals(trainername))
-					.findFirst();
+			Optional<Courses> courseOptional = fcn.stream()
+					.filter(course -> course.getCoursetrainer().equals(trainername)).findFirst();
 
 			if (!fun.getCourseslist().containsAll(fcn)) {
-				fun.getCourseslist().add(findFirst.get());
+				fun.getCourseslist().add(courseOptional.get());
 				ucr.save(fun);
 				return true;
 			} else {
@@ -297,17 +298,46 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String addVideoLink(VideoDto vd) {
 
-		CourseModules cm = CourseModules.builder().modulenum(vd.getModulenum()).clinks(vd.getVideolink()).build();
+		// find the details from db using cname, trainername
+		List<Courses> fcn = cr.findBycoursenameAndcoursetrainer(vd.getCname(), vd.getTname());
 
-		List<Courses> fcn = cr.findBycoursename(vd.getCname());
+		// converting the details into cm object
+		CourseModules cm = CourseModules.builder().modulenum(vd.getModulenum())
+				.videoinserttime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy ")))
+				.clinks(vd.getVideolink()).build();
 
+		// if fcn contains
 		if (fcn.size() > 0) {
+
+			// by using tname gettiing the course object
 			Courses courses = fcn.stream().filter(course -> course.getCoursetrainer().equals(vd.getTname())).findFirst()
 					.get();
 
-			List<CourseModules> list = new ArrayList<>();
-			list.add(cm);
-			courses.setCoursemodule(list);
+			// getting the coursemodules from courses
+			List<CourseModules> existingModules = courses.getCoursemodule();
+			// if courses are already exist the it goes inside else outside
+			if (existingModules.size() > 0) {
+
+				// check the modulenum from db and from client if both are same then return the
+				// coursemodule list
+				Optional<CourseModules> em = existingModules.stream()
+						.filter(module -> module.getModulenum() == vd.getModulenum()).findFirst();
+
+				// add the videolink to set of link if the module if present or else add the
+				// builder to existingmocules list
+				if (em.isPresent()) {
+					em.get().getClinks().addAll(vd.getVideolink());
+				} else {
+					existingModules.add(cm);
+				}
+
+			} else {
+
+				existingModules.add(cm);
+
+			}
+			// set the course object with new setcoursemodule
+			courses.setCoursemodule(existingModules);
 			cr.save(courses);
 
 			return "Video Saved";

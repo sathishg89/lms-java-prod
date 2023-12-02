@@ -35,6 +35,8 @@ public class CourseModules {
 
 	private int modulenum;
 
+	private String videoinserttime;
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "courselinks", joinColumns = @JoinColumn(name = "fk_coursemoduleid"))
 	private Set<String> clinks;

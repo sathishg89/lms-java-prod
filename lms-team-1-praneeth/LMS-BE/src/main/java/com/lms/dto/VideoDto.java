@@ -20,10 +20,11 @@ public class VideoDto {
 	private String name;
 	
 	@NotEmpty(message = "videoname cannot be empty")
-	private String videoname;
+	private Set<String> videoname;
 
 	@Positive(message = "modulenum cannot be negative or empty")
 	private int modulenum;
+	
 	@NotEmpty(message = "videolink cannot be empty")
 	private Set<String> videolink;
 

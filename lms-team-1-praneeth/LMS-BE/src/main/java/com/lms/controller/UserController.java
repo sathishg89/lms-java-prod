@@ -2,14 +2,8 @@ package com.lms.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.zip.DataFormatException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,44 +22,35 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.config.JwtService;
-import com.lms.dto.AllCourseUsersDto;
 import com.lms.dto.UserCoursesDto;
 import com.lms.dto.UserDto;
 import com.lms.dto.UserResponseDto;
 import com.lms.dto.UserVerifyDto;
-import com.lms.dto.VideoDto;
-import com.lms.entity.CourseLink;
-import com.lms.entity.CourseModules;
-import com.lms.entity.CourseUsers;
-import com.lms.entity.Courses;
-import com.lms.entity.CoursesViewDto;
-import com.lms.entity.CoursesViewDto.CoursesViewDtoBuilder;
 import com.lms.entity.User;
 import com.lms.exception.details.CustomException;
 import com.lms.exception.details.EmailNotFoundException;
+import com.lms.service.CourseService;
 import com.lms.service.UserService;
 import com.lms.serviceImpl.EmailService;
 import com.lms.serviceImpl.OtpService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
 
 //@Slf4j
 @RestController
 @RequestMapping("/user")
-@Api(tags = "User Controller", description = "Operations related to users")
 public class UserController {
 
 	@Autowired
 	private UserService lus;
+
+	@Autowired
+	private CourseService cs;
 
 	@Autowired
 	private JwtService js;
@@ -127,7 +112,7 @@ public class UserController {
 
 				UserCoursesDto uc = null;
 				try {
-					uc = lus.getCourseUsers(output.get().getEmail());
+					uc = cs.getCourseUsers(output.get().getEmail());
 
 				} catch (Exception e) {
 
@@ -155,9 +140,8 @@ public class UserController {
 	 */
 
 	@PostMapping("/upload")
-	public ResponseEntity<String> uploadImage(
-			@RequestPart("file") @Valid @Size(max = 50000, message = "Image size is greater than 5MB") MultipartFile mp,
-			String email) throws Exception {
+	public ResponseEntity<String> uploadImage(@RequestParam("file") @Valid MultipartFile mp, String email)
+			throws Exception {
 
 		String uploadImage = lus.saveImg(mp, email);
 
@@ -198,9 +182,9 @@ public class UserController {
 	 */
 
 	@PutMapping("/update")
-	public ResponseEntity<String> learnerUserUpdate(@RequestBody User lu) {
+	public ResponseEntity<String> learnerUserUpdate(@RequestBody User lu, @RequestParam String email) {
 
-		lus.Luupdate(lu);
+		lus.Luupdate(lu, email);
 
 		return new ResponseEntity<String>("User details updated", HttpStatus.ACCEPTED);
 
@@ -260,128 +244,6 @@ public class UserController {
 			return new ResponseEntity<String>("Unable To Reset Password", HttpStatus.BAD_REQUEST);
 		}
 
-	}
-
-	@PostMapping("/addcourseuser")
-	public ResponseEntity<?> addCourseUser(
-			@ApiParam(value = "User details", defaultValue = "{\"username\":\"\",\"useremail\":\"\"}") @RequestParam String username,
-			@RequestParam String useremail) {
-
-		CourseUsers cu = CourseUsers.builder().username(username).useremail(useremail).build();
-
-		boolean saveUserCourse = lus.saveCourseUser(cu);
-
-		if (saveUserCourse) {
-			return new ResponseEntity<String>("CourseUsers Saved", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<String>("Unable To Save CourseUsers", HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@PostMapping("/addcourse")
-	public ResponseEntity<?> addCourse(@RequestParam String coursename, @RequestParam String coursetrainer) {
-
-		Courses cc = Courses.builder().coursename(coursename).coursetrainer(coursetrainer).build();
-
-		boolean saveUserCourse = lus.saveCourses(cc);
-
-		if (saveUserCourse) {
-			return new ResponseEntity<String>("Courses Saved", HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<String>("Unable To Save Courses", HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	@PostMapping("/accesscoursetouser")
-	public ResponseEntity<?> accessCouresToUser(@RequestParam String email, @RequestParam String cname,
-			@RequestParam String trainername) {
-		boolean accessTocoures = lus.accessCouresToUser(email, cname, trainername);
-
-		if (accessTocoures) {
-			return new ResponseEntity<String>("Course Added To User", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<String>("Course Unable To Add User", HttpStatus.BAD_REQUEST);
-		}
-
-	}
-
-	@PostMapping("/addvideolink")
-	public String addVideolink(@RequestBody @Valid VideoDto vd) {
-		lus.addVideoLink(vd);
-
-		return "saved";
-	}
-
-	@GetMapping("/getcourseusers")
-	public ResponseEntity<UserCoursesDto> getCourseUsers(@RequestParam String cuname) {
-
-		UserCoursesDto uc = lus.getCourseUsers(cuname);
-
-		if (uc == null) {
-			throw new CustomException("No User Found");
-		} else {
-			return new ResponseEntity<UserCoursesDto>(uc, HttpStatus.OK);
-		}
-
-	}
-
-	@GetMapping("/getcourse")
-	public ResponseEntity<List<AllCourseUsersDto>> getCourses(@RequestParam String cname, String fname) {
-
-		List<AllCourseUsersDto> uc = lus.getCourses(cname, fname);
-
-		if (uc == null) {
-			throw new CustomException("No User Found");
-		} else {
-			return new ResponseEntity<List<AllCourseUsersDto>>(uc, HttpStatus.OK);
-		}
-
-	}
-
-	@GetMapping("/getvideos")
-	public ResponseEntity<List<CoursesViewDto>> getVideo(@RequestParam String name, @RequestParam String cname,
-			@RequestParam String tname) {
-
-		List<CourseModules> videoLink = lus.getVideoLink(name, cname, tname);
-
-		List<Integer> mn = videoLink.stream().map(x -> x.getModulenum()).collect(Collectors.toList());
-
-		List<List<CourseLink>> collect = videoLink.stream().map(x -> x.getClinks()).collect(Collectors.toList());
-
-		List<List<CourseLink>> findFirst = collect.stream().toList();
-
-		List<List<String>> listoflinks = findFirst.stream().flatMap(clinks -> clinks.stream().map(CourseLink::getLink))
-				.collect(Collectors.toList());
-
-		List<List<String>> listofvideonames = findFirst.stream()
-				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoname)).collect(Collectors.toList());
-
-//		Collections.reverse(listofvideonames);
-
-		List<Map<String, String>> resultMapList = new ArrayList<>();
-
-		for (int i = 0; i < listoflinks.size(); i++) {
-			List<String> list2 = listoflinks.get(i);
-			List<String> list3 = listofvideonames.get(i);
-
-			Map<String, String> resultMap = new HashMap<>();
-
-			for (int j = 0; j < list2.size(); j++) {
-
-				resultMap.put(list3.get(j), list2.get(j));
-			}
-
-			resultMapList.add(resultMap);
-		}
-
-		List<CoursesViewDtoBuilder> combinedList = IntStream.range(0, Math.min(mn.size(), resultMapList.size()))
-				.mapToObj(i -> CoursesViewDto.builder().modulenum(mn.get(i)).videos(resultMapList.get(i)))
-				.collect(Collectors.toList());
-
-		List<CoursesViewDto> list = combinedList.stream().map(CoursesViewDtoBuilder::build)
-				.collect(Collectors.toList());
-
-		return new ResponseEntity<List<CoursesViewDto>>(list, HttpStatus.OK);
 	}
 
 }

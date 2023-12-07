@@ -45,7 +45,7 @@ public class SecurityConfig {
 				cfg.setAllowedOrigins(listoforigin);
 				cfg.setAllowedMethods(listofmethods);
 				cfg.setAllowedHeaders(listofheaders);
-			//	cfg.setAllowCredentials(true);
+				// cfg.setAllowCredentials(true);
 				return cfg;
 			}
 		}));
@@ -56,10 +56,12 @@ public class SecurityConfig {
 
 				{
 					auth.requestMatchers("/admin/signup").authenticated();
+					auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/webjars/**",
+							"/swagger-resources/**").permitAll();
 					auth.requestMatchers("/user/connect", "user/login", "/user/upload", "/user/{email}", "/user/getotp",
 							"/user/verifyacc", "/user/resetpassword", "/user/verifyacc", "/user/resetpassword",
 							"/user/addcourseuser", "/user/addcourse", "/user/accesscoursetouser", "/user/addvideolink",
-							"/user/getcourseusers", "/user/getcourse", "/user/getvideos").permitAll();
+							"/user/getcourseusers", "/user/getcourse", "/user/getvideos","/user/getallapi","/getallapi").permitAll();
 
 				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(ap()).addFilterBefore((Filter) jfl, UsernamePasswordAuthenticationFilter.class);

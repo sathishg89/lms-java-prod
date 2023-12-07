@@ -49,7 +49,7 @@ public interface UserService {
 
 	boolean saveCourses(Courses cc);
 
-	boolean accessCouresToUser(String name, String cname, String trainername);
+	boolean accessCouresToUser(String email, String cname, String trainername);
 
 	UserCoursesDto getCourseUsers(String name);
 

@@ -245,14 +245,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean accessCouresToUser(String name, String cname, String trainername) {
+	public boolean accessCouresToUser(String email, String cname, String trainername) {
 
-		boolean userExists = ucr.existsByusername(name);
+		boolean userExists = ucr.existsByuseremail(email);
 		boolean courseExists = cr.existsBycoursename(cname);
 
 		if (userExists && courseExists) {
 
-			CourseUsers fun = ucr.findByuseremail(name);
+			CourseUsers fun = ucr.findByuseremail(email);
 			List<Courses> fcn = cr.findBycoursename(cname);
 
 			Optional<Courses> courseOptional = fcn.stream()

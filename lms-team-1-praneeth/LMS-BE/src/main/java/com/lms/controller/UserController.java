@@ -52,12 +52,16 @@ import com.lms.service.UserService;
 import com.lms.serviceImpl.EmailService;
 import com.lms.serviceImpl.OtpService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 
 //@Slf4j
 @RestController
 @RequestMapping("/user")
+@Api(tags = "User Controller", description = "Operations related to users")
 public class UserController {
 
 	@Autowired
@@ -74,6 +78,11 @@ public class UserController {
 
 	@Autowired
 	private EmailService es;
+
+	@GetMapping("/getallapi")
+	public void redirectToSwagger(HttpServletResponse response) throws IOException {
+		response.sendRedirect("/swagger-ui/index.html#/");
+	}
 
 	/*
 	 * 
@@ -254,9 +263,13 @@ public class UserController {
 	}
 
 	@PostMapping("/addcourseuser")
-	public ResponseEntity<?> addCourseUser(@RequestBody CourseUsers uc) {
+	public ResponseEntity<?> addCourseUser(
+			@ApiParam(value = "User details", defaultValue = "{\"username\":\"\",\"useremail\":\"\"}") @RequestParam String username,
+			@RequestParam String useremail) {
 
-		boolean saveUserCourse = lus.saveCourseUser(uc);
+		CourseUsers cu = CourseUsers.builder().username(username).useremail(useremail).build();
+
+		boolean saveUserCourse = lus.saveCourseUser(cu);
 
 		if (saveUserCourse) {
 			return new ResponseEntity<String>("CourseUsers Saved", HttpStatus.CREATED);
@@ -266,7 +279,9 @@ public class UserController {
 	}
 
 	@PostMapping("/addcourse")
-	public ResponseEntity<?> addCourse(@RequestBody Courses cc) {
+	public ResponseEntity<?> addCourse(@RequestParam String coursename, @RequestParam String coursetrainer) {
+
+		Courses cc = Courses.builder().coursename(coursename).coursetrainer(coursetrainer).build();
 
 		boolean saveUserCourse = lus.saveCourses(cc);
 
@@ -278,9 +293,9 @@ public class UserController {
 	}
 
 	@PostMapping("/accesscoursetouser")
-	public ResponseEntity<?> accessCouresToUser(@RequestParam String name, @RequestParam String cname,
+	public ResponseEntity<?> accessCouresToUser(@RequestParam String email, @RequestParam String cname,
 			@RequestParam String trainername) {
-		boolean accessTocoures = lus.accessCouresToUser(name, cname, trainername);
+		boolean accessTocoures = lus.accessCouresToUser(email, cname, trainername);
 
 		if (accessTocoures) {
 			return new ResponseEntity<String>("Course Added To User", HttpStatus.OK);

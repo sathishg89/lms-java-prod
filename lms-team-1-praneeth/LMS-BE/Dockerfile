@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . .
 
 # Run Maven clean package to build the application
-RUN ./mvnw clean package
+RUN ./mvnw package
 
 # Expose port 8080
 EXPOSE 8080

@@ -8,7 +8,8 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class LmsApplication {
 
-	//private static final org.slf4j.Logger logger = LoggerFactory.getLogger(LmsApplication.class);
+	// private static final org.slf4j.Logger logger =
+	// LoggerFactory.getLogger(LmsApplication.class);
 
 	public static void main(String[] args) {
 

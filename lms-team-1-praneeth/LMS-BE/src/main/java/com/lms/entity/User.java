@@ -24,21 +24,23 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	@Column(name = "id")
+	private long userId;
 
 	@Column(name = "username")
 	@NotEmpty(message = "name cannot be empty")
-	private String name;
+	private String userName;
 
 	@NotEmpty(message = "Email cannot be empty")
-	private String email;
+	@Column(name = "email")
+	private String userEmail;
 
 	@NotEmpty(message = "password cannot be empty")
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@NotEmpty(message = "role cannot be empty")
-	private String roles;
+	private String role;
 
 	@Lob
 	@Column(columnDefinition = "LONGBLOB")

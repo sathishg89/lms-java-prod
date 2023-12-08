@@ -9,13 +9,15 @@ public enum CustomErrorCodes {
 	TOPIC_NOT_FOUND("10004", "Given Topic not found in the database with the given topicId."),
 	MODULE_ALREADY_EXIST("10005", "Module name already exist in the database with the same course."),
 	USER_ALREADY_ENROLLED("10006", "User already enrolled with the same course."),
+	USER_ALREADY_EXIST("10007", "User already Exist."),
 
 	// Missing value in Request payload Codes
 	MISSING_IMAGE("10021", "Missing image."), MISSING_TOPIC("10022", "Missing topic name."),
 	MISSING_TITLE("10023", "Missing title name."), MISSING_EMAIL_ID("10024", "Missing emai id."),
 	MISSING_PASSWORD("10025", "Missing password."), MISSING_MODULE("10026", "Missing module name."),
 	MISSING_USER_NAME("10027", "Missing user name."), MISSING_DESCRIPTION("10028", "Missing description."),
-	INVALID_EMAIL("10029", "Email Is Not Valid .");
+	INVALID_DETAILS("10029", "InValid Details ."), INVALID_EMAIL("10030", "Email Is Not Valid ."),
+	INVALID_PASSWORD("10030", "InValid Password  .");
 
 	private String errorCode;
 	private String errorMsg;

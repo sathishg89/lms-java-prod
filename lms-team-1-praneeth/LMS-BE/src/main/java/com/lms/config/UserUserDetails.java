@@ -20,9 +20,9 @@ public class UserUserDetails implements UserDetails {
 	private List<GrantedAuthority> authorites;
 
 	public UserUserDetails(User lud) {
-		email = lud.getEmail();
+		email = lud.getUserEmail();
 		pass = lud.getPassword();
-		authorites = Arrays.stream(lud.getRoles().split(",")).map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+		authorites = Arrays.stream(lud.getRole().split(",")).map(role -> new SimpleGrantedAuthority("ROLE_" + role))
 				.collect(Collectors.toList());
 
 	}

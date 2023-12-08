@@ -6,8 +6,8 @@ import com.lms.entity.CourseUsers;
 
 public interface CourseUsersRepo extends JpaRepository<CourseUsers, Integer> {
 
-	CourseUsers findByuseremail(String email);
+	CourseUsers findByuseremail(String userEmail);
 
-	boolean existsByuseremail(String email);
+	boolean existsByuseremail(String userEmail);
 
 }

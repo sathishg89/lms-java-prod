@@ -9,17 +9,13 @@ public class CustomException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private String message;
-	private String errorcode;
+	private String errorMessage;
+	private String errorCode;
 
-	public CustomException(String message, String errorcode) {
+	public CustomException(String errorMessage, String errorCode) {
 
-		this.errorcode = errorcode;
-		this.message = message;
-	}
-
-	public CustomException(String message) {
-		super(message);
+		this.errorMessage = errorMessage;
+		this.errorCode = errorCode;
 	}
 
 }

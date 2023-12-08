@@ -36,30 +36,33 @@ public class GlobalException {
 	}
 
 	@ExceptionHandler(NameFoundException.class)
-	public ResponseEntity<?> nameFound(NameFoundException nf, WebRequest wr) {
+	public ResponseEntity<NameFoundDto> nameFound(NameFoundException nf, WebRequest wr) {
 
-		NameFoundDto d = new NameFoundDto();
-		d.setError("100");
-		d.setMessage("User Already Registered");
+		NameFoundDto nfd = new NameFoundDto();
+		nfd.setErrorMessage(nf.getErrorMessage());
 
-		return new ResponseEntity<Object>(d, HttpStatus.FOUND);
+		return new ResponseEntity<NameFoundDto>(nfd, HttpStatus.FOUND);
 	}
 
 	@ExceptionHandler(EmailNotFoundException.class)
-	public ResponseEntity<?> emailNotFound(EmailNotFoundException enf, WebRequest wr) {
+	public ResponseEntity<EmailNotFoundDto> emailNotFound(EmailNotFoundException enf, WebRequest wr) {
 
-		EmailNotFoundDto efd = new EmailNotFoundDto();
-		efd.setError("504");
-		efd.setMessage(enf.getMessage());
+		EmailNotFoundDto enfd = new EmailNotFoundDto();
+		enfd.setErrorMessage(enf.getErrorMessage());
+		enfd.setErrorCode(enf.getErrorCode());
 
-		return new ResponseEntity<Object>(efd, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<EmailNotFoundDto>(enfd, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(CustomException.class)
-	public ResponseEntity<?> custom(CustomException ce, WebRequest wr) {
+	public ResponseEntity<CustomDto> custom(CustomException ce, WebRequest wr) {
 
-		CustomDto cd = new CustomDto(ce.getMessage(), ce.getErrorcode());
-		return new ResponseEntity<Object>(cd, HttpStatus.BAD_REQUEST);
+		CustomDto cd = new CustomDto();
+
+		cd.setErrorMessage(ce.getErrorMessage());
+		cd.setErrorCode(ce.getErrorCode());
+
+		return new ResponseEntity<CustomDto>(cd, HttpStatus.BAD_REQUEST);
 	}
 
 }

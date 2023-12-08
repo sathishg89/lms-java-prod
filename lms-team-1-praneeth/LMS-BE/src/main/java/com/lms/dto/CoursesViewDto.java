@@ -1,4 +1,4 @@
-package com.lms.entity;
+package com.lms.dto;
 
 import java.util.Map;
 

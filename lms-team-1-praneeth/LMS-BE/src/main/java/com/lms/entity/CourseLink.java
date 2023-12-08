@@ -39,7 +39,7 @@ public class CourseLink {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "courselinks_link", joinColumns = @JoinColumn(name = "fk_linkid"))
 	@Column(name = "link")
-	private List<String> link;
+	private List<String> links;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "courselinks_videoname", joinColumns = @JoinColumn(name = "fk_linkid"))

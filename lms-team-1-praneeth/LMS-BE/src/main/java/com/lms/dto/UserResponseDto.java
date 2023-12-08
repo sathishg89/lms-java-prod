@@ -11,20 +11,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserResponseDto {
 
-	private long id;
-	
-	private String name;
-	
-	private String email;
+	private long userId;
 
-	private String token;
+	private String userName;
 
-	private String roles;
+	private String userEmail;
 
-	private String image;
+	private String jwtToken;
 
-	@JsonIgnoreProperties({"useremail","username"})
+	private String userRole;
+
+	private String userImage;
+
+	@JsonIgnoreProperties({ "useremail", "username" })
 	private UserCoursesDto userCourses;
-	
-	
+
 }

@@ -1,11 +1,9 @@
 package com.lms.service;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.zip.DataFormatException;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.dto.UserVerifyDto;
@@ -13,32 +11,20 @@ import com.lms.entity.User;
 
 public interface UserService {
 
-	public User saveLU(User lu);
+	public User getUser(User user);
 
-	public List<User> getLU(long id);
+	public String saveImg(MultipartFile multiPartFile, String userEmail) throws Exception;
 
-	public User updateLU(User lu);
+	byte[] downloadImage(String userEmail) throws IOException, DataFormatException;
 
-	public void deleteLU(long id);
+	Optional<User> fingbyemail(String userEmail);
 
-	Boolean getByemail(User lu);
+	public User userUpdate(User user, String userEmail);
 
-	public ResponseEntity<?> getby(User lu);
-
-	public String saveImg(MultipartFile file, String name) throws Exception;
-
-	byte[] downloadImage(String email) throws IOException, DataFormatException;
-
-	Optional<User> fingbyemail(String email);
-
-	public User Luupdate(User lu1,String email);
-
-	boolean verifyAccount(String email, String otp);
+	boolean verifyAccount(String userEmail, String otp);
 
 	boolean saveotp(UserVerifyDto uvt);
 
-	boolean resetPassword(String password, String verifypassword, long id);
-
-	
+	boolean resetPassword(String password, String verifypassword, long userId);
 
 }

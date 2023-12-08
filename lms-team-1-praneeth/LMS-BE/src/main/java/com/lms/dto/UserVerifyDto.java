@@ -3,9 +3,12 @@ package com.lms.dto;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,11 +16,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="userverifydto")
+@Builder
+@Table(name = "userverifydto")
 public class UserVerifyDto {
 
 	@Id
-	private String email;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String userEmail;
 	private String otp;
 	private LocalDateTime otpGeneratedTime;
 

@@ -3,17 +3,15 @@ package com.lms.serviceImpl;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.zip.DataFormatException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.UserVerifyDto;
 import com.lms.entity.User;
 import com.lms.exception.details.CustomException;
@@ -37,32 +35,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private OtpRepo or;
 
-//	@Autowired
-//	private ModulesRepo mr;
-
-	@Override
-	public User saveLU(User lu) {
-
-		User lu1 = new User();
-
-		lu1.setName(lu.getName());
-		lu1.setEmail(lu.getEmail());
-		lu1.setPassword(pe.encode(lu.getPassword()));
-		lu1.setRoles(lu.getRoles());
-
-		if (getByemail(lu1)) {
-			return null;
-		} else {
-			return lur.save(lu1);
-		}
-	}
-
-	@Override
-	public Boolean getByemail(User lu) {
-		boolean findByName = lur.existsByemail(lu.getEmail());
-		return findByName;
-	}
-
 	@Override
 	public Optional<User> fingbyemail(String email) {
 
@@ -71,45 +43,37 @@ public class UserServiceImpl implements UserService {
 			findByemail = lur.findByemail(email);
 			return findByemail;
 		} catch (Exception e) {
-			throw new EmailNotFoundException("Email Not Found");
+			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
 		}
 	}
 
 	@Override
-	public List<User> getLU(long id) {
-		return null;
-	}
+	public User getUser(User lu) {
 
-	@Override
-	public User updateLU(User lu) {
-		return null;
-	}
-
-	@Override
-	public void deleteLU(long id) {
-		return;
-	}
-
-	@Override
-	public ResponseEntity<?> getby(User lu) {
-
-		if (lur.findByemail(lu.getEmail()).isEmpty()) {
-			throw new EmailNotFoundException("Email Not Found");
+		Optional<User> findByemail = lur.findByemail(lu.getUserEmail());
+		if (findByemail.isEmpty()) {
+			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
 		} else {
-			return new ResponseEntity<Object>(lur.findByemail(lu.getEmail()).get(), HttpStatus.OK);
+
+			return findByemail.get();
 		}
 	}
 
 	@Override
-	public String saveImg(MultipartFile mp, String email) throws Exception {
+	public String saveImg(MultipartFile mp, String userEmail) throws Exception {
 
-		User op = lur.findByemail(email).orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
+		User op = lur.findByemail(userEmail)
+				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		try {
 			op.setImg(mp.getBytes());
 			lur.save(op);
 			return "Image File Uploaded Successfully :" + mp.getOriginalFilename().toLowerCase();
 		} catch (IOException e) {
-			throw new CustomException("Incorrect Image File");
+			throw new CustomException(CustomErrorCodes.MISSING_IMAGE.getErrorMsg(),
+					CustomErrorCodes.MISSING_IMAGE.getErrorCode());
 		}
 
 	}
@@ -117,35 +81,40 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public byte[] downloadImage(String email) throws IOException, DataFormatException {
 
-		User img = lur.findByemail(email).orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
+		User img = lur.findByemail(email)
+				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 
 		if (img.getImg() != null) {
 			return img.getImg();
 		} else {
-			return null;
+			return img.getImg();
 		}
 
 	}
 
 	@Override
-	public User Luupdate(User lu, String email) {
+	public User userUpdate(User lu, String userEmail) {
 
 		User lu1;
-		if (lu.getEmail() == null && lu.getImg() == null && lu.getName() == null && lu.getPassword() == null) {
-			throw new CustomException("Empty Details Failed To Update:");
+		if (lu.getUserEmail() == null && lu.getImg() == null && lu.getUserName() == null && lu.getPassword() == null) {
+			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 
 		} else {
-			lu1 = lur.findByemail(email).orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
+			lu1 = lur.findByemail(userEmail)
+					.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+							CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		}
 
-		if (lu.getEmail() != null && !lu.getEmail().isEmpty()) {
-			lu1.setEmail(lu.getEmail());
+		if (lu.getUserEmail() != null && !lu.getUserEmail().isEmpty()) {
+			lu1.setUserEmail(lu.getUserEmail());
 		}
 		if (lu.getPassword() != null && !lu.getPassword().isEmpty()) {
 			lu1.setPassword(pe.encode(lu.getPassword()));
 		}
-		if (lu.getName() != null && !lu.getName().isEmpty()) {
-			lu1.setName(lu.getName());
+		if (lu.getUserName() != null && !lu.getUserName().isEmpty()) {
+			lu1.setUserName(lu.getUserName());
 		}
 		if (lu.getImg() != null && lu.getImg().length != 0) {
 			lu1.setImg(lu.getImg());
@@ -167,11 +136,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean verifyAccount(String email, String otp) {
+	public boolean verifyAccount(String userEmail, String otp) {
 
 		Optional<UserVerifyDto> findByemail;
 		try {
-			findByemail = or.findByemail(email);
+			findByemail = or.findByemail(userEmail);
 
 			if (findByemail.get().getOtp().equals(otp) && Duration
 					.between(findByemail.get().getOtpGeneratedTime(), LocalDateTime.now()).getSeconds() < (1 * 60)) {
@@ -181,14 +150,17 @@ public class UserServiceImpl implements UserService {
 				return false;
 			}
 		} catch (Exception e) {
-			throw new EmailNotFoundException("Email Not Found");
+			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
 		}
 	}
 
 	@Override
 	public boolean resetPassword(String password, String verifypassword, long id) {
 
-		User findById = lur.findById(id).orElseThrow(() -> new CustomException("Invalid Id"));
+		User findById = lur.findById(id)
+				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+						CustomErrorCodes.INVALID_DETAILS.getErrorCode()));
 		if (password.equals(verifypassword)) {
 			findById.setPassword(pe.encode(verifypassword));
 

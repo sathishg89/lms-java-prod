@@ -18,17 +18,17 @@ public class EmailService {
 	@Value("${myapp.url1}")
 	private String url1;
 
-	public void sendOtpEmail(String email, String otp) throws MessagingException {
+	public void sendOtpEmail(String userEmail, String otp) throws MessagingException {
 		MimeMessage mimeMessage = jms.createMimeMessage();
 		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-		mimeMessageHelper.setTo(email);
+		mimeMessageHelper.setTo(userEmail);
 		mimeMessageHelper.setSubject("Verify OTP");
 
 		mimeMessageHelper.setText("""
 				<div>
 				  <a href= "%s/user/verifyacc?email=%s&otp=%s" target="_blank">click link to verify</a>
 				</div>
-				""".formatted(url1, email, otp), true);
+				""".formatted(url1, userEmail, otp), true);
 
 		jms.send(mimeMessage);
 	}

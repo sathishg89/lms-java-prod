@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.lms.constants.CustomErrorCodes;
 import com.lms.entity.User;
 import com.lms.exception.details.EmailNotFoundException;
 import com.lms.repository.UserRepo;
@@ -24,7 +25,8 @@ public class UserUserdetailsService implements UserDetailsService {
 		Optional<User> findByemail = ur.findByemail(username);
 
 		return findByemail.map(details -> new UserUserDetails(details))
-				.orElseThrow(() -> new EmailNotFoundException("Email Not Found"));
+				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.MISSING_EMAIL_ID.getErrorMsg(),
+						CustomErrorCodes.MISSING_EMAIL_ID.getErrorCode()));
 	}
 
 }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.AllCourseUsersDto;
 import com.lms.dto.UserCoursesDto;
-import com.lms.dto.VideoDto;
+import com.lms.dto.VideoUploadDto;
 import com.lms.entity.CourseLink;
 import com.lms.entity.CourseModules;
 import com.lms.entity.CourseUsers;
@@ -79,8 +79,8 @@ public class CourseServiceImpl implements CourseService {
 			Optional<Courses> courseOptional = fcn.stream()
 					.filter(course -> course.getCoursetrainer().equals(trainerName)).findFirst();
 
-			if (!fun.getCourseslist().containsAll(fcn)) {
-				fun.getCourseslist().add(courseOptional.get());
+			if (!fun.getCoursesList().containsAll(fcn)) {
+				fun.getCoursesList().add(courseOptional.get());
 				ucr.save(fun);
 				return true;
 			} else {
@@ -92,7 +92,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean addVideoLink(VideoDto videoDto) {
+	public boolean addVideoLink(VideoUploadDto videoDto) {
 
 		LinkedHashSet<String> videolink = videoDto.getVideolink();
 
@@ -100,7 +100,8 @@ public class CourseServiceImpl implements CourseService {
 		List<String> linklist = new ArrayList<>(videolink);
 
 		if (videoname.size() < videolink.size() || videolink.size() > videoname.size()) {
-			throw new CustomException("Video Title or Video Link Is Missing");
+			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 		} else {
 			LinkedHashMap<String, String> linkedmap = new LinkedHashMap<>();
 
@@ -113,15 +114,16 @@ public class CourseServiceImpl implements CourseService {
 				linkedmap.put(name, link);
 			}
 			// find the details from db using cname, trainername
-			List<Courses> fcn = cr.findBycoursenameAndcoursetrainer(videoDto.getCname(), videoDto.getTname());
+			List<Courses> fcn = cr.findBycoursenameAndcoursetrainer(videoDto.getCourseName(),
+					videoDto.getTrainerName());
 
-			CourseLink cl = CourseLink.builder().link(linklist).videoname(videoDto.getVideoname()).build();
+			CourseLink cl = CourseLink.builder().links(linklist).videoname(videoDto.getVideoname()).build();
 
 			List<CourseLink> cl1 = new ArrayList<>();
 			cl1.add(cl);
 
 			// converting the details into cm object
-			CourseModules cm = CourseModules.builder().modulenum(videoDto.getModulenum())
+			CourseModules cm = CourseModules.builder().modulenum(videoDto.getModulenumber())
 					.videoinserttime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy "))).clinks(cl1)
 					.build();
 
@@ -129,8 +131,9 @@ public class CourseServiceImpl implements CourseService {
 			if (fcn.size() > 0) {
 
 				// by using tname gettiing the course object
-				Courses courses = fcn.stream().filter(course -> course.getCoursetrainer().equals(videoDto.getTname()))
-						.findFirst().get();
+				Courses courses = fcn.stream()
+						.filter(course -> course.getCoursetrainer().equals(videoDto.getTrainerName())).findFirst()
+						.get();
 
 				// getting the coursemodules from courses
 				List<CourseModules> existingModules = courses.getCoursemodule();
@@ -141,7 +144,7 @@ public class CourseServiceImpl implements CourseService {
 					// check the modulenum from db and from client if both are same then return the
 					// coursemodule list
 					Optional<CourseModules> em = existingModules.stream()
-							.filter(module -> module.getModulenum() == videoDto.getModulenum()).findFirst();
+							.filter(module -> module.getModulenum() == videoDto.getModulenumber()).findFirst();
 
 					// add the videolink to set of link if the module if present or else add the
 					// builder to existingmocules list
@@ -157,7 +160,7 @@ public class CourseServiceImpl implements CourseService {
 						if (clinks.size() > 0) {
 							for (CourseLink existingCl : clinks) {
 								log.info("" + existingCl);
-								existingCl.getLink().addAll(cl.getLink());
+								existingCl.getLinks().addAll(cl.getLinks());
 								existingCl.getVideoname().addAll(cl.getVideoname());
 							}
 						} else {
@@ -193,12 +196,13 @@ public class CourseServiceImpl implements CourseService {
 		try {
 			CourseUsers fun = ucr.findByuseremail(courseUserEmail);
 
-			UserCoursesDto ucd = UserCoursesDto.builder().username(fun.getUsername()).useremail(fun.getUseremail())
-					.courseslist(fun.getCourseslist()).build();
+			UserCoursesDto ucd = UserCoursesDto.builder().username(fun.getUserName()).useremail(fun.getUserEmail())
+					.courseslist(fun.getCoursesList()).build();
 
 			return ucd;
 		} catch (Exception e) {
-			throw new CustomException("No User : " + courseUserEmail);
+			throw new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
 		}
 
 	}
@@ -216,8 +220,9 @@ public class CourseServiceImpl implements CourseService {
 			return collect;
 		} catch (Exception e) {
 
-			throw new CustomException(CustomErrorCodes.MISSING_EMAIL_ID.getErrorMsg());
-			// throw new CustomException("No User : " + courseName);
+			throw new CustomException(CustomErrorCodes.USER_NOT_FOUND.getErrorMsg(),
+					CustomErrorCodes.USER_NOT_FOUND.getErrorCode());
+
 		}
 
 	}
@@ -228,17 +233,19 @@ public class CourseServiceImpl implements CourseService {
 		try {
 			CourseUsers courseUsers = ucr.findByuseremail(userEmail);
 
-			List<CourseModules> collect = courseUsers.getCourseslist().stream()
+			List<CourseModules> collect = courseUsers.getCoursesList().stream()
 					.filter(fil -> fil.getCoursename().equals(courseName) && fil.getCoursetrainer().equals(trainerName))
 					.flatMap(courses -> courses.getCoursemodule().stream()).collect(Collectors.toList());
 
 			if (collect.size() > 0) {
 				return collect;
 			} else {
-				throw new CustomException("No Videos Available");
+				throw new CustomException(CustomErrorCodes.COURSE_NOT_FOUND.getErrorMsg(),
+						CustomErrorCodes.COURSE_NOT_FOUND.getErrorCode());
 			}
 		} catch (Exception e) {
-			throw new CustomException("Name or Cname or Trainername Not Found");
+			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 		}
 
 	}

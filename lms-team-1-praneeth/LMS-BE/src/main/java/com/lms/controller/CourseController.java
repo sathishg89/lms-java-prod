@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.AllCourseUsersDto;
+import com.lms.dto.CoursesViewDto;
 import com.lms.dto.UserCoursesDto;
-import com.lms.dto.VideoDto;
+import com.lms.dto.VideoUploadDto;
+import com.lms.dto.CoursesViewDto.CoursesViewDtoBuilder;
 import com.lms.entity.CourseLink;
 import com.lms.entity.CourseModules;
 import com.lms.entity.CourseUsers;
 import com.lms.entity.Courses;
-import com.lms.entity.CoursesViewDto;
-import com.lms.entity.CoursesViewDto.CoursesViewDtoBuilder;
 import com.lms.exception.details.CustomException;
 import com.lms.service.CourseService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/course")
 public class CourseController {
 
 	@Autowired
@@ -42,7 +42,7 @@ public class CourseController {
 	@PostMapping("/addcourseuser")
 	public ResponseEntity<?> addCourseUser(@RequestParam String userName, @RequestParam String userEmail) {
 
-		CourseUsers cu = CourseUsers.builder().username(userName).useremail(userEmail).build();
+		CourseUsers cu = CourseUsers.builder().userName(userName).userEmail(userEmail).build();
 
 		boolean saveUserCourse = cs.saveCourseUser(cu);
 
@@ -81,7 +81,7 @@ public class CourseController {
 	}
 
 	@PostMapping("/addvideolink")
-	public ResponseEntity<String> addVideolink(@RequestBody @Valid VideoDto videoDto) {
+	public ResponseEntity<String> addVideolink(@RequestBody @Valid VideoUploadDto videoDto) {
 		boolean addVideoLink = cs.addVideoLink(videoDto);
 
 		if (addVideoLink) {
@@ -98,7 +98,8 @@ public class CourseController {
 		UserCoursesDto uc = cs.getCourseUsers(courseUserName);
 
 		if (uc == null) {
-			throw new CustomException("No User Found");
+			throw new CustomException(CustomErrorCodes.USER_NOT_FOUND.getErrorMsg(),
+					CustomErrorCodes.USER_NOT_FOUND.getErrorCode());
 		} else {
 			return new ResponseEntity<UserCoursesDto>(uc, HttpStatus.OK);
 		}
@@ -131,13 +132,11 @@ public class CourseController {
 
 		List<List<CourseLink>> findFirst = collect.stream().toList();
 
-		List<List<String>> listoflinks = findFirst.stream().flatMap(clinks -> clinks.stream().map(CourseLink::getLink))
+		List<List<String>> listoflinks = findFirst.stream().flatMap(clinks -> clinks.stream().map(CourseLink::getLinks))
 				.collect(Collectors.toList());
 
 		List<List<String>> listofvideonames = findFirst.stream()
 				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoname)).collect(Collectors.toList());
-
-//		Collections.reverse(listofvideonames);
 
 		List<Map<String, String>> resultMapList = new ArrayList<>();
 

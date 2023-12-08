@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CustomDto {
 
-	private String message;
-	private String error;
+	private String errorMessage;
+	private String errorCode;
 
 }

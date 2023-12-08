@@ -37,10 +37,6 @@ public class CourseModules {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String videoinserttime;
 
-//	@ElementCollection(fetch = FetchType.EAGER)
-//	@CollectionTable(name = "courselinks", joinColumns = @JoinColumn(name = "fk_coursemoduleid"))
-//	private Set<String> clinks;
-
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "courselinktable")
 	private List<CourseLink> clinks;

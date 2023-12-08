@@ -1,4 +1,3 @@
-
 package com.lms.serviceImpl;
 
 import java.io.BufferedReader;
@@ -34,7 +33,18 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public User saveUser(User lu) {
-		return null;
+
+		User lu1 = User.builder().userName(lu.getUserName()).userEmail(lu.getUserEmail())
+				.password(pe.encode(lu.getPassword())).role(lu.getRole()).build();
+
+		boolean findByName = ur.existsByemail(lu1.getUserEmail());
+
+		if (findByName) {
+			throw new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
+		} else {
+			return ur.save(lu1);
+		}
 	}
 
 	@Override
@@ -63,8 +73,8 @@ public class AdminServiceImpl implements AdminService {
 			if (!existsByemail) {
 
 				if (isValidEmail & !userName.equals(null)) {
-					User user = User.builder().name(userName).email(userEmail).password(pe.encode("welcome@123"))
-							.isActive(true).roles("user").build();
+					User user = User.builder().userName(userName).userEmail(userEmail)
+							.password(pe.encode("welcome@123")).isActive(true).role("user").build();
 
 					userlist.add(user);
 
@@ -87,6 +97,16 @@ public class AdminServiceImpl implements AdminService {
 		}
 
 		return false;
+	}
+
+	@Override
+	public List<User> gestLU(long id) {
+		return null;
+	}
+
+	@Override
+	public void deleteLU(long id) {
+
 	}
 
 }

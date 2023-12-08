@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NameFoundDto {
 
-	private String error;
-	private String message;
+	private String errorMessage;
+	private String errorCode;
 
 }

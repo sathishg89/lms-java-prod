@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class EmailNotFoundDto {
 
-	private String message;
-	private String error;
+	private String errorMessage;
+	private String errorCode;
 
 }

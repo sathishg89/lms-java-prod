@@ -12,27 +12,24 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoDto {
-
-	@NotEmpty(message = "Course name cannot be empty")
-	private String cname;
+public class VideoUploadDto {
 
 	@NotEmpty(message = "name cannot be empty")
-	private String name;
-	
+	private String userName;
+
+	@NotEmpty(message = "Course name cannot be empty")
+	private String courseName;
+
+	@NotEmpty(message = "tname cannot be empty")
+	private String trainerName;
+
+	@Positive(message = "modulenum cannot be negative or empty")
+	private int modulenumber;
+
 	@NotEmpty(message = "videoname cannot be empty")
 	private List<String> videoname;
 
-	@Positive(message = "modulenum cannot be negative or empty")
-	private int modulenum;
-	
 	@NotEmpty(message = "videolink cannot be empty")
 	private LinkedHashSet<String> videolink;
 
-	@NotEmpty(message = "tname cannot be empty")
-	private String tname;
-
-	
-	
-	
 }

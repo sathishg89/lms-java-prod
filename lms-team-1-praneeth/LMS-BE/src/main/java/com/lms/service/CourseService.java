@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.lms.dto.AllCourseUsersDto;
 import com.lms.dto.UserCoursesDto;
-import com.lms.dto.VideoDto;
+import com.lms.dto.VideoUploadDto;
 import com.lms.entity.CourseModules;
 import com.lms.entity.CourseUsers;
 import com.lms.entity.Courses;
@@ -17,7 +17,7 @@ public interface CourseService {
 
 	boolean accessCouresToUser(String courseUserEmail, String courseName, String trainerName);
 	
-	boolean addVideoLink(VideoDto videoDto);
+	boolean addVideoLink(VideoUploadDto videoDto);
 
 	UserCoursesDto getCourseUsers(String courseUserName);
 

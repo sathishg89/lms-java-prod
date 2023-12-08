@@ -7,10 +7,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.entity.User;
 import com.lms.exception.details.NameFoundException;
+import com.lms.service.AdminService;
 import com.lms.service.UserService;
 
 import jakarta.validation.Valid;
@@ -21,6 +24,9 @@ public class AdminController {
 
 	@Autowired
 	private UserService lus;
+
+	@Autowired
+	private AdminService as;
 
 	/*
 	 * 
@@ -40,4 +46,16 @@ public class AdminController {
 		}
 	}
 
+	@PostMapping("/importusers")
+	@PreAuthorize("hasAuthority('admin')")
+	public ResponseEntity<?> signUpcsv(@RequestParam("file") MultipartFile mp) throws Exception {
+
+		boolean userImport = as.userImport(mp);
+
+		if (userImport) {
+			return new ResponseEntity<String>("User Imported", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Error In Importing Users", HttpStatus.INTERNAL_SERVER_ERROR);
+
+	}
 }

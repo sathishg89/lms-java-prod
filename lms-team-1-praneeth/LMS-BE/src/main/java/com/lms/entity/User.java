@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "build")
+@Builder
 public class User {
 
 	@Id
@@ -41,5 +43,8 @@ public class User {
 	@Lob
 	@Column(columnDefinition = "LONGBLOB")
 	private byte[] img;
+
+	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
+	private boolean isActive;
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.AllCourseUsersDto;
 import com.lms.dto.UserCoursesDto;
 import com.lms.dto.VideoDto;
@@ -109,8 +110,9 @@ public class CourseController {
 
 		List<AllCourseUsersDto> uc = cs.getCourses(courseName, trainerName);
 
-		if (uc == null) {
-			throw new CustomException("No User Found");
+		if (uc.size() == 0) {
+			throw new CustomException(CustomErrorCodes.MISSING_EMAIL_ID.getErrorMsg(),
+					CustomErrorCodes.MISSING_EMAIL_ID.getErrorCode());
 		} else {
 			return new ResponseEntity<List<AllCourseUsersDto>>(uc, HttpStatus.OK);
 		}

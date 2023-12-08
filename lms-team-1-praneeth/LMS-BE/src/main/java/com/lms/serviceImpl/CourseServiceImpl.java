@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.AllCourseUsersDto;
 import com.lms.dto.UserCoursesDto;
 import com.lms.dto.VideoDto;
@@ -187,17 +188,17 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public UserCoursesDto getCourseUsers(String courseUserName) {
+	public UserCoursesDto getCourseUsers(String courseUserEmail) {
 
 		try {
-			CourseUsers fun = ucr.findByuseremail(courseUserName);
+			CourseUsers fun = ucr.findByuseremail(courseUserEmail);
 
 			UserCoursesDto ucd = UserCoursesDto.builder().username(fun.getUsername()).useremail(fun.getUseremail())
 					.courseslist(fun.getCourseslist()).build();
 
 			return ucd;
 		} catch (Exception e) {
-			throw new CustomException("No User : " + courseUserName);
+			throw new CustomException("No User : " + courseUserEmail);
 		}
 
 	}
@@ -214,7 +215,9 @@ public class CourseServiceImpl implements CourseService {
 					.collect(Collectors.toList());
 			return collect;
 		} catch (Exception e) {
-			throw new CustomException("No User : " + courseName);
+
+			throw new CustomException(CustomErrorCodes.MISSING_EMAIL_ID.getErrorMsg());
+			// throw new CustomException("No User : " + courseName);
 		}
 
 	}

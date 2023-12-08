@@ -58,7 +58,7 @@ public class GlobalException {
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<?> custom(CustomException ce, WebRequest wr) {
 
-		CustomDto cd = new CustomDto(ce.getMessage(), "404");
+		CustomDto cd = new CustomDto(ce.getMessage(), ce.getErrorcode());
 		return new ResponseEntity<Object>(cd, HttpStatus.BAD_REQUEST);
 	}
 

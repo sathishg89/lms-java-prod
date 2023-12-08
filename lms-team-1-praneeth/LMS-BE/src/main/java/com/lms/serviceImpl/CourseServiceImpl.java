@@ -68,12 +68,12 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean accessCouresToUser(String courseUserEmail, String courseName, String trainerName) {
 
-		boolean userExists = ucr.existsByuseremail(courseUserEmail);
+		boolean userExists = ucr.existsByuserEmail(courseUserEmail);
 		boolean courseExists = cr.existsBycoursename(courseName);
 
 		if (userExists && courseExists) {
 
-			CourseUsers fun = ucr.findByuseremail(courseUserEmail);
+			CourseUsers fun = ucr.findByuserEmail(courseUserEmail);
 			List<Courses> fcn = cr.findBycoursename(courseName);
 
 			Optional<Courses> courseOptional = fcn.stream()
@@ -194,7 +194,7 @@ public class CourseServiceImpl implements CourseService {
 	public UserCoursesDto getCourseUsers(String courseUserEmail) {
 
 		try {
-			CourseUsers fun = ucr.findByuseremail(courseUserEmail);
+			CourseUsers fun = ucr.findByuserEmail(courseUserEmail);
 
 			UserCoursesDto ucd = UserCoursesDto.builder().username(fun.getUserName()).useremail(fun.getUserEmail())
 					.courseslist(fun.getCoursesList()).build();
@@ -231,7 +231,7 @@ public class CourseServiceImpl implements CourseService {
 	public List<CourseModules> getVideoLink(String userEmail, String courseName, String trainerName) {
 
 		try {
-			CourseUsers courseUsers = ucr.findByuseremail(userEmail);
+			CourseUsers courseUsers = ucr.findByuserEmail(userEmail);
 
 			List<CourseModules> collect = courseUsers.getCoursesList().stream()
 					.filter(fil -> fil.getCoursename().equals(courseName) && fil.getCoursetrainer().equals(trainerName))

@@ -22,7 +22,7 @@ public class UserUserdetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		Optional<User> findByemail = ur.findByemail(username);
+		Optional<User> findByemail = ur.findByuserEmail(username);
 
 		return findByemail.map(details -> new UserUserDetails(details))
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.MISSING_EMAIL_ID.getErrorMsg(),

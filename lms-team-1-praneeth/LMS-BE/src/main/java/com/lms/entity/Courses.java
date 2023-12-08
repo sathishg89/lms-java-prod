@@ -45,7 +45,7 @@ public class Courses {
 	@JoinColumn(name = "fk_courseid", referencedColumnName = "courseid", nullable = false)
 	private List<CourseModules> coursemodule;
 
-	@ManyToMany(mappedBy = "courseslist", cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "coursesList", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("courseslist")
 	private List<CourseUsers> courseusers;
 }

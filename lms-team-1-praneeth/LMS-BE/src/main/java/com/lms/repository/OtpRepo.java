@@ -8,5 +8,5 @@ import com.lms.dto.UserVerifyDto;
 
 public interface OtpRepo extends JpaRepository<UserVerifyDto, String> {
 
-	Optional<UserVerifyDto> findByemail(String userEmail);
+	Optional<UserVerifyDto> findByuserEmail(String userEmail);
 }

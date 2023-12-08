@@ -10,9 +10,9 @@ import com.lms.entity.User;
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 
-	boolean existsByemail(String userEmail);
+	boolean existsByuserEmail(String userEmail);
 
-	Optional<User> findByemail(String userEmail);
+	Optional<User> findByuserEmail(String userEmail);
 	
 
 }

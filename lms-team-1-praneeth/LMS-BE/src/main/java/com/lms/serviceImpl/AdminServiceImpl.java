@@ -37,7 +37,7 @@ public class AdminServiceImpl implements AdminService {
 		User lu1 = User.builder().userName(lu.getUserName()).userEmail(lu.getUserEmail())
 				.password(pe.encode(lu.getPassword())).role(lu.getRole()).build();
 
-		boolean findByName = ur.existsByemail(lu1.getUserEmail());
+		boolean findByName = ur.existsByuserEmail(lu1.getUserEmail());
 
 		if (findByName) {
 			throw new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
@@ -67,7 +67,7 @@ public class AdminServiceImpl implements AdminService {
 			String userName = record.get(0);
 			String userEmail = record.get(1);
 
-			boolean existsByemail = ur.existsByemail(userEmail);
+			boolean existsByemail = ur.existsByuserEmail(userEmail);
 			boolean isValidEmail = userEmail.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
 
 			if (!existsByemail) {

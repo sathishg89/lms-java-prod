@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
 		Optional<User> findByemail;
 		try {
-			findByemail = lur.findByemail(email);
+			findByemail = lur.findByuserEmail(email);
 			return findByemail;
 		} catch (Exception e) {
 			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUser(User lu) {
 
-		Optional<User> findByemail = lur.findByemail(lu.getUserEmail());
+		Optional<User> findByemail = lur.findByuserEmail(lu.getUserEmail());
 		if (findByemail.isEmpty()) {
 			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String saveImg(MultipartFile mp, String userEmail) throws Exception {
 
-		User op = lur.findByemail(userEmail)
+		User op = lur.findByuserEmail(userEmail)
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		try {
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public byte[] downloadImage(String email) throws IOException, DataFormatException {
 
-		User img = lur.findByemail(email)
+		User img = lur.findByuserEmail(email)
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 
 		} else {
-			lu1 = lur.findByemail(userEmail)
+			lu1 = lur.findByuserEmail(userEmail)
 					.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 							CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		}
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
 
 		Optional<UserVerifyDto> findByemail;
 		try {
-			findByemail = or.findByemail(userEmail);
+			findByemail = or.findByuserEmail(userEmail);
 
 			if (findByemail.get().getOtp().equals(otp) && Duration
 					.between(findByemail.get().getOtpGeneratedTime(), LocalDateTime.now()).getSeconds() < (1 * 60)) {

@@ -1,14 +1,30 @@
 package com.lms.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "db")
 public class DatabaseProperties {
+
+    @Value("${spring.datasource.url}")
     private String url;
+
+    @Value("${spring.datasource.username}")
     private String username;
+
+    @Value("${spring.datasource.password}")
     private String password;
 
-    // Getters and setters for the fields
+    // Getters for the fields
+    public String getUrl() {
+        return url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

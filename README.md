@@ -15,7 +15,7 @@
 ### MySQL Password setup:
     sudo mysql -u root -p
     Enter password: empty+enter
-    ### Password setup query:
+**Password setup query:**
         ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
         FLUSH PRIVILEGES;
         EXIT;
@@ -115,7 +115,7 @@
 ### Connect frontend with backend  : 
     cd lms-fe/lmsv1/src/Components/
     sudo vi Home.jsx
-   ** line-10:** const response = await axios.get("**http://pub-ip:8080/user/login**");
+**line-10**: const response = await axios.get("**http://pub-ip:8080/user/login**");
 
 ### build frontend:
     cd lms-spring/lms-fe/lmsv1

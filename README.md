@@ -15,7 +15,7 @@
 ### MySQL Password setup:
     sudo mysql -u root -p
     Enter password: empty+enter
-**Password setup query:**
+    Password setup query:
         ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
         FLUSH PRIVILEGES;
         EXIT;

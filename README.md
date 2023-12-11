@@ -24,9 +24,9 @@
 ## BACKEND setup:
 ### Update DB credentials: LMS-BE/src/main/resources/application.properties
 - Change/Update the DataBase details according to your requirement 
-  spring.datasource.url=jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:LMS}?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&useSSL=false
-  spring.datasource.username=${DB_USERNAME:root}
-  spring.datasource.password=${DB_PASSWORD:password}
+  - spring.datasource.url=jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:LMS}?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&useSSL=false
+  - spring.datasource.username=${DB_USERNAME:root}
+  - spring.datasource.password=${DB_PASSWORD:password}
 ### Install java: 
     sudo apt install openjdk-17* -y
     Java --version
@@ -39,9 +39,9 @@
 ### Backend service setup:
 - backend service file to run the application in background
 - sudo vi /etc/systemd/system/lms-be.service
-- [Unit]
-- Description=Your Spring Boot Application
-- [Service]
+  - [Unit]
+  - Description=Your Spring Boot Application
+  - [Service]
   - User=ubuntu
   - ExecStart=/usr/bin/java -jar /home/ubuntu/lms-team-1/LMS-BE/target/LMS-0.0.1-SNAPSHOT.jar
   - SuccessExitStatus=143
@@ -59,13 +59,13 @@
 ### Install nodejs version: 20
     sudo apt-get update
 **Visit: https://deb.nodesource.com/**
-    sudo apt-get update && sudo apt-get install -y ca-certificates curl gnupg
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-    NODE_MAJOR=20
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-    sudo apt-get update
-    sudo apt-get install nodejs -y
-    sudo apt install nodejs -y
+- sudo apt-get update && sudo apt-get install -y ca-certificates curl gnupg
+- curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+- NODE_MAJOR=20
+- echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+- sudo apt-get update
+- sudo apt-get install nodejs -y
+- sudo apt install nodejs -y
 ### Install node version manager (nvm) for installing node v:20
 
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash

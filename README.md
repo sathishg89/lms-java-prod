@@ -6,14 +6,13 @@
     Frontend: node-20
     Ports: 22,80,8080,3306
 
-#### Install tree for checking directories: sudo apt  install tree -y
 ## Database setup:
     Install mysql db: sudo apt install mysql-server -y
     Mysql secure installations: sudo mysql_secure_installation
         Choose option: y/n
     Check status: sudo service mysql status
     Restart service: sudo service mysql restart
-### Password setup:
+### MySQL Password setup:
     sudo mysql -u root -p
     Enter password: empty+enter
     ### Password setup query:
@@ -107,7 +106,7 @@
 ## BACKEND setup:
 - cd LMS-BE
 - docker build -t lmsbe .
-- we will give database details while running the server
+- we will give database details while running the container
 - docker run -d --name be --link mysql:mysql -e DB_HOST=mysql -e DB_PORT=3306 -e DB_NAME=lmsdb -e DB_USERNAME=root -e DB_PASSWORD=Qwerty@123 -p 8080:8080 lmsbe
 ##### Check backend in browser: http://pub-ip:8080/user/login
 

@@ -38,18 +38,18 @@
     java -jar target/LMS-0.0.1-SNAPSHOT.jar
 ### Backend service setup:
 - backend service file to run the application in background
-    sudo vi /etc/systemd/system/lms-be.service
-        [Unit]
-        Description=Your Spring Boot Application
-        [Service]
-        User=ubuntu
-        ExecStart=/usr/bin/java -jar /home/ubuntu/lms-team-1/LMS-BE/target/LMS-0.0.1-SNAPSHOT.jar
-        SuccessExitStatus=143
-        [Install]
-        WantedBy=multi-user.target
-    sudo systemctl daemon-reload
-    sudo systemctl start lms-be
-    sudo systemctl enable lms-be
+- sudo vi /etc/systemd/system/lms-be.service
+    [Unit]
+    Description=Your Spring Boot Application
+    [Service]
+    User=ubuntu
+    ExecStart=/usr/bin/java -jar /home/ubuntu/lms-team-1/LMS-BE/target/LMS-0.0.1-SNAPSHOT.jar
+    SuccessExitStatus=143
+    [Install]
+    WantedBy=multi-user.target
+- sudo systemctl daemon-reload
+- sudo systemctl start lms-be
+- sudo systemctl enable lms-be
 ##### Check backend in browser: http://pub-ip:8080/user/login
 
 ## FRONTEND Server setup:

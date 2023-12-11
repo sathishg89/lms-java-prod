@@ -23,9 +23,9 @@
 ## BACKEND setup:
 ### Update DB credentials: LMS-BE/src/main/resources/application.properties
 - Change/Update the DataBase details according to your requirement 
-  - spring.datasource.url=**jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:LMS}?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&useSSL=false**
-  - spring.datasource.username=**${DB_USERNAME:root}**
-  - spring.datasource.password=**${DB_PASSWORD:password}**
+  - **spring.datasource.url**=jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:LMS}?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&useSSL=false
+  - **spring.datasource.username**=${DB_USERNAME:root}
+  - **spring.datasource.password**=${DB_PASSWORD:password}
 ### Install java: 
     sudo apt install openjdk-17* -y
     Java --version

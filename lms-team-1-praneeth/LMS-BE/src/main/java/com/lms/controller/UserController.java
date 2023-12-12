@@ -2,7 +2,6 @@ package com.lms.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.zip.DataFormatException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.UserVerifyDto;
 import com.lms.entity.User;
+import com.lms.exception.details.CustomException;
 import com.lms.service.UserService;
 import com.lms.serviceImpl.EmailService;
 import com.lms.serviceImpl.OtpService;
@@ -78,19 +79,16 @@ public class UserController {
 	 */
 
 	@GetMapping("/download/{email}")
-	public ResponseEntity<String> downloadImage(@PathVariable("email") String userEmail)
+	public ResponseEntity<byte[]> downloadImage(@PathVariable("email") String userEmail)
 			throws IOException, DataFormatException {
 		byte[] imageData = us.downloadImage(userEmail);
-		String encodeToString = "";
-		String img = "";
 
 		if (imageData != null) {
-			encodeToString = Base64.getEncoder().encodeToString(imageData);
-			img = "data:image/png;base64," + encodeToString;
+			return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(imageData);
 		} else {
-			img = userEmail.substring(0, 2).toUpperCase();
+			throw new CustomException(CustomErrorCodes.MISSING_IMAGE.getErrorMsg(),
+					CustomErrorCodes.MISSING_IMAGE.getErrorCode());
 		}
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_HTML).body(img);
 
 	}
 

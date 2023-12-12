@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +22,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.AllCourseUsersDto;
 import com.lms.dto.CoursesViewDto;
+import com.lms.dto.CoursesViewDto.CoursesViewDtoBuilder;
 import com.lms.dto.UserCoursesDto;
 import com.lms.dto.VideoUploadDto;
-import com.lms.dto.CoursesViewDto.CoursesViewDtoBuilder;
 import com.lms.entity.CourseLink;
 import com.lms.entity.CourseModules;
 import com.lms.entity.CourseUsers;
 import com.lms.entity.Courses;
+import com.lms.entity.User;
 import com.lms.exception.details.CustomException;
+import com.lms.repository.UserRepo;
 import com.lms.service.CourseService;
 
 import jakarta.validation.Valid;
@@ -39,22 +43,33 @@ public class CourseController {
 	@Autowired
 	private CourseService cs;
 
+	@Autowired
+	private UserRepo ur;
+
 	@PostMapping("/addcourseuser")
-	public ResponseEntity<?> addCourseUser(@RequestParam String userName, @RequestParam String userEmail) {
+	public ResponseEntity<String> addCourseUser(@RequestParam String userName, @RequestParam String userEmail) {
 
-		CourseUsers cu = CourseUsers.builder().userName(userName).userEmail(userEmail).build();
+		Optional<User> user = ur.findByuserEmail(userEmail);
 
-		boolean saveUserCourse = cs.saveCourseUser(cu);
+		if (user.isPresent()) {
+			CourseUsers cu = CourseUsers.builder().userName(userName).userEmail(userEmail).build();
 
-		if (saveUserCourse) {
-			return new ResponseEntity<String>("CourseUsers Saved", HttpStatus.CREATED);
+			boolean saveUserCourse = cs.saveCourseUser(cu);
+
+			if (saveUserCourse) {
+				return new ResponseEntity<String>("CourseUsers Saved", HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<String>("Unable To Save CourseUsers", HttpStatus.BAD_REQUEST);
+			}
 		} else {
-			return new ResponseEntity<String>("Unable To Save CourseUsers", HttpStatus.BAD_REQUEST);
+			throw new CustomException(CustomErrorCodes.USER_NOT_FOUND.getErrorMsg(),
+					CustomErrorCodes.USER_NOT_FOUND.getErrorCode());
 		}
+
 	}
 
 	@PostMapping("/addcourse")
-	public ResponseEntity<?> addCourse(@RequestParam String courseName, @RequestParam String courseTrainer) {
+	public ResponseEntity<String> addCourse(@RequestParam String courseName, @RequestParam String courseTrainer) {
 
 		Courses cc = Courses.builder().coursename(courseName).coursetrainer(courseTrainer).build();
 
@@ -68,8 +83,8 @@ public class CourseController {
 	}
 
 	@PostMapping("/accesscoursetouser")
-	public ResponseEntity<?> accessCouresToUser(@RequestParam String courseUserEmail, @RequestParam String courseName,
-			@RequestParam String trainerName) {
+	public ResponseEntity<String> accessCouresToUser(@RequestParam String courseUserEmail,
+			@RequestParam String courseName, @RequestParam String trainerName) {
 		boolean accessTocoures = cs.accessCouresToUser(courseUserEmail, courseName, trainerName);
 
 		if (accessTocoures) {
@@ -163,4 +178,15 @@ public class CourseController {
 
 		return new ResponseEntity<List<CoursesViewDto>>(list, HttpStatus.OK);
 	}
+
+	@DeleteMapping("/deletecourse")
+	public ResponseEntity<String> deleteCourse(@RequestParam String courseName, @RequestParam String trainerName) {
+
+		if (cs.deleteCourse(courseName, trainerName)) {
+			return new ResponseEntity<String>("Course Deleted", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("UnAble To  Course Deleted", HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }

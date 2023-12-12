@@ -250,4 +250,74 @@ public class CourseServiceImpl implements CourseService {
 
 	}
 
+	@Override
+	public boolean deleterCourseUser(String email) {
+
+		CourseUsers user = ucr.findByuserEmail(email);
+
+		if (user != null) {
+			user.getCoursesList().clear();
+
+			ucr.save(user);
+
+			ucr.delete(user);
+
+			return true;
+		}
+
+		else {
+			return false;
+		}
+
+	}
+
+	@Override
+	public boolean deleteCourse(String courseName, String trainerName) {
+
+		List<Courses> findBycoursenameAndcoursetrainer = cr.findBycoursenameAndcoursetrainer(courseName, trainerName);
+
+		if (!findBycoursenameAndcoursetrainer.isEmpty()) {
+			Courses courses = findBycoursenameAndcoursetrainer.get(0);
+
+			cr.delete(courses);
+			return true;
+
+		} else {
+			return false;
+		}
+
+	}
+
+	@Override
+	public boolean removeCourseAccess(String userEmail, String courseName, String trainerName) {
+
+		CourseUsers findByuserEmail = ucr.findByuserEmail(userEmail);
+
+		if (findByuserEmail != null) {
+			List<Courses> coursesList = findByuserEmail.getCoursesList();
+
+			List<Courses> collect = coursesList.stream()
+					.filter(fil -> fil.getCoursename().equals(courseName) & fil.getCoursetrainer().equals(trainerName))
+					.collect(Collectors.toList());
+
+			collect.clear();
+
+			findByuserEmail.setCoursesList(collect);
+
+			ucr.save(findByuserEmail);
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	@Override
+	public List<Courses> getAllCourses() {
+
+		List<Courses> findAll = cr.findAll();
+
+		return findAll;
+	}
+
 }

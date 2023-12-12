@@ -18,7 +18,8 @@ public class AllCourseUsersDto {
 
 	private String coursename;
 	private String coursetrainer;
-	@JsonIgnoreProperties("courseslist")
+	
+	@JsonIgnoreProperties("coursesList")
 	private List<CourseUsers> courseusers;
 
 }

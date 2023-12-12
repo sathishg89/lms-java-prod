@@ -1,9 +1,15 @@
 package com.lms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
+import com.lms.entity.Courses;
 import com.lms.entity.User;
 import com.lms.exception.details.NameFoundException;
 import com.lms.service.AdminService;
+import com.lms.service.CourseService;
 import com.lms.service.UserService;
 
 import jakarta.validation.Valid;
@@ -29,6 +37,9 @@ public class AdminController {
 
 	@Autowired
 	private UserService us;
+
+	@Autowired
+	private CourseService cs;
 
 	/*
 	 * 
@@ -71,6 +82,41 @@ public class AdminController {
 			return new ResponseEntity<String>("User details updated", HttpStatus.OK);
 		}
 
+	}
+
+	@DeleteMapping("/delete/{email}")
+	public ResponseEntity<String> deleteUser(@PathVariable("email") String userEmail) {
+
+		boolean deleteUser = us.deleteUser(userEmail);
+		boolean deleterCourseUser = cs.deleterCourseUser(userEmail);
+
+		if (deleterCourseUser && deleteUser) {
+			return new ResponseEntity<String>("User Deleted Successfully", HttpStatus.OK);
+
+		} else {
+			return new ResponseEntity<String>("User Deletion UnSuccessfully", HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	@PatchMapping("/removecourseaccess")
+	public ResponseEntity<String> removeCourseAccess(@RequestParam String userEmail, @RequestParam String courseName,
+			@RequestParam String trainerName) {
+
+		boolean removeCourseAccess = cs.removeCourseAccess(userEmail, courseName, trainerName);
+		if (removeCourseAccess) {
+			return new ResponseEntity<String>("Access Removed", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("Unable To Access Removed", HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	@GetMapping("/getallcourses")
+	public ResponseEntity<List<Courses>> getAllCourses() {
+		List<Courses> allCourses = cs.getAllCourses();
+
+		return new ResponseEntity<List<Courses>>(allCourses, HttpStatus.OK);
 	}
 
 }

@@ -55,7 +55,7 @@ public class SecurityConfig {
 				auth ->
 
 				{
-					auth.requestMatchers("/getallapi").permitAll();
+					auth.requestMatchers("/getallapi", "/admin/delete/{email}","/admin/removecourseaccess","/admin/getallcourses").permitAll();
 
 					auth.requestMatchers("/admin/signup", "/admin/importusers", "/admin/update").authenticated();
 
@@ -68,8 +68,8 @@ public class SecurityConfig {
 							"/user/update", "/user/getotp", "/user/verifyacc", "/user/resetpassword").permitAll();
 
 					auth.requestMatchers("/course/addcourseuser", "/course/addcourse", "/course/accesscoursetouser",
-							"/course/addvideolink", "/course/getcourseusers", "/course/getcourse", "/course/getvideos")
-							.permitAll();
+							"/course/addvideolink", "/course/getcourseusers", "/course/getcourse", "/course/getvideos",
+							"/course/deletecourse").permitAll();
 
 				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(ap()).addFilterBefore((Filter) jfl, UsernamePasswordAuthenticationFilter.class);

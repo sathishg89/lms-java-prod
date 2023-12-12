@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserRepo lur;
+	private UserRepo ur;
 
 	@Autowired
 	private PasswordEncoder pe;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
 		Optional<User> findByemail;
 		try {
-			findByemail = lur.findByuserEmail(email);
+			findByemail = ur.findByuserEmail(email);
 			return findByemail;
 		} catch (Exception e) {
 			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUser(User lu) {
 
-		Optional<User> findByemail = lur.findByuserEmail(lu.getUserEmail());
+		Optional<User> findByemail = ur.findByuserEmail(lu.getUserEmail());
 		if (findByemail.isEmpty()) {
 			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
@@ -64,12 +64,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String saveImg(MultipartFile mp, String userEmail) throws Exception {
 
-		User op = lur.findByuserEmail(userEmail)
+		User op = ur.findByuserEmail(userEmail)
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		try {
 			op.setImg(mp.getBytes());
-			lur.save(op);
+			ur.save(op);
 			return "Image File Uploaded Successfully :" + mp.getOriginalFilename().toLowerCase();
 		} catch (IOException e) {
 			throw new CustomException(CustomErrorCodes.MISSING_IMAGE.getErrorMsg(),
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public byte[] downloadImage(String email) throws IOException, DataFormatException {
 
-		User img = lur.findByuserEmail(email)
+		User img = ur.findByuserEmail(email)
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 
 		} else {
-			lu1 = lur.findByuserEmail(userEmail)
+			lu1 = ur.findByuserEmail(userEmail)
 					.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 							CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		}
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
 			lu1.setImg(lu.getImg());
 		}
 
-		return lur.save(lu1);
+		return ur.save(lu1);
 
 	}
 
@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean resetPassword(String password, String verifypassword, long id) {
 
-		User findById = lur.findById(id)
+		User findById = ur.findById(id)
 				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
 						CustomErrorCodes.INVALID_DETAILS.getErrorCode()));
 		if (password.equals(verifypassword)) {
@@ -168,6 +168,21 @@ public class UserServiceImpl implements UserService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean deleteUser(String UserEmail) {
+
+		User findByuserEmail = ur.findByuserEmail(UserEmail).orElseThrow(null);
+
+		if (findByuserEmail != null) {
+			ur.delete(findByuserEmail);
+
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }

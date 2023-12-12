@@ -24,4 +24,12 @@ public interface CourseService {
 	List<AllCourseUsersDto> getCourses(String courseName, String trainerName);
 
 	List<CourseModules> getVideoLink(String userEmail, String courseName, String trainerName);
+
+	boolean deleterCourseUser(String email);
+
+	boolean deleteCourse(String courseName, String trainerName);
+
+	boolean removeCourseAccess(String userEmail, String courseName, String trainerName);
+
+	List<Courses> getAllCourses();
 }

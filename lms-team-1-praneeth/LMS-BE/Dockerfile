@@ -1,5 +1,5 @@
 # Use the official OpenJDK 17 image as the base image
-FROM eclipse-temurin:17
+FROM openjdk:17
 
 # Maintainer information
 LABEL maintainer="praneeth"

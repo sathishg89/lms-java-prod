@@ -55,16 +55,21 @@ public class SecurityConfig {
 				auth ->
 
 				{
-					auth.requestMatchers("/admin/signup", "/admin/importusers").authenticated();
+					auth.requestMatchers("/getallapi").permitAll();
+
+					auth.requestMatchers("/admin/signup", "/admin/importusers", "/admin/update").authenticated();
+
+					auth.requestMatchers("/auth/login").permitAll();
 
 					auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/webjars/**",
 							"/swagger-resources/**").permitAll();
 
-					auth.requestMatchers("/user/connect", "user/login", "/user/upload", "/user/{email}", "/user/getotp",
-							"/user/verifyacc", "/user/resetpassword", "/user/verifyacc", "/user/resetpassword",
-							"/user/addcourseuser", "/user/addcourse", "/user/accesscoursetouser", "/user/addvideolink",
-							"/user/getcourseusers", "/user/getcourse", "/user/getvideos", "/user/getallapi",
-							"/getallapi").permitAll();
+					auth.requestMatchers("/user/connect", "user/login", "/user/uploadimage", "/user/download/{email}",
+							"/user/update", "/user/getotp", "/user/verifyacc", "/user/resetpassword").permitAll();
+
+					auth.requestMatchers("/course/addcourseuser", "/course/addcourse", "/course/accesscoursetouser",
+							"/course/addvideolink", "/course/getcourseusers", "/course/getcourse", "/course/getvideos")
+							.permitAll();
 
 				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(ap()).addFilterBefore((Filter) jfl, UsernamePasswordAuthenticationFilter.class);

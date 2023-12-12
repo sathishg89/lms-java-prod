@@ -14,9 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VideoUploadDto {
 
-	@NotEmpty(message = "name cannot be empty")
-	private String userName;
-
 	@NotEmpty(message = "Course name cannot be empty")
 	private String courseName;
 

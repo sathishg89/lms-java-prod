@@ -25,7 +25,6 @@ import com.lms.service.UserService;
 import com.lms.serviceImpl.EmailService;
 import com.lms.serviceImpl.OtpService;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 //@Slf4j
@@ -41,17 +40,6 @@ public class UserController {
 
 	@Autowired
 	private EmailService es;
-
-	/*
-	 * 
-	 * API used to get all the api in swagger document
-	 * 
-	 */
-
-	@GetMapping("/getallapi")
-	public void redirectToSwagger(HttpServletResponse response) throws IOException {
-		response.sendRedirect("/swagger-ui/index.html#/");
-	}
 
 	/*
 	 * 
@@ -173,7 +161,7 @@ public class UserController {
 	 * 
 	 */
 
-	@PostMapping("/resetpassword")
+	@PutMapping("/resetpassword")
 	public ResponseEntity<String> saveNewPassword(@RequestParam("password") String password,
 			@RequestParam("verifypassword") String verifypassword, @RequestParam("id") long id) {
 

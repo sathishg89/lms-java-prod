@@ -116,6 +116,9 @@ public class AdminController {
 	public ResponseEntity<List<AllCoursesDto>> getAllCourses() {
 		List<AllCoursesDto> allCourses = cs.getAllCourses();
 
+		
+		
+		
 		return new ResponseEntity<List<AllCoursesDto>>(allCourses, HttpStatus.OK);
 	}
 

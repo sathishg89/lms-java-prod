@@ -3,6 +3,7 @@ package com.lms.service;
 import java.util.List;
 
 import com.lms.dto.AllCourseUsersDto;
+import com.lms.dto.AllCoursesDto;
 import com.lms.dto.UserCoursesDto;
 import com.lms.dto.VideoUploadDto;
 import com.lms.entity.CourseModules;
@@ -31,5 +32,5 @@ public interface CourseService {
 
 	boolean removeCourseAccess(String userEmail, String courseName, String trainerName);
 
-	List<Courses> getAllCourses();
+	List<AllCoursesDto> getAllCourses();
 }

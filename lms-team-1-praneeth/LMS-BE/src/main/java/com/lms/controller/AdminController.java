@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
-import com.lms.entity.Courses;
+import com.lms.dto.AllCoursesDto;
 import com.lms.entity.User;
 import com.lms.exception.details.NameFoundException;
 import com.lms.service.AdminService;
@@ -113,10 +113,10 @@ public class AdminController {
 	}
 
 	@GetMapping("/getallcourses")
-	public ResponseEntity<List<Courses>> getAllCourses() {
-		List<Courses> allCourses = cs.getAllCourses();
+	public ResponseEntity<List<AllCoursesDto>> getAllCourses() {
+		List<AllCoursesDto> allCourses = cs.getAllCourses();
 
-		return new ResponseEntity<List<Courses>>(allCourses, HttpStatus.OK);
+		return new ResponseEntity<List<AllCoursesDto>>(allCourses, HttpStatus.OK);
 	}
 
 }

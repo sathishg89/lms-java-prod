@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.AllCourseUsersDto;
+import com.lms.dto.AllCoursesDto;
 import com.lms.dto.UserCoursesDto;
 import com.lms.dto.VideoUploadDto;
 import com.lms.entity.CourseLink;
@@ -313,9 +314,8 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public List<Courses> getAllCourses() {
-
-		List<Courses> findAll = cr.findAll();
+	public List<AllCoursesDto> getAllCourses() {
+		List<AllCoursesDto> findAll = cr.getOnlyCourses();
 
 		return findAll;
 	}

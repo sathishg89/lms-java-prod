@@ -66,7 +66,7 @@
 - kubectl apply -f backend-service.yml
 
 #### to check backend use port-forward cmd
-- kubectl port-forward service/backend-service **32315:8080** --address 0.0.0.0
+- kubectl port-forward service/backend-service **32323:8080** --address 0.0.0.0
 - check in browser: **pub-ip:32315/user/connect**
   
 

@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: backend-configmap
 data:
-  DB_HOST: mysql
+  DB_HOST: mysql-cluster-ip
   DB_PORT: "3306"
   DB_NAME: lmsdb
   DB_USER: root

@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-app
+  name: backend-deployment
 spec:
-  replicas: 1
+  replicas: 1 # You can adjust the number of replicas as needed
   selector:
     matchLabels:
       app: backend
@@ -15,17 +15,30 @@ spec:
     spec:
       containers:
         - name: backend
-          image: muralialakuntla3/lms-java-be
+          image: muralialakuntla3/lms-java-be # Replace with your actual Docker image name
           ports:
             - containerPort: 8080
           env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://mysql-cluster-ip:3306/LMS?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&useSSL=false
-            - name: MYSQL_USER
+            - name: DB_HOST
               valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: user
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: DB_USER
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:

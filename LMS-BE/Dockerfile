@@ -2,7 +2,7 @@
 FROM openjdk:17
 
 # Maintainer information
-LABEL maintainer="praneeth"
+LABEL maintainer="murali muralialakuntla3@gmail.com"
 
 # Set the working directory inside the container
 WORKDIR /app

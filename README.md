@@ -49,21 +49,40 @@
 - kubectl apply -f mysql-secret.yml
 - kubectl apply -f mysql-deployment.yml
 - kubectl apply -f mysql-cluster-ip.yml
-  
+
+### Docker login:
+- generate PAT in docker hub
+- My Account -> settings -> New Access Token
+- login to your server
+- docker login -u muralialakuntla3
+- password: paste your token 
 ### Backend:
+- cd LMS-BE
+- chmod +x mvnw
+- docker build -t muralialakuntla3/lms-java-be
+- docker push muralialakuntla3/lms-java-be
 - kubectl apply -f backend-configmap.yml
 - kubectl apply -f backend-deployment.yml
 - kubectl apply -f backend-service.yml
 
 #### to check backend use port-forward cmd
-- kubectl port-forward service/backend-service **30700:8080**
+- kubectl port-forward service/backend-service **32315:8080** --address 0.0.0.0
+- check in browser: **pub-ip:32315/user/connect**
+  
 
 ### Frontend:
+#### Connect frontend with backend  : 
+- cd LMS-FE/src/
+- sudo vi utils.js
+- export const url =("**http://pub-ip:8080/user/login**");
+#### frontend deployment
+- docker build -t muralialakuntla3/lms-java-be
+- docker push muralialakuntla3/lms-java-be
 - kubectl apply -f frontend-deployment.yml
 - kubectl apply -f frontend-service.yml
 #### to check backend use port-forward cmd
-- kubectl port-forward service/frontend-service **30700:80**
-
+- kubectl port-forward service/frontend-service **30700:80** --address 0.0.0.0
+- check in browser: **pub-ip:32315**
 
 
 

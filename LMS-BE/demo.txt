@@ -1,0 +1,16 @@
+//	@GetMapping("/login")
+//	public ResponseEntity<String> login1(@RequestBody @Valid LearnerUserDto lud) {
+//
+//		LearnerUser lu = LearnerUser.build(0, null, lud.getEmail(), lud.getPassword(), null);
+//		ResponseEntity<?> getby = lus.getby(lu);
+//
+//		if (getby.equals(null)) {
+//			throw new EmailNotFoundException();
+//
+//		} else {
+//
+//			return new ResponseEntity<String>("Welcome" + getby.getBody(), getby.getStatusCode());
+//
+//		}
+//
+//	}

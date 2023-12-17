@@ -81,7 +81,7 @@
 - kubectl apply -f frontend-deployment.yml
 - kubectl apply -f frontend-service.yml
 #### to check backend use port-forward cmd
-- kubectl port-forward service/frontend-service **30700:80** --address 0.0.0.0
+- kubectl port-forward service/frontend-service **31374:80** --address 0.0.0.0
 - check in browser: **pub-ip:32315**
 
 

@@ -117,7 +117,7 @@
 ### Connect frontend with backend  : 
 - cd LMS-FE/src/
 - sudo vi utils.js
-- export const url =("**http://pub-ip:8080/user/login**");
+- export const url =("**http://pub-ip:8080/user/**");
 
 ### build frontend:
 - cd LMS-FE

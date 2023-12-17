@@ -34,6 +34,8 @@
 - curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 - sudo install minikube-linux-amd64 /usr/local/bin/minikube
 - minikube version
+- minikube status
+- minikube start
 
 ## STEP-3: Create K8S Manifest files
 - Code: git clone -b dev https://github.com/muralialakuntla3/lms-java.git

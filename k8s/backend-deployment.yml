@@ -39,7 +39,7 @@ spec:
                 configMapKeyRef:
                   name: backend-configmap
                   key: DB_USER
-            - name: MYSQL_PASSWORD
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret

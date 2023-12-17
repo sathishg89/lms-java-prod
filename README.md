@@ -1,4 +1,4 @@
-# LMS-JAVA Application VM Deployment
+# LMS-JAVA Application Docker Deployment
 ## Server setup:
     Server type: T2.medium server
     Ports: 22,80,8080,3306

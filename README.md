@@ -53,13 +53,13 @@
 - kubectl apply -f backend-deployment.yml
 - kubectl apply -f backend-service.yml
 - to check backend use port-forward cmd
-  kubectl port-forward service/backend-service **30700:8080**
+    kubectl port-forward service/backend-service **30700:8080**
 
 ### Frontend:
 - kubectl apply -f frontend-deployment.yml
 - kubectl apply -f frontend-service.yml
 - to check backend use port-forward cmd
-  kubectl port-forward service/frontend-service **30700:80**
+    kubectl port-forward service/frontend-service **30700:80**
 
 
 

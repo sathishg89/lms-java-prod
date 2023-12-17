@@ -59,7 +59,7 @@
 ### Backend:
 - cd LMS-BE
 - chmod +x mvnw
-- docker build -t muralialakuntla3/lms-java-be
+- docker build -t muralialakuntla3/lms-java-be .
 - docker push muralialakuntla3/lms-java-be
 - kubectl apply -f backend-configmap.yml
 - kubectl apply -f backend-deployment.yml
@@ -74,10 +74,10 @@
 #### Connect frontend with backend  : 
 - cd LMS-FE/src/
 - sudo vi utils.js
-- export const url =("**http://pub-ip:8080/user/login**");
+- export const url =("**http://pub-ip:8080/user/**");
 #### frontend deployment
-- docker build -t muralialakuntla3/lms-java-be
-- docker push muralialakuntla3/lms-java-be
+- docker build -t muralialakuntla3/lms-java-fe .
+- docker push muralialakuntla3/lms-java-fe
 - kubectl apply -f frontend-deployment.yml
 - kubectl apply -f frontend-service.yml
 #### to check backend use port-forward cmd

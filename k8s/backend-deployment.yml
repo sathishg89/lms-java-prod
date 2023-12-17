@@ -1,10 +1,9 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
 spec:
-  replicas: 1 # You can adjust the number of replicas as needed
+  replicas: 1        # You can adjust the number of replicas as needed
   selector:
     matchLabels:
       app: backend
@@ -15,32 +14,16 @@ spec:
     spec:
       containers:
         - name: backend
-          image: muralialakuntla3/lms-java-be # Replace with your actual Docker image name
+          image: muralialakuntla3/lms-java-be      # Replace with your actual Docker image 
           ports:
             - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: backend-configmap
           env:
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-configmap
-                  key: DB_HOST
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-configmap
-                  key: DB_PORT
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-configmap
-                  key: DB_NAME
-            - name: DB_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-configmap
-                  key: DB_USER
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
                   key: password
+

@@ -1,10 +1,13 @@
 package com.lms.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +25,11 @@ import com.lms.service.AdminService;
 import com.lms.service.CourseService;
 import com.lms.service.UserService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping({ "/admin" })
 public class AdminController {
 
 	@Autowired
@@ -36,6 +40,17 @@ public class AdminController {
 
 	@Autowired
 	private CourseService cs;
+
+	/*
+	 * 
+	 * API fetches the swagger document
+	 * 
+	 */
+
+	@GetMapping("/getallapi")
+	public void redirectToSwagger(HttpServletResponse response) throws IOException {
+		response.sendRedirect("/swagger-ui/index.html#/");
+	}
 
 	/*
 	 * 
@@ -65,8 +80,8 @@ public class AdminController {
 		return new ResponseEntity<String>("Error In Importing Users", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PutMapping("/update")
-	public ResponseEntity<String> UserUpdate(@RequestBody User user, @RequestParam String UserEmail) {
+	@PutMapping("/userupdate/{userEmail}")
+	public ResponseEntity<String> UserUpdate(@RequestBody User user, @PathVariable("userEmail") String UserEmail) {
 		User luupdate = us.userUpdate(user, UserEmail);
 		if (luupdate == null) {
 			return new ResponseEntity<String>("User details updated", HttpStatus.BAD_REQUEST);
@@ -75,8 +90,8 @@ public class AdminController {
 		}
 	}
 
-	@DeleteMapping("/delete/{email}")
-	public ResponseEntity<String> deleteUser(@PathVariable("email") String userEmail) {
+	@DeleteMapping("/delete/{userEmail}")
+	public ResponseEntity<String> deleteUser(@PathVariable("userEmail") String userEmail) {
 
 		boolean deleteUser = us.deleteUser(userEmail);
 		boolean deleterCourseUser = cs.deleterCourseUser(userEmail);
@@ -89,9 +104,9 @@ public class AdminController {
 		}
 	}
 
-	@PatchMapping("/removecourseaccess")
-	public ResponseEntity<String> removeCourseAccess(@RequestParam String userEmail, @RequestParam String courseName,
-			@RequestParam String trainerName) {
+	@PatchMapping("/removecourseaccess/{userEmail}/{courseName}/{trainerName}")
+	public ResponseEntity<String> removeCourseAccess(@PathVariable("userEmail") String userEmail, @PathVariable("courseName") String courseName,
+			@PathVariable("trainerName") String trainerName) {
 		boolean removeCourseAccess = cs.removeCourseAccess(userEmail, courseName, trainerName);
 		if (removeCourseAccess) {
 			return new ResponseEntity<String>("Access Removed", HttpStatus.OK);
@@ -99,7 +114,5 @@ public class AdminController {
 			return new ResponseEntity<String>("Unable To Access Removed", HttpStatus.BAD_REQUEST);
 		}
 	}
-
-	
 
 }

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.AddCourseDto;
@@ -46,7 +45,7 @@ import com.lms.service.CourseService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping({ "/admin/course", "/user/course" })
+@RequestMapping({ "/admin/course" })
 public class CourseController {
 
 	@Autowired
@@ -104,7 +103,7 @@ public class CourseController {
 
 	}
 
-	@PostMapping("/addvideolink")
+	@PostMapping("/savevideo")
 	public ResponseEntity<String> addVideolink(@RequestBody @Valid VideoUploadDto videoDto) {
 		boolean addVideoLink = cs.addVideoLink(videoDto);
 
@@ -116,8 +115,8 @@ public class CourseController {
 
 	}
 
-	@GetMapping("/getcourseuserinfo/{email}")
-	public ResponseEntity<CourseUserDto> getCourseUserDetails(@PathVariable("email") String userEmail) {
+	@GetMapping("/getcourseuserinfo/{userEmail}")
+	public ResponseEntity<CourseUserDto> getCourseUserDetails(@PathVariable("userEmail") String userEmail) {
 
 		CourseUserDto uc = cs.getCourseUsers(userEmail);
 
@@ -130,9 +129,9 @@ public class CourseController {
 
 	}
 
-	@GetMapping("/getcourseusers/{coursename}/{trainername}")
-	public ResponseEntity<List<CourseUsersInfoDto>> getCourses(@PathVariable("coursename") String courseName,
-			@PathVariable("trainername") String trainerName) {
+	@GetMapping("/getcourseusers/{courseName}/{trainerName}")
+	public ResponseEntity<List<CourseUsersInfoDto>> getCourses(@PathVariable("courseName") String courseName,
+			@PathVariable("trainerName") String trainerName) {
 
 		List<CourseUsersInfoDto> uc = cs.getCourses(courseName, trainerName);
 
@@ -145,9 +144,9 @@ public class CourseController {
 
 	}
 
-	@DeleteMapping("/deletecourse/{coursename}/{trainername}")
-	public ResponseEntity<String> deleteCourse(@PathVariable("coursename") String courseName,
-			@PathVariable("trainername") String trainerName) {
+	@DeleteMapping("/deletecourse/{courseName}/{trainerName}")
+	public ResponseEntity<String> deleteCourse(@PathVariable("courseName") String courseName,
+			@PathVariable("trainerName") String trainerName) {
 
 		if (cs.deleteCourse(courseName, trainerName)) {
 			return new ResponseEntity<String>("Course Deleted", HttpStatus.OK);
@@ -156,9 +155,9 @@ public class CourseController {
 		}
 	}
 
-	@GetMapping("/{coursename}/{trainername}/getvideos")
-	public ResponseEntity<List<CoursesModuleInfoDto>> getVideos(@PathVariable("coursename") String courseName,
-			@PathVariable("trainername") String trainerName) {
+	@GetMapping("/{courseName}/{trainerName}/getvideos")
+	public ResponseEntity<List<CoursesModuleInfoDto>> getVideos(@PathVariable("courseName") String courseName,
+			@PathVariable("trainerName") String trainerName) {
 
 		List<CourseModules> getcourse = cs.getCourseModules(courseName, trainerName);
 
@@ -209,8 +208,8 @@ public class CourseController {
 		return new ResponseEntity<List<CoursesListDto>>(allCourses, HttpStatus.OK);
 	}
 
-	@GetMapping("/{coursename}/courseinfo")
-	public ResponseEntity<CourseInfoDto> getCourseInfo(@PathVariable("coursename") String courseName) {
+	@GetMapping("/{courseName}/courseinfo")
+	public ResponseEntity<CourseInfoDto> getCourseInfo(@PathVariable("courseName") String courseName) {
 
 		CourseInfoDto courseInfo = cs.getCourseInfo(courseName);
 
@@ -223,47 +222,10 @@ public class CourseController {
 
 	}
 
-	@PostMapping("/uploadresume/{email}")
-	public ResponseEntity<String> saveResume(@PathVariable("email") String userEmail,
-			@RequestBody MultipartFile multipart) throws Exception {
+	
 
-		boolean saveResume = cs.saveResume(userEmail, multipart);
-
-		if (saveResume) {
-			return new ResponseEntity<String>("Resume Saved", HttpStatus.OK);
-		}
-		return new ResponseEntity<String>("Resume Not Saved", HttpStatus.BAD_REQUEST);
-	}
-
-	@GetMapping("/{email}/resume")
-	public ResponseEntity<byte[]> getResumes(@PathVariable("email") String userEmail) {
-
-		byte[] resume = cs.getResume(userEmail);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		if (resume != null) {
-			return new ResponseEntity<byte[]>(resume, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<byte[]>(resume, HttpStatus.BAD_REQUEST);
-		}
-
-	}
-
-	@DeleteMapping("/{email}/deleteresume")
-	public ResponseEntity<String> deleteResume(@PathVariable("email") String userEmail) {
-
-		boolean deleteResume = cs.deleteResume(userEmail);
-
-		if (deleteResume) {
-			return new ResponseEntity<String>("Resume Deletion Successfull", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<String>("Resume Deletion UnSuccessfull", HttpStatus.OK);
-		}
-
-	}
-
-	@GetMapping("/{coursename}/{trainerName}/modules")
-	public ResponseEntity<?> getModules(@PathVariable("coursename") String courseName,
+	@GetMapping("/{courseName}/{trainerName}/getmodules")
+	public ResponseEntity<List<CourseModules>> getModules(@PathVariable("coursename") String courseName,
 			@PathVariable String trainerName) {
 
 		List<CourseModules> courseModules = cs.getCourseModules(courseName, trainerName);
@@ -275,9 +237,9 @@ public class CourseController {
 		}
 	}
 
-	@PutMapping("/{coursename}/{moduleid}/update")
+	@PutMapping("/{courseName}/{moduleId}/updatemodules")
 	public ResponseEntity<List<CourseModules>> updateModules(@RequestBody ModuleUpdateDto mud,
-			@PathVariable("coursename") String courseName, @PathVariable("moduleid") int modulenum) {
+			@PathVariable("courseName") String courseName, @PathVariable("moduleId") int modulenum) {
 
 		HttpHeaders hd = new HttpHeaders();
 		hd.setContentType(MediaType.APPLICATION_JSON);
@@ -287,9 +249,9 @@ public class CourseController {
 		return new ResponseEntity<List<CourseModules>>(updateModule, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{coursename}/{moduleid}/delete")
-	public ResponseEntity<String> deleteModule(@PathVariable("coursename") String courseName,
-			@PathVariable("moduleid") int modulenum) {
+	@DeleteMapping("/{courseName}/{moduleId}/deletemodule")
+	public ResponseEntity<String> deleteModule(@PathVariable("courseName") String courseName,
+			@PathVariable("moduleId") int modulenum) {
 		boolean deleteModule = cs.deleteModule(courseName, modulenum);
 
 		if (deleteModule) {

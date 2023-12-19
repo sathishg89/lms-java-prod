@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 import java.util.zip.DataFormatException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.UserVerifyDto;
 import com.lms.entity.User;
 import com.lms.exception.details.CustomException;
+import com.lms.service.CourseService;
 import com.lms.service.UserService;
 import com.lms.serviceImpl.EmailService;
 import com.lms.serviceImpl.OtpService;
@@ -42,6 +45,9 @@ public class UserController {
 	@Autowired
 	private EmailService es;
 
+	@Autowired
+	private CourseService cs;
+
 	/*
 	 * 
 	 * API used to test the connect for connection of back-end with front-end
@@ -59,9 +65,9 @@ public class UserController {
 	 * 
 	 */
 
-	@PostMapping("/uploadimage/{email}")
+	@PostMapping("/uploadimage/{userEmail}")
 	public ResponseEntity<String> uploadImage(@RequestParam("file") @Valid MultipartFile multiPartFile,
-			@PathVariable("email") String userEmail) throws Exception {
+			@PathVariable("userEmail") String userEmail) throws Exception {
 
 		String uploadImage = us.saveImg(multiPartFile, userEmail);
 
@@ -78,8 +84,8 @@ public class UserController {
 	 * 
 	 */
 
-	@GetMapping("/download/{email}")
-	public ResponseEntity<byte[]> downloadImage(@PathVariable("email") String userEmail)
+	@GetMapping("/download/{userEmail}")
+	public ResponseEntity<byte[]> downloadImage(@PathVariable("userEmail") String userEmail)
 			throws IOException, DataFormatException {
 		byte[] imageData = us.downloadImage(userEmail);
 
@@ -98,8 +104,8 @@ public class UserController {
 	 * 
 	 */
 
-	@PutMapping("/update/{email}")
-	public ResponseEntity<User> UserUpdate(@RequestBody User user, @PathVariable("email") String UserEmail) {
+	@PutMapping("/update/{userEmail}")
+	public ResponseEntity<User> UserUpdate(@RequestBody User user, @PathVariable("userEmail") String UserEmail) {
 
 		User luupdate = us.userUpdate(user, UserEmail);
 		if (luupdate != null) {
@@ -117,8 +123,8 @@ public class UserController {
 	 * 
 	 */
 
-	@PostMapping("/getotp/{email}")
-	public ResponseEntity<String> getotp(@PathVariable("email") String userEmail) throws Exception {
+	@PostMapping("/getotp/{userEmail}")
+	public ResponseEntity<String> getotp(@PathVariable("userEmail") String userEmail) throws Exception {
 
 		String generateOtp = otps.generateOtp();
 
@@ -143,7 +149,7 @@ public class UserController {
 	 */
 
 	@GetMapping("/verifyotp")
-	public ResponseEntity<String> verifyAccount(@RequestParam("email") String userEmail,
+	public ResponseEntity<String> verifyAccount(@RequestParam("userEmail") String userEmail,
 			@RequestParam("otp") String otp) {
 		boolean verifyAccount = us.verifyAccount(userEmail, otp);
 
@@ -170,6 +176,45 @@ public class UserController {
 			return new ResponseEntity<String>("Reset Password Done", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("Unable To Reset Password", HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	@PostMapping("/{userEmail}/uploadresume")
+	public ResponseEntity<String> saveResume(@PathVariable("userEmail") String userEmail,
+			@RequestBody MultipartFile multipart) throws Exception {
+
+		boolean saveResume = cs.saveResume(userEmail, multipart);
+
+		if (saveResume) {
+			return new ResponseEntity<String>("Resume Saved", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Resume Not Saved", HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/{userEmail}/getresume")
+	public ResponseEntity<byte[]> getResumes(@PathVariable("email") String userEmail) {
+
+		byte[] resume = cs.getResume(userEmail);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		if (resume != null) {
+			return new ResponseEntity<byte[]>(resume, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<byte[]>(resume, HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	@DeleteMapping("/{userEmail}/deleteresume")
+	public ResponseEntity<String> deleteResume(@PathVariable("userEmail") String userEmail) {
+
+		boolean deleteResume = cs.deleteResume(userEmail);
+
+		if (deleteResume) {
+			return new ResponseEntity<String>("Resume Deletion Successfull", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("Resume Deletion UnSuccessfull", HttpStatus.OK);
 		}
 
 	}

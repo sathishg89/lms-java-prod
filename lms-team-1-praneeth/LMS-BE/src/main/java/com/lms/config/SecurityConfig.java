@@ -55,22 +55,36 @@ public class SecurityConfig {
 				auth ->
 
 				{
-					auth.requestMatchers("/getallapi", "/admin/delete/{email}", "/admin/removecourseaccess",
-							"/admin/getallcourses", "/admin/**").permitAll();
-
-					auth.requestMatchers("/admin/signup", "/admin/importusers", "/admin/update").authenticated();
-
-					auth.requestMatchers("/auth/login", "/demo/**").permitAll();
-
 					auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/webjars/**",
 							"/swagger-resources/**").permitAll();
 
-					auth.requestMatchers("/user/connect", "user/login", "/user/uploadimage", "/user/download/{email}",
-							"/user/update", "/user/getotp", "/user/verifyacc", "/user/resetpassword" ,"/user/**" ).permitAll();
+					auth.requestMatchers("/admin/getallapi").permitAll();
 
-					auth.requestMatchers("/course/addcourseuser", "/course/addcourse", "/course/accesscoursetouser",
-							"/course/addvideolink", "/course/getcourseusers", "/course/getcourse", "/course/getvideos",
-							"/course/deletecourse", "/course/**").permitAll();
+					auth.requestMatchers("/auth/login").permitAll();
+
+					auth.requestMatchers("/user/connect", "/user/uploadimage/{userEmail}", "/user/download/{userEmail}",
+							"/user/update/{userEmail}", "/user/getotp/{userEmail}", "/user/verifyotp",
+							"/user/resetpassword", "/user/{userEmail}/uploadresume", "/user/{userEmail}/getresume",
+							"/user/{userEmail}/deleteresume").permitAll();
+
+					auth.requestMatchers("/admin/signup", "/admin/importusers", "/admin/userupdate/{userEmail}",
+							"/admin/delete/{userEmail}",
+							"/admin/removecourseaccess/{userEmail}/{courseName}/{trainerName}").authenticated();
+
+					auth.requestMatchers("/admin/course/addcourseuser", "/admin/course/addcourse",
+							"/admin/course/accesscoursetouser", "/admin/course/savevideo",
+							"/admin/course/getcourseuserinfo/{userEmail}",
+							"/admin/course//getcourseusers/{courseName}/{trainerName}",
+
+							"/admin/course/deletecourse/{courseName}/{trainerName}",
+							"/admin/course/{courseName}/{trainerName}/getvideos",
+
+							"/admin/course/getallcourses", "/admin/course/{courseName}/courseinfo",
+
+							"/admin/course/{courseName}/{trainerName}/getmodules",
+							"/admin/course/{courseName}/{moduleId}/updatemodules",
+
+							"/admin/course/{courseName}/{moduleId}/deletemodule").permitAll();
 
 				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(ap()).addFilterBefore((Filter) jfl, UsernamePasswordAuthenticationFilter.class);

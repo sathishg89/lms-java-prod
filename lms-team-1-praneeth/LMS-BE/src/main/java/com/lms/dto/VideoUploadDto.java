@@ -20,6 +20,9 @@ public class VideoUploadDto {
 	@NotEmpty(message = "tname cannot be empty")
 	private String trainerName;
 
+	@NotEmpty(message = "modulename cannot be empty")
+	private String modulename;
+
 	@Positive(message = "modulenum cannot be negative or empty")
 	private int modulenumber;
 

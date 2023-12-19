@@ -144,6 +144,8 @@ public class CourseServiceImpl implements CourseService {
 
 			// converting the details into cm object
 			CourseModules cm = CourseModules.builder().modulenum(videoDto.getModulenumber())
+
+					.modulename(videoDto.getModulename())
 					.videoinserttime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy "))).clinks(cl1)
 					.build();
 

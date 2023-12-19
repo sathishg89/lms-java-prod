@@ -2,6 +2,12 @@ package com.lms.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.zip.DataFormatException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
+import com.lms.dto.CoursesModuleInfoDto;
 import com.lms.dto.UserVerifyDto;
+import com.lms.dto.CoursesModuleInfoDto.CoursesModuleInfoDtoBuilder;
+import com.lms.entity.CourseLink;
+import com.lms.entity.CourseModules;
 import com.lms.entity.User;
 import com.lms.exception.details.CustomException;
 import com.lms.service.CourseService;
@@ -217,6 +227,53 @@ public class UserController {
 			return new ResponseEntity<String>("Resume Deletion UnSuccessfull", HttpStatus.OK);
 		}
 
+	}
+
+	@GetMapping("/{courseName}/{trainerName}/getvideos")
+	public ResponseEntity<List<CoursesModuleInfoDto>> getVideos(@PathVariable("courseName") String courseName,
+			@PathVariable("trainerName") String trainerName) {
+
+		List<CourseModules> getcourse = cs.getCourseModules(courseName, trainerName);
+
+		List<Integer> mn = getcourse.stream().map(x -> x.getModulenum()).collect(Collectors.toList());
+
+		List<String> mname = getcourse.stream().map(x -> x.getModulename()).collect(Collectors.toList());
+
+		List<List<CourseLink>> collect = getcourse.stream().map(x -> x.getClinks()).collect(Collectors.toList());
+
+		List<List<CourseLink>> findFirst = collect.stream().toList();
+
+		List<List<String>> listoflinks = findFirst.stream().flatMap(clinks -> clinks.stream().map(CourseLink::getLinks))
+				.collect(Collectors.toList());
+
+		List<List<String>> listofvideonames = findFirst.stream()
+				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoname)).collect(Collectors.toList());
+
+		List<Map<String, String>> resultMapList = new ArrayList<>();
+
+		for (int i = 0; i < listoflinks.size(); i++) {
+			List<String> list2 = listoflinks.get(i);
+			List<String> list3 = listofvideonames.get(i);
+
+			Map<String, String> resultMap = new HashMap<>();
+
+			for (int j = 0; j < list2.size(); j++) {
+
+				resultMap.put(list3.get(j), list2.get(j));
+			}
+
+			resultMapList.add(resultMap);
+		}
+
+		List<CoursesModuleInfoDtoBuilder> combinedList = IntStream
+				.range(0, Math.min(mn.size(), resultMapList.size())).mapToObj(i -> CoursesModuleInfoDto.builder()
+						.modulenum(mn.get(i)).modulename(mname.get(i)).videos(resultMapList.get(i)))
+				.collect(Collectors.toList());
+
+		List<CoursesModuleInfoDto> list = combinedList.stream().map(CoursesModuleInfoDtoBuilder::build)
+				.collect(Collectors.toList());
+
+		return new ResponseEntity<List<CoursesModuleInfoDto>>(list, HttpStatus.OK);
 	}
 
 }

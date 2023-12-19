@@ -222,8 +222,6 @@ public class CourseController {
 
 	}
 
-	
-
 	@GetMapping("/{courseName}/{trainerName}/getmodules")
 	public ResponseEntity<List<CourseModules>> getModules(@PathVariable("coursename") String courseName,
 			@PathVariable String trainerName) {

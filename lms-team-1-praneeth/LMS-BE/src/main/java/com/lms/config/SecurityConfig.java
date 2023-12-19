@@ -65,7 +65,8 @@ public class SecurityConfig {
 					auth.requestMatchers("/user/connect", "/user/uploadimage/{userEmail}", "/user/download/{userEmail}",
 							"/user/update/{userEmail}", "/user/getotp/{userEmail}", "/user/verifyotp",
 							"/user/resetpassword", "/user/{userEmail}/uploadresume", "/user/{userEmail}/getresume",
-							"/user/{userEmail}/deleteresume").permitAll();
+							"/user/{userEmail}/deleteresume", "/user/{courseName}/{trainerName}/getvideos")
+							.permitAll();
 
 					auth.requestMatchers("/admin/signup", "/admin/importusers", "/admin/userupdate/{userEmail}",
 							"/admin/delete/{userEmail}",
@@ -74,7 +75,7 @@ public class SecurityConfig {
 					auth.requestMatchers("/admin/course/addcourseuser", "/admin/course/addcourse",
 							"/admin/course/accesscoursetouser", "/admin/course/savevideo",
 							"/admin/course/getcourseuserinfo/{userEmail}",
-							"/admin/course//getcourseusers/{courseName}/{trainerName}",
+							"/admin/course/getcourseusers/{courseName}/{trainerName}",
 
 							"/admin/course/deletecourse/{courseName}/{trainerName}",
 							"/admin/course/{courseName}/{trainerName}/getvideos",

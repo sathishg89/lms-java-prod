@@ -12,19 +12,24 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
-import com.lms.dto.AllCourseUsersDto;
-import com.lms.dto.AllCoursesDto;
-import com.lms.dto.UserCoursesDto;
+import com.lms.dto.CourseInfoDto;
+import com.lms.dto.CourseUserDto;
+import com.lms.dto.CourseUsersInfoDto;
+import com.lms.dto.CoursesListDto;
+import com.lms.dto.ModuleUpdateDto;
 import com.lms.dto.VideoUploadDto;
 import com.lms.entity.CourseLink;
 import com.lms.entity.CourseModules;
 import com.lms.entity.CourseUsers;
 import com.lms.entity.Courses;
+import com.lms.entity.Resume;
 import com.lms.exception.details.CustomException;
 import com.lms.repository.CourseUsersRepo;
 import com.lms.repository.CoursesRepo;
+import com.lms.repository.ResumeRepo;
 import com.lms.service.CourseService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,14 +44,23 @@ public class CourseServiceImpl implements CourseService {
 	@Autowired
 	private CoursesRepo cr;
 
+	@Autowired
+	private ResumeRepo rr;
+
 	@Override
 	public boolean saveCourseUser(CourseUsers courseUsers) {
 
-		CourseUsers save = ucr.save(courseUsers);
-		if (save == null) {
-			return false;
+		if (!ucr.existsByuserEmail(courseUsers.getUserEmail())) {
+			CourseUsers save = ucr.save(courseUsers);
+			if (save == null) {
+				return false;
+			} else {
+				return true;
+			}
 		} else {
-			return true;
+
+			throw new CustomException(CustomErrorCodes.USER_ALREADY_EXIST.getErrorMsg(),
+					CustomErrorCodes.USER_ALREADY_EXIST.getErrorCode());
 		}
 
 	}
@@ -56,12 +70,17 @@ public class CourseServiceImpl implements CourseService {
 
 		course.setCoursecreatedate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
 
-		Courses save = cr.save(course);
+		if (!cr.existsBycoursename(course.getCoursename())) {
+			Courses save = cr.save(course);
 
-		if (save == null) {
-			return false;
+			if (save == null) {
+				return false;
+			} else {
+				return true;
+			}
 		} else {
-			return true;
+			throw new CustomException(CustomErrorCodes.COURSE_ALREADY_EXIST.getErrorMsg(),
+					CustomErrorCodes.COURSE_ALREADY_EXIST.getErrorCode());
 		}
 
 	}
@@ -192,12 +211,12 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public UserCoursesDto getCourseUsers(String courseUserEmail) {
+	public CourseUserDto getCourseUsers(String courseUserEmail) {
 
 		try {
 			CourseUsers fun = ucr.findByuserEmail(courseUserEmail);
 
-			UserCoursesDto ucd = UserCoursesDto.builder().username(fun.getUserName()).useremail(fun.getUserEmail())
+			CourseUserDto ucd = CourseUserDto.builder().username(fun.getUserName()).useremail(fun.getUserEmail())
 					.courseslist(fun.getCoursesList()).build();
 
 			return ucd;
@@ -209,14 +228,15 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public List<AllCourseUsersDto> getCourses(String courseName, String trainerName) {
+	public List<CourseUsersInfoDto> getCourses(String courseName, String trainerName) {
 
 		try {
 			List<Courses> findByusername = cr.findBycoursename(courseName);
 
-			List<AllCourseUsersDto> collect = findByusername.stream()
+			List<CourseUsersInfoDto> collect = findByusername.stream()
 					.filter(fil -> fil.getCoursetrainer().equals(trainerName))
-					.map(c -> new AllCourseUsersDto(c.getCoursename(), c.getCoursetrainer(), c.getCourseusers()))
+					.map(c -> new CourseUsersInfoDto(c.getCourseid(), c.getCoursename(), c.getCoursetrainer(),
+							c.getCoursecreatedate(), c.getCourseusers()))
 					.collect(Collectors.toList());
 			return collect;
 		} catch (Exception e) {
@@ -224,29 +244,6 @@ public class CourseServiceImpl implements CourseService {
 			throw new CustomException(CustomErrorCodes.USER_NOT_FOUND.getErrorMsg(),
 					CustomErrorCodes.USER_NOT_FOUND.getErrorCode());
 
-		}
-
-	}
-
-	@Override
-	public List<CourseModules> getVideoLink(String userEmail, String courseName, String trainerName) {
-
-		try {
-			CourseUsers courseUsers = ucr.findByuserEmail(userEmail);
-
-			List<CourseModules> collect = courseUsers.getCoursesList().stream()
-					.filter(fil -> fil.getCoursename().equals(courseName) && fil.getCoursetrainer().equals(trainerName))
-					.flatMap(courses -> courses.getCoursemodule().stream()).collect(Collectors.toList());
-
-			if (collect.size() > 0) {
-				return collect;
-			} else {
-				throw new CustomException(CustomErrorCodes.COURSE_NOT_FOUND.getErrorMsg(),
-						CustomErrorCodes.COURSE_NOT_FOUND.getErrorCode());
-			}
-		} catch (Exception e) {
-			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
-					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 		}
 
 	}
@@ -297,13 +294,10 @@ public class CourseServiceImpl implements CourseService {
 		if (findByuserEmail != null) {
 			List<Courses> coursesList = findByuserEmail.getCoursesList();
 
-			List<Courses> collect = coursesList.stream()
-					.filter(fil -> fil.getCoursename().equals(courseName) & fil.getCoursetrainer().equals(trainerName))
-					.collect(Collectors.toList());
+			coursesList.removeIf(course -> course.getCoursename().equals(courseName)
+					&& course.getCoursetrainer().equals(trainerName));
 
-			collect.clear();
-
-			findByuserEmail.setCoursesList(collect);
+			findByuserEmail.setCoursesList(coursesList);
 
 			ucr.save(findByuserEmail);
 			return true;
@@ -314,10 +308,177 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public List<AllCoursesDto> getAllCourses() {
-		List<AllCoursesDto> findAll = cr.getOnlyCourses();
-
+	public List<CoursesListDto> getAllCourses() {
+		List<CoursesListDto> findAll = cr.getOnlyCourses();
 		return findAll;
+
+	}
+
+	@Override
+	public List<CourseModules> getCourseModules(String courseName, String trainerName) {
+
+		List<CourseModules> collect;
+		try {
+			collect = cr.findCourseModulesByCourseName(courseName, trainerName);
+
+			if (collect.size() > 0) {
+				return collect;
+			} else {
+				throw new CustomException(CustomErrorCodes.COURSE_NOT_FOUND.getErrorMsg(),
+						CustomErrorCodes.COURSE_NOT_FOUND.getErrorCode());
+			}
+		} catch (Exception e) {
+			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
+		}
+
+	}
+
+	@Override
+	public CourseInfoDto getCourseInfo(String courseName) {
+
+		List<Object[]> courseDetails = cr.getCourseDetails(courseName);
+
+		List<Integer> modulenumList = courseDetails.stream().map(result -> (Integer) result[4])
+				.collect(Collectors.toList());
+
+		CourseInfoDto courseInfoDto = courseDetails.stream().findFirst()
+				.map(result -> CourseInfoDto.builder().coursename((String) result[0]).coursetrainer((String) result[1])
+						.courseimage((byte[]) result[2]).description((String) result[3]).modulenum(modulenumList)
+						.build())
+				.get();
+
+		return courseInfoDto;
+	}
+
+	@Override
+	public boolean saveResume(String userEmail, MultipartFile multipart) throws Exception {
+
+		byte[] file = multipart.getBytes();
+
+		Resume r = Resume.builder().userEmail(userEmail).resume(file).build();
+
+		Resume resume = rr.findByUserEmail(userEmail)
+				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
+		if (resume == null) {
+			rr.save(r);
+
+		} else {
+			resume.setResume(file);
+			rr.save(resume);
+		}
+		return true;
+	}
+
+	@Override
+	public byte[] getResume(String userEmail) {
+
+		Resume resume = rr.findByUserEmail(userEmail)
+				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
+
+		return resume.getResume();
+
+	}
+
+	@Override
+	public boolean deleteResume(String userEmail) {
+
+		Resume resume = rr.findByUserEmail(userEmail)
+				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
+
+		resume.setResume(null);
+		rr.save(resume);
+
+		return true;
+	}
+
+	@Override
+	public List<CourseModules> updateModule(String courseName, int modulenum, ModuleUpdateDto mud) {
+
+		LocalDateTime now = LocalDateTime.now();
+
+		Courses courses = cr.findBycoursename(courseName).get(0);
+
+		List<CourseModules> ml = courses.getCoursemodule();
+
+		CourseModules courseModules = ml.stream().filter(x -> x.getModulenum() == modulenum).findFirst().get();
+		courseModules.setModulename(mud.getModulename());
+		courseModules.setModulenum(modulenum);
+		courseModules.setVideoinserttime(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+		List<CourseLink> clinks = courseModules.getClinks();
+
+		if (!clinks.isEmpty()) {
+
+			List<String> links = clinks.get(0).getLinks();
+			List<String> videos = clinks.get(0).getVideoname();
+
+			CourseLink courseLink = clinks.get(0);
+			List<CourseLink> clinks1 = new ArrayList<>();
+
+			if (mud.getVideolink() != null && mud.getVideoname() != null) {
+
+				clinks.remove(courseLink);
+				links.clear();
+				videos.clear();
+
+				courseLink.setLinks(mud.getVideolink());
+				courseLink.setVideoname(mud.getVideoname());
+				clinks1.add(courseLink);
+				courseModules.setClinks(clinks1);
+
+			} else {
+				courseModules.setClinks(clinks);
+			}
+
+		}
+
+		Courses save = null;
+		if (courseModules != null) {
+
+			ml.remove(courseModules);
+			ml.add(courseModules);
+			courses.setCoursemodule(ml);
+
+			save = cr.save(courses);
+
+		}
+		return save.getCoursemodule();
+	}
+
+	@Override
+	public boolean deleteModule(String courseName, int modulenum) {
+		Courses courses = cr.findBycoursename(courseName).get(0);
+
+		List<CourseModules> ml = courses.getCoursemodule();
+
+		CourseModules courseModules = ml.stream().filter(x -> x.getModulenum() == modulenum).findFirst().orElse(null);
+
+		if (courseModules != null) {
+			List<CourseLink> clinks = courseModules.getClinks();
+
+			if (!clinks.isEmpty()) {
+				CourseLink courseLink = clinks.get(0);
+
+				courseLink.getLinks().clear();
+				courseLink.getVideoname().clear();
+
+				if (courseLink.getLinks().isEmpty() && courseLink.getVideoname().isEmpty()) {
+					clinks.remove(courseLink);
+				}
+			}
+
+			ml.remove(courseModules);
+			courses.setCoursemodule(ml);
+			cr.save(courses);
+
+			return true;
+		}
+
+		return false;
 	}
 
 }

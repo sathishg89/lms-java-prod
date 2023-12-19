@@ -14,10 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
+import com.lms.entity.CourseUsers;
+import com.lms.entity.Resume;
 import com.lms.entity.User;
 import com.lms.exception.details.CustomException;
+import com.lms.repository.ResumeRepo;
 import com.lms.repository.UserRepo;
 import com.lms.service.AdminService;
+import com.lms.service.CourseService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +31,12 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private UserRepo ur;
+
+	@Autowired
+	private ResumeRepo rr;
+
+	@Autowired
+	private CourseService cs;
 
 	@Autowired
 	private PasswordEncoder pe;
@@ -75,8 +85,13 @@ public class AdminServiceImpl implements AdminService {
 				if (isValidEmail & !userName.equals(null)) {
 					User user = User.builder().userName(userName).userEmail(userEmail)
 							.password(pe.encode("welcome@123")).isActive(true).role("user").build();
-
+					CourseUsers cu = CourseUsers.builder().userName(userName).userEmail(userEmail).build();
 					userlist.add(user);
+
+					Resume res = Resume.builder().userEmail(userEmail).build();
+
+					cs.saveCourseUser(cu);
+					rr.save(res);
 
 				} else {
 					throw new CustomException(CustomErrorCodes.MISSING_USER_NAME.getErrorMsg(),
@@ -92,7 +107,6 @@ public class AdminServiceImpl implements AdminService {
 
 		if (!userlist.isEmpty()) {
 			ur.saveAll(userlist);
-
 			return true;
 		}
 

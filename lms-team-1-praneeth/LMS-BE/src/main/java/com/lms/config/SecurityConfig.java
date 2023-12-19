@@ -55,21 +55,22 @@ public class SecurityConfig {
 				auth ->
 
 				{
-					auth.requestMatchers("/getallapi", "/admin/delete/{email}","/admin/removecourseaccess","/admin/getallcourses").permitAll();
+					auth.requestMatchers("/getallapi", "/admin/delete/{email}", "/admin/removecourseaccess",
+							"/admin/getallcourses", "/admin/**").permitAll();
 
 					auth.requestMatchers("/admin/signup", "/admin/importusers", "/admin/update").authenticated();
 
-					auth.requestMatchers("/auth/login").permitAll();
+					auth.requestMatchers("/auth/login", "/demo/**").permitAll();
 
 					auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/webjars/**",
 							"/swagger-resources/**").permitAll();
 
 					auth.requestMatchers("/user/connect", "user/login", "/user/uploadimage", "/user/download/{email}",
-							"/user/update", "/user/getotp", "/user/verifyacc", "/user/resetpassword").permitAll();
+							"/user/update", "/user/getotp", "/user/verifyacc", "/user/resetpassword" ,"/user/**" ).permitAll();
 
 					auth.requestMatchers("/course/addcourseuser", "/course/addcourse", "/course/accesscoursetouser",
 							"/course/addvideolink", "/course/getcourseusers", "/course/getcourse", "/course/getvideos",
-							"/course/deletecourse").permitAll();
+							"/course/deletecourse", "/course/**").permitAll();
 
 				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(ap()).addFilterBefore((Filter) jfl, UsernamePasswordAuthenticationFilter.class);
@@ -90,7 +91,6 @@ public class SecurityConfig {
 		DaoAuthenticationProvider dap = new DaoAuthenticationProvider();
 		dap.setUserDetailsService(uds());
 		dap.setPasswordEncoder(pe());
-
 		return dap;
 	}
 
@@ -101,7 +101,6 @@ public class SecurityConfig {
 
 	@Bean
 	AuthenticationManager am(AuthenticationConfiguration config) throws Exception {
-
 		return config.getAuthenticationManager();
 	}
 

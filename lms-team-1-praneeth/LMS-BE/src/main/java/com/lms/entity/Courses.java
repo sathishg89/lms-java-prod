@@ -3,15 +3,15 @@ package com.lms.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
@@ -32,7 +32,6 @@ public class Courses {
 	@Id
 	@GeneratedValue(generator = "cseqgen")
 	@SequenceGenerator(name = "cseqgen", sequenceName = "csg", initialValue = 101, allocationSize = 1)
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private int courseid;
 
 	private String coursename;
@@ -41,7 +40,16 @@ public class Courses {
 
 	private String coursecreatedate;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Lob
+	@Column(columnDefinition = "LONGBLOB")
+	private byte[] courseimage;
+
+	private String description;
+
+	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
+	private boolean archived;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "fk_courseid", referencedColumnName = "courseid", nullable = false)
 	private List<CourseModules> coursemodule;
 

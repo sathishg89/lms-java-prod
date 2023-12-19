@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,11 +35,14 @@ public class CourseModules {
 
 	private int modulenum;
 
+	@NotEmpty(message = "Modulename cannot be empty")
+	private String modulename;
+
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String videoinserttime;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "courselinktable")
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "fk_cmid")
 	private List<CourseLink> clinks;
 
 }

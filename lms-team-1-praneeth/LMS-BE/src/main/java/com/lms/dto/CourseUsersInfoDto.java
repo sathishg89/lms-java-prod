@@ -14,11 +14,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AllCourseUsersDto {
+public class CourseUsersInfoDto {
 
+	private int courseid;
 	private String coursename;
 	private String coursetrainer;
-	
+	private String coursecreatedate;
+
 	@JsonIgnoreProperties("coursesList")
 	private List<CourseUsers> courseusers;
 

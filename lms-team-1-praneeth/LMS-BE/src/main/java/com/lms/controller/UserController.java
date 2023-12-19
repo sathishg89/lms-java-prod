@@ -59,9 +59,9 @@ public class UserController {
 	 * 
 	 */
 
-	@PostMapping("/uploadimage")
+	@PostMapping("/uploadimage/{email}")
 	public ResponseEntity<String> uploadImage(@RequestParam("file") @Valid MultipartFile multiPartFile,
-			String userEmail) throws Exception {
+			@PathVariable("email") String userEmail) throws Exception {
 
 		String uploadImage = us.saveImg(multiPartFile, userEmail);
 
@@ -98,14 +98,15 @@ public class UserController {
 	 * 
 	 */
 
-	@PutMapping("/update")
-	public ResponseEntity<String> UserUpdate(@RequestBody User user, @RequestParam String UserEmail) {
+	@PutMapping("/update/{email}")
+	public ResponseEntity<User> UserUpdate(@RequestBody User user, @PathVariable("email") String UserEmail) {
 
 		User luupdate = us.userUpdate(user, UserEmail);
-		if (luupdate == null) {
-			return new ResponseEntity<String>("User details updated", HttpStatus.BAD_REQUEST);
+		if (luupdate != null) {
+
+			return new ResponseEntity<User>(luupdate, HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<String>("User details updated", HttpStatus.OK);
+			return new ResponseEntity<User>(luupdate, HttpStatus.OK);
 		}
 
 	}
@@ -116,8 +117,8 @@ public class UserController {
 	 * 
 	 */
 
-	@PostMapping("/getotp")
-	public ResponseEntity<String> getotp(@RequestParam String userEmail) throws Exception {
+	@PostMapping("/getotp/{email}")
+	public ResponseEntity<String> getotp(@PathVariable("email") String userEmail) throws Exception {
 
 		String generateOtp = otps.generateOtp();
 
@@ -141,7 +142,7 @@ public class UserController {
 	 * 
 	 */
 
-	@GetMapping("/verifyacc")
+	@GetMapping("/verifyotp")
 	public ResponseEntity<String> verifyAccount(@RequestParam("email") String userEmail,
 			@RequestParam("otp") String otp) {
 		boolean verifyAccount = us.verifyAccount(userEmail, otp);

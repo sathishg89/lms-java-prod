@@ -24,6 +24,6 @@ public class UserResponseDto {
 	private String userImage;
 
 	@JsonIgnoreProperties({ "useremail", "username" })
-	private UserCoursesDto userCourses;
+	private CourseUserDto userCourses;
 
 }

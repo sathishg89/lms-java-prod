@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.config.JwtService;
 import com.lms.constants.CustomErrorCodes;
-import com.lms.dto.UserCoursesDto;
+import com.lms.dto.CourseUserDto;
 import com.lms.dto.UserDto;
 import com.lms.dto.UserResponseDto;
 import com.lms.entity.User;
@@ -77,7 +77,7 @@ public class AuthController {
 					img = output.get().getUserName().substring(0, 2).toUpperCase();
 				}
 
-				UserCoursesDto uc = null;
+				CourseUserDto uc = null;
 				try {
 					uc = cs.getCourseUsers(output.get().getUserEmail());
 

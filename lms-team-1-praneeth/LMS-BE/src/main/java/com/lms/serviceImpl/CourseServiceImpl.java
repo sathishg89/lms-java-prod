@@ -119,7 +119,7 @@ public class CourseServiceImpl implements CourseService {
 		List<String> videoname = videoDto.getVideoname();
 		List<String> linklist = new ArrayList<>(videolink);
 
-		if (videoname.size() < videolink.size() || videolink.size() > videoname.size()) {
+		if (videoname.size() < videolink.size() || videoname.size() > videolink.size()) {
 			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
 					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 		} else {
@@ -319,17 +319,18 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public List<CourseModules> getCourseModules(String courseName, String trainerName) {
 
-		List<CourseModules> collect;
-		try {
-			collect = cr.findCourseModulesByCourseName(courseName, trainerName);
+		boolean existsBycoursename = cr.existsBycoursename(courseName);
 
-			if (collect.size() > 0) {
+		if (existsBycoursename) {
+			List<CourseModules> collect = cr.findCourseModulesByCourseName(courseName, trainerName);
+
+			if (!collect.isEmpty()) {
 				return collect;
 			} else {
-				throw new CustomException(CustomErrorCodes.COURSE_NOT_FOUND.getErrorMsg(),
-						CustomErrorCodes.COURSE_NOT_FOUND.getErrorCode());
+				throw new CustomException(CustomErrorCodes.MISSING_MODULE.getErrorMsg(),
+						CustomErrorCodes.MISSING_MODULE.getErrorCode());
 			}
-		} catch (Exception e) {
+		} else {
 			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
 					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 		}
@@ -404,51 +405,47 @@ public class CourseServiceImpl implements CourseService {
 
 		Courses courses = cr.findBycoursename(courseName).get(0);
 
+		if (courses == null) {
+
+			throw new CustomException(CustomErrorCodes.COURSE_NOT_FOUND.getErrorMsg(),
+					CustomErrorCodes.COURSE_NOT_FOUND.getErrorCode());
+
+		}
+
 		List<CourseModules> ml = courses.getCoursemodule();
 
-		CourseModules courseModules = ml.stream().filter(x -> x.getModulenum() == modulenum).findFirst().get();
-		courseModules.setModulename(mud.getModulename());
-		courseModules.setModulenum(modulenum);
-		courseModules.setVideoinserttime(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+		Optional<CourseModules> optionalCourseModules = ml.stream().filter(x -> x.getModulenum() == modulenum)
+				.findFirst();
 
-		List<CourseLink> clinks = courseModules.getClinks();
+		if (optionalCourseModules.isPresent()) {
+			CourseModules courseModules = optionalCourseModules.get();
 
-		if (!clinks.isEmpty()) {
+			courseModules.setModulename(mud.getModulename());
+			courseModules.setModulenum(modulenum);
+			courseModules.setVideoinserttime(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-			List<String> links = clinks.get(0).getLinks();
-			List<String> videos = clinks.get(0).getVideoname();
+			List<CourseLink> clinks = courseModules.getClinks();
 
-			CourseLink courseLink = clinks.get(0);
-			List<CourseLink> clinks1 = new ArrayList<>();
+			if (!clinks.isEmpty()) {
+				CourseLink courseLink = clinks.get(0);
 
-			if (mud.getVideolink() != null && mud.getVideoname() != null) {
+				if (mud.getLinks() != null) {
+					courseLink.setLinks(mud.getLinks());
 
-				clinks.remove(courseLink);
-				links.clear();
-				videos.clear();
+				}
+				if (mud.getVideoname() != null) {
+					courseLink.setVideoname(mud.getVideoname());
+				}
 
-				courseLink.setLinks(mud.getVideolink());
-				courseLink.setVideoname(mud.getVideoname());
-				clinks1.add(courseLink);
-				courseModules.setClinks(clinks1);
-
-			} else {
-				courseModules.setClinks(clinks);
 			}
 
+			Courses save = cr.save(courses);
+			return save.getCoursemodule();
+		} else {
+
+			throw new CustomException(CustomErrorCodes.MISSING_MODULE.getErrorMsg(),
+					CustomErrorCodes.MISSING_MODULE.getErrorCode());
 		}
-
-		Courses save = null;
-		if (courseModules != null) {
-
-			ml.remove(courseModules);
-			ml.add(courseModules);
-			courses.setCoursemodule(ml);
-
-			save = cr.save(courses);
-
-		}
-		return save.getCoursemodule();
 	}
 
 	@Override

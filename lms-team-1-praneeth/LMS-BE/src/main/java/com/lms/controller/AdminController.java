@@ -90,7 +90,7 @@ public class AdminController {
 		}
 	}
 
-	@DeleteMapping("/delete/{userEmail}")
+	@DeleteMapping("/userdelete/{userEmail}")
 	public ResponseEntity<String> deleteUser(@PathVariable("userEmail") String userEmail) {
 
 		boolean deleteUser = us.deleteUser(userEmail);
@@ -114,5 +114,7 @@ public class AdminController {
 			return new ResponseEntity<String>("Unable To Access Removed", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
 
 }

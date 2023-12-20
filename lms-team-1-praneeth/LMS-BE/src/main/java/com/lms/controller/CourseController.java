@@ -104,7 +104,7 @@ public class CourseController {
 	}
 
 	@PostMapping("/savevideo")
-	public ResponseEntity<String> addVideolink(@RequestBody @Valid VideoUploadDto videoDto) {
+	public ResponseEntity<String> saveVideo(@RequestBody @Valid VideoUploadDto videoDto) {
 		boolean addVideoLink = cs.addVideoLink(videoDto);
 
 		if (addVideoLink) {
@@ -200,6 +200,7 @@ public class CourseController {
 				.collect(Collectors.toList());
 
 		return new ResponseEntity<List<CoursesModuleInfoDto>>(list, HttpStatus.OK);
+
 	}
 
 	@GetMapping("/getallcourses")
@@ -223,7 +224,7 @@ public class CourseController {
 	}
 
 	@GetMapping("/{courseName}/{trainerName}/getmodules")
-	public ResponseEntity<List<CourseModules>> getModules(@PathVariable("coursename") String courseName,
+	public ResponseEntity<List<CourseModules>> getModules(@PathVariable("courseName") String courseName,
 			@PathVariable String trainerName) {
 
 		List<CourseModules> courseModules = cs.getCourseModules(courseName, trainerName);
@@ -236,7 +237,7 @@ public class CourseController {
 	}
 
 	@PutMapping("/{courseName}/{moduleId}/updatemodules")
-	public ResponseEntity<List<CourseModules>> updateModules(@RequestBody ModuleUpdateDto mud,
+	public ResponseEntity<List<CourseModules>> updateModules(@RequestBody @Valid ModuleUpdateDto mud,
 			@PathVariable("courseName") String courseName, @PathVariable("moduleId") int modulenum) {
 
 		HttpHeaders hd = new HttpHeaders();

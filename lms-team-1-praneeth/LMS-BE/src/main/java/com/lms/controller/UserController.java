@@ -94,7 +94,7 @@ public class UserController {
 	 * 
 	 */
 
-	@GetMapping("/download/{userEmail}")
+	@GetMapping("/downloadimage/{userEmail}")
 	public ResponseEntity<byte[]> downloadImage(@PathVariable("userEmail") String userEmail)
 			throws IOException, DataFormatException {
 		byte[] imageData = us.downloadImage(userEmail);

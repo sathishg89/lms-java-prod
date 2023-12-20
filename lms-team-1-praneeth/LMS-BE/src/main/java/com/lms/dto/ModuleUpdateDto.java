@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ModuleUpdateDto {
 
 	private String modulename;
-	private List<String> videolink;
+	private List<String> links;
 	private List<String> videoname;
 
 }

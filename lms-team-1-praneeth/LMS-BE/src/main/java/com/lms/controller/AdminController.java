@@ -59,7 +59,7 @@ public class AdminController {
 	 */
 
 	@PostMapping("/signup")
-	@PreAuthorize("hasAuthority('superadmin')")
+	@PreAuthorize("hasAuthority('admin')")
 	public ResponseEntity<User> signUp(@RequestBody @Valid User user) {
 
 		User saveLU = as.saveUser(user);
@@ -105,8 +105,8 @@ public class AdminController {
 	}
 
 	@PatchMapping("/removecourseaccess/{userEmail}/{courseName}/{trainerName}")
-	public ResponseEntity<String> removeCourseAccess(@PathVariable("userEmail") String userEmail, @PathVariable("courseName") String courseName,
-			@PathVariable("trainerName") String trainerName) {
+	public ResponseEntity<String> removeCourseAccess(@PathVariable("userEmail") String userEmail,
+			@PathVariable("courseName") String courseName, @PathVariable("trainerName") String trainerName) {
 		boolean removeCourseAccess = cs.removeCourseAccess(userEmail, courseName, trainerName);
 		if (removeCourseAccess) {
 			return new ResponseEntity<String>("Access Removed", HttpStatus.OK);
@@ -114,7 +114,5 @@ public class AdminController {
 			return new ResponseEntity<String>("Unable To Access Removed", HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
 
 }

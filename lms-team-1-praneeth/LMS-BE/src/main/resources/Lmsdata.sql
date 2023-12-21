@@ -18,14 +18,14 @@ INSERT INTO corseusers (userid, username, useremail) VALUES
 (104, 'nithin', 'nithin@gmail.com'),
 (105,'raju','raju@digital-edify.com');
 
-INSERT INTO courses (courseid, coursename,coursetrainer) VALUES
-(1, 'fsbasics2301','saikumar'),
-(2, 'fsbasics2302','saikumar'),
-(3, 'fscorejava2301','sajeed'),
-(4, 'fsadvjava2302','trikesh'),
-(5, 'fsreact2301','manideep'),
-(6, 'fsreact2302','raju'),
-(7, 'awsdevops2301','ravi');
+INSERT INTO courses (courseid, coursename,coursetrainer,archieved) VALUES
+(1, 'fsbasics2301','saikumar',0),
+(2, 'fsbasics2302','saikumar',0),
+(3, 'fscorejava2301','sajeed',0),
+(4, 'fsadvjava2302','trikesh',0),
+(5, 'fsreact2301','manideep',0),
+(6, 'fsreact2302','raju',0),
+(7, 'awsdevops2301','ravi',0);
 
 -- Insert values into the courseusers table
 

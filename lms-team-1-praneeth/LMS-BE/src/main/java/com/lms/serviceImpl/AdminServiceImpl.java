@@ -45,13 +45,13 @@ public class AdminServiceImpl implements AdminService {
 	public User saveUser(User lu) {
 
 		User lu1 = User.builder().userName(lu.getUserName()).userEmail(lu.getUserEmail())
-				.password(pe.encode(lu.getPassword())).role(lu.getRole()).build();
+				.password(pe.encode(lu.getPassword())).role(lu.getRole()).isActive(true).build();
 
 		boolean findByName = ur.existsByuserEmail(lu1.getUserEmail());
 
 		if (findByName) {
-			throw new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
-					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
+			throw new CustomException(CustomErrorCodes.EMAIL_ALREADY_EXIST.getErrorMsg(),
+					CustomErrorCodes.EMAIL_ALREADY_EXIST.getErrorCode());
 		} else {
 			return ur.save(lu1);
 		}

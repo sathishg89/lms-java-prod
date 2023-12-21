@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,6 +27,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
 	@Autowired
@@ -62,11 +64,11 @@ public class SecurityConfig {
 
 					auth.requestMatchers("/auth/login").permitAll();
 
-					auth.requestMatchers("/user/connect", "/user/uploadimage/{userEmail}", "/user/downloadimage/{userEmail}",
-							"/user/update/{userEmail}", "/user/getotp/{userEmail}", "/user/verifyotp",
-							"/user/resetpassword", "/user/{userEmail}/uploadresume", "/user/{userEmail}/getresume",
-							"/user/{userEmail}/deleteresume", "/user/{courseName}/{trainerName}/getvideos")
-							.permitAll();
+					auth.requestMatchers("/user/connect", "/user/uploadimage/{userEmail}",
+							"/user/downloadimage/{userEmail}", "/user/update/{userEmail}", "/user/getotp/{userEmail}",
+							"/user/verifyotp", "/user/resetpassword", "/user/{userEmail}/uploadresume",
+							"/user/{userEmail}/getresume", "/user/{userEmail}/deleteresume",
+							"/user/{courseName}/{trainerName}/getvideos").permitAll();
 
 					auth.requestMatchers("/admin/signup", "/admin/importusers", "/admin/userupdate/{userEmail}",
 							"/admin/userdelete/{userEmail}",
@@ -83,7 +85,7 @@ public class SecurityConfig {
 							"/admin/course/getallcourses", "/admin/course/{courseName}/courseinfo",
 
 							"/admin/course/{courseName}/{trainerName}/getmodules",
-							
+
 							"/admin/course/{courseName}/{moduleId}/updatemodules",
 
 							"/admin/course/{courseName}/{moduleId}/deletemodule").permitAll();
@@ -91,7 +93,6 @@ public class SecurityConfig {
 				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(ap()).addFilterBefore((Filter) jfl, UsernamePasswordAuthenticationFilter.class);
 
-		;
 		http.formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());
 
 		return http.build();

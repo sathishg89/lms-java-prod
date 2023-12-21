@@ -79,8 +79,16 @@ public class CourseController {
 
 	@PostMapping("/addcourse")
 	public ResponseEntity<String> addCourse(@RequestBody @Valid AddCourseDto acd) throws Exception {
-		Courses cc = Courses.builder().coursename(acd.getCourseName()).coursetrainer(acd.getCourseTrainer())
-				.courseimage(acd.getCourseImage().getBytes()).description(acd.getDescription()).build();
+
+		Courses cc;
+		if (acd.getCourseImage() != null && acd.getCourseImage().getBytes() != null) {
+			cc = Courses.builder().coursename(acd.getCourseName()).coursetrainer(acd.getCourseTrainer())
+					.courseimage(acd.getCourseImage().getBytes()).description(acd.getDescription()).build();
+		} else {
+			cc = Courses.builder().coursename(acd.getCourseName()).coursetrainer(acd.getCourseTrainer())
+					.description(acd.getDescription()).build();
+		}
+
 		boolean saveUserCourse = cs.saveCourses(cc);
 
 		if (saveUserCourse) {

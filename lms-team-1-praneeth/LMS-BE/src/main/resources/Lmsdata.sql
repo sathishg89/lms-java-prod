@@ -1,65 +1,114 @@
 -- Insert values into the courses table
 -- password is abc123
-INSERT INTO user (id, email, username, password, role, img, is_active)
+
+INSERT INTO user (id, email, username, password, img, is_active, role)
 VALUES
-(1, 'jessie@digital-edify.com', 'jessie', '$2a$10$HHb8UqUNaLB4bWAkdWzKs.WoDuAiWm5QHhQq00kPiWLJpkHxRKQRa', 'superadmin', null, true),
-(2, 'praneeth@gmail.com', 'praneeth', '$2a$10$Xp.ZX88BX2G/WcBe0wWZo.LtClA.DwRSjDCiOzWckihUobkh872m.', 'user', null, true),
-(3, 'varun@gmail.com', 'varun', '$2a$10$mcvZYPO9HSL/luoIPFajU.AlEzRWBA58iy3kelx4oaeTnLRSkDBri', 'user', null, true),
-(4, 'raju@digital-edify.com', 'raju', '$2a$10$lbqUCzxPwn.TNb7umLTmBeCAwdx/1hOOIQLTxEXxabjJv257oENm6', 'admin', null, true),
-(5, 'ravi@digital-edify.com', 'ravi', '$2a$10$c9rtpTX8DOGoFi65hKF2Se5SADmiJQNRKb0mGzsMCidRj56sP9OfS', 'admin', null, true),
-(6, 'farhath@gmail.com', 'farhath', '$2a$10$CMpmYyJIMcySe1yP57D55uTqzrqpmFHL2numt4wD4lkd3n0BQiLCy', 'user', null, true),
-(7, 'nithin@gmail.com', 'nithin', '$2a$10$DGCAWkzJbSMM2.pLhYH4wOnbzg2DQGES/vlQ8v3CD/tT8mXvjn8ky', 'user', null, true);
+(1, 'jessie@digital-edify.com', 'jessie', '$2a$10$Xp.ZX88BX2G/WcBe0wWZo.LtClA.DwRSjDCiOzWckihUobkh872m.', NUll,'1','superadmin'),
+('2', 'praneeth@gmail.com', 'praneeth', '$2a$10$Xp.ZX88BX2G/WcBe0wWZo.LtClA.DwRSjDCiOzWckihUobkh872m.', NULL, '1', 'user'),
+('3', 'varun@gmail.com', 'varun', '$2a$10$mcvZYPO9HSL/luoIPFajU.AlEzRWBA58iy3kelx4oaeTnLRSkDBri', NULL, '1', 'user'),
+('4', 'raju@digital-edify.com', 'raju', '$2a$10$lbqUCzxPwn.TNb7umLTmBeCAwdx/1hOOIQLTxEXxabjJv257oENm6', NULL, '1', 'admin'),
+('5', 'ravi@digital-edify.com', 'ravi', '$2a$10$c9rtpTX8DOGoFi65hKF2Se5SADmiJQNRKb0mGzsMCidRj56sP9OfS', NULL, '1', 'admin'),
+('6', 'farhath@gmail.com', 'farhath', '$2a$10$JnV368Wp7SFUeE4pf1XkluDjOw2bVqj7Ys9ydvXtU9hwjc2ECWO/u', NULL, '1', 'user'),
+('8', 'nithin@gmail.com', 'nithin', '$2a$10$VM0HYtaz/C61EL3A1dQgduN3082xmG9yWR5FyuLTfqbK.w/HMfIua', NULL, '1', 'user'),
+('40', 'ravikiran@gmail.com', 'ravikiran', '$2a$10$18Hft/7yGoEy3grMgpoo/eMPLlgBmRYzr5FKQ22qyy.lI/pZlbk5W', NULL, '0', 'user'),
+('41', 'murali@gmail.com', 'murali', '$2a$10$kYXEdp8r6SAe0smcRBoxl.DgwzeRlxwPkLbwrHBcn459j8Ekne0t2', NULL, '0', 'user'),
+('43', 'akhil@gmail.com', 'akhil', '$2a$10$6YGEdQMfvKvslK7QGmWMI.fvUoky3bQV6PJB35Lm/6TsGbUIH576S', NULL, '1', 'user');
 
 
-INSERT INTO corseusers (userid, username, useremail) VALUES
-(101, 'praneeth', 'praneeth@gmail.com'),
-(102, 'varun', 'varun@gmail.com'),
-(103, 'farhath', 'farhath@gmail.com'),
-(104, 'nithin', 'nithin@gmail.com'),
-(105,'raju','raju@digital-edify.com');
+INSERT INTO corseusers (userid, useremail, username)
+VALUES
+('1007', 'yellaiah@gmail.com', 'yellaiah'),
+('1008', 'mubeen@gmail.com', 'mubeen'),
+('1018', 'ravikiran@gmail.com', 'ravikiran'),
+('1020', 'nithin@gmail.com', 'nithin'),
+('1021', 'varun@gmail.com', 'varun'),
+('1022', 'farhath@gmail.com', 'farhath'),
+('1023', 'praneeth@gmail.com', 'praneeth');
 
-INSERT INTO courses (courseid, coursename,coursetrainer,archieved) VALUES
-(1, 'fsbasics2301','saikumar',0),
-(2, 'fsbasics2302','saikumar',0),
-(3, 'fscorejava2301','sajeed',0),
-(4, 'fsadvjava2302','trikesh',0),
-(5, 'fsreact2301','manideep',0),
-(6, 'fsreact2302','raju',0),
-(7, 'awsdevops2301','ravi',0);
+INSERT INTO cusg (next_val) VALUES ('1034');
 
--- Insert values into the courseusers table
+INSERT INTO courses (courseid, coursecreatedate, courseimage, coursename, coursetrainer, archived, description)
+VALUES
+('103', '02-12-2023 07:13:32', NULL, 'fsbasics2303', 'deepak', '0', NULL),
+('104', '02-12-2023 07:13:47', NULL, 'fsreact2301', 'raju', '1', NULL),
+('110', '12-12-2023 03:16:07', NULL, 'fsreact2304', 'manideep', '0', NULL),
+('112', '15-12-2023 11:26:16', NULL, 'fsreact2305', 'manideep', '1', NULL),
+('113', '15-12-2023 11:26:39', NULL, 'fspython2301', 'tirikesh', '0', NULL),
+('114', '15-12-2023 11:27:27', NULL, 'powerbi2302', 'deepak', '1', NULL),
+('115', '15-12-2023 11:27:39', NULL, 'awsdevops2307', 'ravi', '0', NULL),
+('116', '15-12-2023 11:27:46', NULL, 'awsdevops2308', 'mubeen', '1', NULL),
+('117', '15-12-2023 11:27:55', NULL, 'azuredevops2301', 'mubeen', '0', NULL),
+('118', '15-12-2023 11:28:01', NULL, 'azuredevops2303', 'ravi', '1', NULL),
+('119', '15-12-2023 11:28:48', NULL, 'fscorejava2302', 'saikumar', '0', NULL),
+('120', '15-12-2023 11:29:06', NULL, 'fscorejava2302', 'sajeed', '1', NULL),
+('121', '21-12-2023 10:50:11', NULL, 'fsadvjava2303', 'sajeed', '0', NULL);
+
+INSERT INTO csg (next_val) VALUES ('122');
+
+INSERT INTO courses_users (fk_userid, fk_courseid)
+VALUES
+('1007', '104'),
+('1007', '112'),
+('1007', '116'),
+('1021', '104'),
+('1021', '112'),
+('1021', '120'),
+('1022', '103'),
+('1022', '104'),
+('1022', '116'),
+('1022', '120'),
+('1023', '103'),
+('1023', '112'),
+('1023', '120'),
+('1008', '103'),
+('1018', '116'),
+('1018', '120');
 
 
--- Insert values into the courses_users join table
-INSERT INTO courses_users (fk_userid, fk_courseid) VALUES
-(101, 1), -- praneeth enrolled in fsbasics2301
-(102, 1), -- varun enrolled in fsbasics2301
-(103, 1), -- farhath enrolled in fsbasics2301
-(104, 1), -- nithin enrolled in fsbasics2301
-(105, 1), -- raju enrolled in fsbasics2301
-(101, 2), -- praneeth enrolled in fsbasics2302
-(102, 2), -- varun enrolled in fsbasics2302
--- Add more entries for other courses as needed
-(103, 3), -- farhath enrolled in fscorejava2301
-(104, 4), -- nithin enrolled in fsadvjava2302
-(105, 5), -- raju enrolled in fsreact2301
-(101, 6), -- praneeth enrolled in fsreact2302
-(102, 7); -- varun enrolled in awsdevops2301
+INSERT INTO coursemodules (cmid, modulename, modulenum, videoinserttime, fk_courseid)
+VALUES
+('13', 'updatredmodule1225', '2', '19-12-2023', '104'),
+('35', 'intro to js', '1', '19-12-2023', '104'),
+('37', 'fs fundamentals 2', '2', '20-12-2023', '103'),
+('38', 'fs fundamentals 1', '1', '20-12-2023', '103');
 
 
-INSERT INTO coursemodules (cmid,modulenum,videoinserttime,fk_courseid)
-values 
-(1,1,null,1),
-(2,2,null,2),
-(3,3,null,1),
-(4,2,null,5),
-(5,1,null,7);
+INSERT INTO cmsg (next_val) VALUES ('39');
 
-INSERT INTO courselinks (linkid,courselinktable)
-values (1,1),(2,2),(3,3),(4,1),(5,2);
+INSERT INTO courselinks (linkid, fk_cmid)
+VALUES
+('25', '13'),
+('50', '35'),
+('52', '37'),
+('53', '38');
 
-INSERT INTO courselinks_link(fk_linkid,link)
-values (1,'link1'),(1,'link2'),(2,'link1'),(2,'link2'),(2,'link3'),(3,'link1');
+INSERT INTO courselinks_link (fk_linkid, link)
+VALUES
+('25', 'jks'),
+('25', 'nssj'),
+('50', 'link1'),
+('50', 'link2'),
+('50', 'https://www.youtube.com/embed/MKqJBhOgapM?si=NYjVVjoH8C_as8C4'),
+('52', 'link1'),
+('52', 'link2'),
+('52', 'link3'),
+('52', 'link4'),
+('53', 'link1'),
+('53', 'link2'),
+('53', 'linnk3');
 
-INSERT INTO courselinks_videoname(fk_linkid,videoname)
-values (1,'html'),(1,'css'),(2,'js'),(2,'elements'),(2,'tags'),(3,'div');
+
+INSERT INTO courselinks_videoname (fk_linkid, videoname)
+VALUES
+('25', 'sjsn'),
+('25', 'sjs'),
+('50', 'tags'),
+('50', 'attributes'),
+('50', 'youtube'),
+('52', 'sdlc'),
+('52', 'agile'),
+('52', 'scrum'),
+('52', 'git'),
+('53', 'scrum'),
+('53', 'agile'),
+('53', 'git');

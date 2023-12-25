@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.constants.CustomErrorCodes;
-import com.lms.dto.AddCourseDto;
+import com.lms.dto.CourseDto;
 import com.lms.dto.CourseInfoDto;
 import com.lms.dto.CourseUserDto;
 import com.lms.dto.CourseUsersInfoDto;
@@ -78,7 +78,7 @@ public class CourseController {
 	}
 
 	@PostMapping("/addcourse")
-	public ResponseEntity<String> addCourse(@RequestBody @Valid AddCourseDto acd) throws Exception {
+	public ResponseEntity<String> addCourse(@RequestBody @Valid CourseDto acd) throws Exception {
 
 		Courses cc;
 		if (acd.getCourseImage() != null && acd.getCourseImage().getBytes() != null) {

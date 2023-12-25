@@ -16,19 +16,14 @@ public class VideoUploadDto {
 
 	@NotEmpty(message = "Course name cannot be empty")
 	private String courseName;
-
 	@NotEmpty(message = "tname cannot be empty")
 	private String trainerName;
-
 	@NotEmpty(message = "modulename cannot be empty")
 	private String modulename;
-
 	@Positive(message = "modulenum cannot be negative or empty")
 	private int modulenumber;
-
 	@NotEmpty(message = "videoname cannot be empty")
 	private List<String> videoname;
-
 	@NotEmpty(message = "videolink cannot be empty")
 	private LinkedHashSet<String> videolink;
 

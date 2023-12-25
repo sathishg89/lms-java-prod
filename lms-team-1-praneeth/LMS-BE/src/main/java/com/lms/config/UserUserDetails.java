@@ -11,9 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.lms.entity.User;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class UserUserDetails implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -27,7 +24,6 @@ public class UserUserDetails implements UserDetails {
 		pass = lud.getPassword();
 		authorites = Arrays.stream(lud.getRole().split(",")).map(role -> new SimpleGrantedAuthority(role))
 				.collect(Collectors.toList());
-		log.info("auth" + authorites);
 	}
 
 	@Override

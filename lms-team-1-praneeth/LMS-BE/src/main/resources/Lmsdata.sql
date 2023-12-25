@@ -84,8 +84,8 @@ VALUES
 
 INSERT INTO courselinks_link (fk_linkid, link)
 VALUES
-('25', 'jks'),
-('25', 'nssj'),
+('25', 'link1'),
+('25', 'link2'),
 ('50', 'link1'),
 ('50', 'link2'),
 ('50', 'https://www.youtube.com/embed/MKqJBhOgapM?si=NYjVVjoH8C_as8C4'),
@@ -95,13 +95,13 @@ VALUES
 ('52', 'link4'),
 ('53', 'link1'),
 ('53', 'link2'),
-('53', 'linnk3');
+('53', 'link3');
 
 
 INSERT INTO courselinks_videoname (fk_linkid, videoname)
 VALUES
-('25', 'sjsn'),
-('25', 'sjs'),
+('25', 'video1'),
+('25', 'video2'),
 ('50', 'tags'),
 ('50', 'attributes'),
 ('50', 'youtube'),

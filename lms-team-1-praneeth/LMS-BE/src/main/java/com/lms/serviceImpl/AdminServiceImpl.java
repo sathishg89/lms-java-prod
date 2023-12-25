@@ -113,14 +113,4 @@ public class AdminServiceImpl implements AdminService {
 		return false;
 	}
 
-	@Override
-	public List<User> gestLU(long id) {
-		return null;
-	}
-
-	@Override
-	public void deleteLU(long id) {
-
-	}
-
 }

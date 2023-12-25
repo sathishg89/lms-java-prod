@@ -36,11 +36,13 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain sfc(HttpSecurity http) throws Exception {
 
+		String origins = "*";
+
 		http.csrf(csrf -> csrf.disable());
 		http.cors(cor -> cor.configurationSource(new CorsConfigurationSource() {
 			@Override
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-				List<String> listoforigin = List.of("*");
+				List<String> listoforigin = List.of(origins);
 				List<String> listofmethods = List.of("GET", "POST", "PUT", "DELETE");
 				List<String> listofheaders = List.of("*");
 				CorsConfiguration cfg = new CorsConfiguration();

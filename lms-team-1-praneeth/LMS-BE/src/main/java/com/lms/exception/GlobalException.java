@@ -14,11 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import com.lms.dto.CustomDto;
-import com.lms.dto.EmailNotFoundDto;
-import com.lms.dto.NameFoundDto;
 import com.lms.exception.details.CustomException;
-import com.lms.exception.details.EmailNotFoundException;
-import com.lms.exception.details.NameFoundException;
 
 @RestControllerAdvice
 @RequestMapping(produces = "application/json")
@@ -33,25 +29,6 @@ public class GlobalException {
 			errorMap.put(error.getField(), error.getDefaultMessage());
 		});
 		return errorMap;
-	}
-
-	@ExceptionHandler(NameFoundException.class)
-	public ResponseEntity<NameFoundDto> nameFound(NameFoundException nf, WebRequest wr) {
-
-		NameFoundDto nfd = new NameFoundDto();
-		nfd.setErrorMessage(nf.getErrorMessage());
-
-		return new ResponseEntity<NameFoundDto>(nfd, HttpStatus.FOUND);
-	}
-
-	@ExceptionHandler(EmailNotFoundException.class)
-	public ResponseEntity<EmailNotFoundDto> emailNotFound(EmailNotFoundException enf, WebRequest wr) {
-
-		EmailNotFoundDto enfd = new EmailNotFoundDto();
-		enfd.setErrorMessage(enf.getErrorMessage());
-		enfd.setErrorCode(enf.getErrorCode());
-
-		return new ResponseEntity<EmailNotFoundDto>(enfd, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(CustomException.class)

@@ -18,7 +18,7 @@ EXPOSE 8080
 
 # Define the entry point for the container
 
-ENTRYPOINT [ "java","-jar","target/LMS-0.0.1-SNAPSHOT.jar" ]
+ENTRYPOINT [ "java","-jar","target/lmsbe.jar" ]
 
 
 

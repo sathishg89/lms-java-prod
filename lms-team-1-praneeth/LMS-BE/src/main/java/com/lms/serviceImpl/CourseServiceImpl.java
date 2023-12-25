@@ -348,8 +348,7 @@ public class CourseServiceImpl implements CourseService {
 		CourseInfoDto courseInfoDto = courseDetails.stream().findFirst()
 				.map(result -> CourseInfoDto.builder().coursename((String) result[0]).coursetrainer((String) result[1])
 						.courseimage((byte[]) result[2]).description((String) result[3]).modulenum(modulenumList)
-						.build())
-				.get();
+						.build()).get();
 
 		return courseInfoDto;
 	}

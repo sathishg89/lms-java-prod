@@ -14,10 +14,8 @@ import lombok.NoArgsConstructor;
 public class CourseInfoDto {
 
 	private String coursename;
-
 	private String coursetrainer;
 	private byte[] courseimage;
-
 	private String description;
 	private List<Integer> modulenum;
 }

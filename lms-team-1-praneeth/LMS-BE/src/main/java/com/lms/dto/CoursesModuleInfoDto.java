@@ -14,9 +14,7 @@ import lombok.NoArgsConstructor;
 public class CoursesModuleInfoDto {
 
 	private int modulenum;
-
 	private String modulename;
-
 	private Map<String, String> videos;
 
 }

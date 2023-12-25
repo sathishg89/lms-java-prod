@@ -20,7 +20,6 @@ public class CourseUsersInfoDto {
 	private String coursename;
 	private String coursetrainer;
 	private String coursecreatedate;
-
 	@JsonIgnoreProperties("coursesList")
 	private List<CourseUsers> courseusers;
 

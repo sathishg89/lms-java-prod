@@ -12,16 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AddCourseDto {
+public class CourseDto {
 
 	@NotEmpty(message = "coursename cannot be empty")
 	private String courseName;
-
 	@NotEmpty(message = "courseTrainer cannot be empty")
 	private String courseTrainer;
-
 	private String description;
-
 	private MultipartFile courseImage;
 
 }

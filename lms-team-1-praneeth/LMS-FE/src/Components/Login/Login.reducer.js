@@ -1,6 +1,6 @@
 import actions from "./Login.action.types";
 const initialState = {
-  name:"",
+  name: "",
   email: "",
   password: "",
   responseStatus: "",
@@ -19,13 +19,12 @@ const loginReducer = (state = initialState, action) => {
       console.log("payload :", action.payload);
       return {
         ...state,
-        email: action.payload.email,
-        name: action.payload.name,
-        password: action.payload.password,
+        email: action.payload.userEmail,
+        name: action.payload.userName,
         responseStatus: "",
         errorMessage: "",
-        jwt: action.payload.token,
-        role: action.payload.roles,
+        jwt: action.payload.jwtToken,
+        role: action.payload.userRole,
         userCourses: action.payload.userCourses
         /////
         // userid:action.payload._id

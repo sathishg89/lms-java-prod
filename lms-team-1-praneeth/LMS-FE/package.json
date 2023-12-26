@@ -43,6 +43,6 @@
     ]
   },
   "devDependencies": {
-    "serve": "^14.2.1"
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0"
   }
 }

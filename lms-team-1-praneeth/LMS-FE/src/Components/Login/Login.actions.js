@@ -1,16 +1,16 @@
 import actions from "./Login.action.types";
 import { url } from "../../utils";
 import axios from "axios";
-export function login(email, password) {
+export function login(userEmail, password) {
   return async (dispatch, getState) => {
     const reqBody = {
-      email,
+      userEmail,
       password,
     };
     console.log("reqbody :", reqBody);
     try {
       // Use axios to make the HTTP POST request
-      const response = await axios.post(`${url}login`, reqBody);
+      const response = await axios.post(`${url}auth/login`, reqBody);
       console.log(response);
       // Check if the response is successful
       if (response.status === 200) {

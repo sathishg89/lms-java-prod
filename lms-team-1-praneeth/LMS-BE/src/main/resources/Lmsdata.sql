@@ -3,16 +3,16 @@
 
 INSERT INTO user (id, email, username, password, img, is_active, role)
 VALUES
-(1, 'jessie@digital-edify.com', 'jessie', '$2a$10$Xp.ZX88BX2G/WcBe0wWZo.LtClA.DwRSjDCiOzWckihUobkh872m.', NUll,'1','superadmin'),
-('2', 'praneeth@gmail.com', 'praneeth', '$2a$10$Xp.ZX88BX2G/WcBe0wWZo.LtClA.DwRSjDCiOzWckihUobkh872m.', NULL, '1', 'user'),
-('3', 'varun@gmail.com', 'varun', '$2a$10$mcvZYPO9HSL/luoIPFajU.AlEzRWBA58iy3kelx4oaeTnLRSkDBri', NULL, '1', 'user'),
-('4', 'raju@digital-edify.com', 'raju', '$2a$10$lbqUCzxPwn.TNb7umLTmBeCAwdx/1hOOIQLTxEXxabjJv257oENm6', NULL, '1', 'admin'),
-('5', 'ravi@digital-edify.com', 'ravi', '$2a$10$c9rtpTX8DOGoFi65hKF2Se5SADmiJQNRKb0mGzsMCidRj56sP9OfS', NULL, '1', 'admin'),
-('6', 'farhath@gmail.com', 'farhath', '$2a$10$JnV368Wp7SFUeE4pf1XkluDjOw2bVqj7Ys9ydvXtU9hwjc2ECWO/u', NULL, '1', 'user'),
-('8', 'nithin@gmail.com', 'nithin', '$2a$10$VM0HYtaz/C61EL3A1dQgduN3082xmG9yWR5FyuLTfqbK.w/HMfIua', NULL, '1', 'user'),
-('40', 'ravikiran@gmail.com', 'ravikiran', '$2a$10$18Hft/7yGoEy3grMgpoo/eMPLlgBmRYzr5FKQ22qyy.lI/pZlbk5W', NULL, '0', 'user'),
-('41', 'murali@gmail.com', 'murali', '$2a$10$kYXEdp8r6SAe0smcRBoxl.DgwzeRlxwPkLbwrHBcn459j8Ekne0t2', NULL, '0', 'user'),
-('43', 'akhil@gmail.com', 'akhil', '$2a$10$6YGEdQMfvKvslK7QGmWMI.fvUoky3bQV6PJB35Lm/6TsGbUIH576S', NULL, '1', 'user');
+(1, 'jessie@digital-edify.com', 'jessie', '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NUll,'1','superadmin'),
+('2', 'praneeth@gmail.com', 'praneeth',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
+('3', 'varun@gmail.com', 'varun',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
+('4', 'raju@digital-edify.com', 'raju',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'admin'),
+('5', 'ravi@digital-edify.com', 'ravi',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'admin'),
+('6', 'farhath@gmail.com', 'farhath',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
+('8', 'nithin@gmail.com', 'nithin',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
+('40', 'ravikiran@gmail.com', 'ravikiran',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'user'),
+('41', 'murali@gmail.com', 'murali',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'user'),
+('43', 'akhil@gmail.com', 'akhil', '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user');
 
 
 INSERT INTO corseusers (userid, useremail, username)

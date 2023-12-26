@@ -14,7 +14,7 @@
 - docker network create -d bridge lmsnetwork
     
 ## DATABASE setup:
-- docker run -d --name mysql --network lmsnetwork -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Qwerty@123 -e MYSQL_DATABASE=lmsdb mysql
+- docker run -dt --name mysql --network lmsnetwork -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Qwerty@123 -e MYSQL_DATABASE=lmsdb mysql
 
 ## BACKEND setup:
 - cd LMS-BE
@@ -34,7 +34,7 @@
 ### build frontend:
 - cd LMS-FE
 - docker build -t lmsfe .
-- docker runt -d --name fe --network lmsnetwork -p 80:80 lmsfe
+- docker run -dt --name fe --network lmsnetwork -p 80:80 lmsfe
 - docker ps
 ### Check frontend in browser
 - browse : pub-ip:80

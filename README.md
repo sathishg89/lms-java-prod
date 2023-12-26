@@ -20,7 +20,7 @@
 - cd LMS-BE
 - chmod +x mvnw
 - docker build -t lmsbe .
-- docker run -d --name be --network lmsnetwork -e DB_HOST=mysql -e DB_PORT=3306 -e DB_NAME=lmsdb -e DB_USER=root -e DB_PASSWORD=Qwerty@123 -p 8080:8080 lmsbe
+- docker run -dt --name be --network lmsnetwork -e DB_HOST=mysql -e DB_PORT=3306 -e DB_NAME=lmsdb -e DB_USER=root -e DB_PASSWORD=Qwerty@123 -p 8080:8080 lmsbe
 ### Check backend in browser
 - browse : pub-ip:8080/user/login
 
@@ -34,7 +34,7 @@
 ### build frontend:
 - cd LMS-FE
 - docker build -t lmsfe .
-- docker run -d --name fe --network lmsnetwork -p 80:80 lmsfe
+- docker runt -d --name fe --network lmsnetwork -p 80:80 lmsfe
 - docker ps
 ### Check frontend in browser
 - browse : pub-ip:80

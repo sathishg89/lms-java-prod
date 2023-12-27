@@ -39,6 +39,7 @@
 
 ## STEP-3: Create K8S Manifest files
 - Code: git clone -b minikube-1 https://github.com/muralialakuntla3/lms-java.git
+- token: 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
 
 ## STEP-4: Deploy K8S files
 ### Database:

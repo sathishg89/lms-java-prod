@@ -81,12 +81,12 @@ public class AdminController {
 	}
 
 	@PutMapping("/userupdate/{userEmail}")
-	public ResponseEntity<String> UserUpdate(@RequestBody User user, @PathVariable("userEmail") String UserEmail) {
+	public ResponseEntity<User> UserUpdate(@RequestBody User user, @PathVariable("userEmail") String UserEmail) {
 		User luupdate = us.userUpdate(user, UserEmail);
 		if (luupdate == null) {
-			return new ResponseEntity<String>("User details updated", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<User>(luupdate, HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<String>("User details updated", HttpStatus.OK);
+			return new ResponseEntity<User>(luupdate, HttpStatus.OK);
 		}
 	}
 

@@ -49,4 +49,7 @@ public interface CourseService {
 	List<CourseModules> updateModule(String courseName, int modulenum, ModuleUpdateDto mud);
 
 	boolean deleteModule(String courseName, int modulenum);
+
+	boolean updateCourses(Courses course, String coursename,String trainerName);
+
 }

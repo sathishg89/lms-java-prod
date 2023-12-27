@@ -77,8 +77,8 @@ public class SecurityConfig {
 							"/admin/removecourseaccess/{userEmail}/{courseName}/{trainerName}").authenticated();
 
 					auth.requestMatchers("/admin/course/addcourseuser", "/admin/course/addcourse",
-							"/admin/course/accesscoursetouser", "/admin/course/savevideo",
-							"/admin/course/getcourseuserinfo/{userEmail}",
+							"/admin/course/updatecourse/{courseName}/{trainerName}", "/admin/course/accesscoursetouser",
+							"/admin/course/savevideo", "/admin/course/getcourseuserinfo/{userEmail}",
 							"/admin/course/getcourseusers/{courseName}/{trainerName}",
 
 							"/admin/course/deletecourse/{courseName}/{trainerName}",

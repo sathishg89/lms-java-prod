@@ -86,6 +86,47 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
+	public boolean updateCourses(Courses course, String coursename, String trainerName) {
+
+		if (cr.existsBycoursename(coursename)) {
+
+			Courses courses = cr.findBycoursenameAndcoursetrainer(coursename, trainerName).get(0);
+			if (course.getCoursename() != null && !course.getCoursename().isEmpty()) {
+				courses.setCoursename(course.getCoursename());
+
+			}
+			if (course.getCoursetrainer() != null && !course.getCoursetrainer().isEmpty()) {
+				courses.setCoursetrainer(course.getCoursetrainer());
+
+			}
+			if (course.getDescription() != null && !course.getDescription().isEmpty()) {
+				courses.setDescription(course.getDescription());
+
+			}
+			if (course.getCourseimage() != null) {
+				courses.setCourseimage(course.getCourseimage());
+			}
+			if (course.isArchived() != false) {
+				courses.setArchived(course.isArchived());
+			}
+
+			log.info("c1 " + courses.getCoursename() + courses.getCoursetrainer() + courses.isArchived());
+
+			Courses save = cr.save(courses);
+
+			if (save == null) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			throw new CustomException(CustomErrorCodes.COURSE_NOT_FOUND.getErrorMsg(),
+					CustomErrorCodes.COURSE_NOT_FOUND.getErrorCode());
+		}
+
+	}
+
+	@Override
 	public boolean accessCouresToUser(String courseUserEmail, String courseName, String trainerName) {
 
 		boolean userExists = ucr.existsByuserEmail(courseUserEmail);
@@ -348,7 +389,8 @@ public class CourseServiceImpl implements CourseService {
 		CourseInfoDto courseInfoDto = courseDetails.stream().findFirst()
 				.map(result -> CourseInfoDto.builder().coursename((String) result[0]).coursetrainer((String) result[1])
 						.courseimage((byte[]) result[2]).description((String) result[3]).modulenum(modulenumList)
-						.build()).get();
+						.build())
+				.get();
 
 		return courseInfoDto;
 	}

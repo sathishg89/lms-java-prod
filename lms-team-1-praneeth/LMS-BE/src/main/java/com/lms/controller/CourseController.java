@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.CourseDto;
 import com.lms.dto.CourseInfoDto;
+import com.lms.dto.CourseUpdateDto;
 import com.lms.dto.CourseUserDto;
 import com.lms.dto.CourseUsersInfoDto;
 import com.lms.dto.CoursesListDto;
@@ -78,7 +80,7 @@ public class CourseController {
 	}
 
 	@PostMapping("/addcourse")
-	public ResponseEntity<String> addCourse(@RequestBody @Valid CourseDto acd) throws Exception {
+	public ResponseEntity<String> addCourse(@ModelAttribute @Valid CourseDto acd) throws Exception {
 
 		Courses cc;
 		if (acd.getCourseImage() != null && acd.getCourseImage().getBytes() != null) {
@@ -90,6 +92,32 @@ public class CourseController {
 		}
 
 		boolean saveUserCourse = cs.saveCourses(cc);
+
+		if (saveUserCourse) {
+			return new ResponseEntity<String>("Courses Saved", HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<String>("Unable To Save Courses", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PutMapping("/updatecourse/{coursename}/{trainerName}")
+	public ResponseEntity<String> updateCourse(@ModelAttribute CourseUpdateDto cud,
+			@PathVariable("coursename") String courseName, @PathVariable String trainerName) throws Exception {
+
+		Courses cc;
+		if (cud.getCourseImage() != null && cud.getCourseImage().getBytes() != null) {
+
+			cc = Courses.builder().coursename(cud.getCourseName()).coursetrainer(cud.getCourseTrainer())
+					.courseimage(cud.getCourseImage().getBytes()).description(cud.getDescription())
+					.archived(cud.isArchived()).build();
+		} else {
+
+			cc = Courses.builder().coursename(cud.getCourseName()).coursetrainer(cud.getCourseTrainer())
+					.description(cud.getDescription()).archived(cud.isArchived()).build();
+
+		}
+
+		boolean saveUserCourse = cs.updateCourses(cc, courseName, trainerName);
 
 		if (saveUserCourse) {
 			return new ResponseEntity<String>("Courses Saved", HttpStatus.CREATED);

@@ -56,7 +56,7 @@
 - My Account -> settings -> New Access Token
 - login to your server
 - docker login -u muralialakuntla3
-- password: paste your token 
+- password: dckr_pat_T_p3YGsUgYgDKejQbR2K5rYqDGk
 ### Backend:
 - cd LMS-BE
 - chmod +x mvnw

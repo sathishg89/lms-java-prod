@@ -110,7 +110,7 @@ public class UserController {
 
 	/*
 	 * 
-	 * API used to update the details of user
+	 * API used to update the details by user
 	 * 
 	 */
 
@@ -189,6 +189,12 @@ public class UserController {
 
 	}
 
+	/*
+	 * 
+	 * API used to upload the resume by user
+	 * 
+	 */
+
 	@PostMapping("/{userEmail}/uploadresume")
 	public ResponseEntity<String> saveResume(@PathVariable("userEmail") String userEmail,
 			@RequestBody MultipartFile multipart) throws Exception {
@@ -200,6 +206,12 @@ public class UserController {
 		}
 		return new ResponseEntity<String>("Resume Not Saved", HttpStatus.BAD_REQUEST);
 	}
+
+	/*
+	 * 
+	 * API used to download resume by user
+	 * 
+	 */
 
 	@GetMapping("/{userEmail}/getresume")
 	public ResponseEntity<byte[]> getResumes(@PathVariable("email") String userEmail) {
@@ -215,6 +227,12 @@ public class UserController {
 
 	}
 
+	/*
+	 * 
+	 * API used to delete resume by user
+	 * 
+	 */
+
 	@DeleteMapping("/{userEmail}/deleteresume")
 	public ResponseEntity<String> deleteResume(@PathVariable("userEmail") String userEmail) {
 
@@ -227,6 +245,12 @@ public class UserController {
 		}
 
 	}
+
+	/*
+	 * 
+	 * API used to get all videos of particular course and trainer by user
+	 * 
+	 */
 
 	@GetMapping("/{courseName}/{trainerName}/getvideos")
 	public ResponseEntity<List<CoursesModuleInfoDto>> getVideos(@PathVariable("courseName") String courseName,

@@ -56,6 +56,12 @@ public class CourseController {
 	@Autowired
 	private UserRepo ur;
 
+	/*
+	 * 
+	 * API used to add course user by admin
+	 * 
+	 */
+
 	@PostMapping("/addcourseuser")
 	public ResponseEntity<String> addCourseUser(@RequestParam String userName, @RequestParam String userEmail) {
 
@@ -79,6 +85,11 @@ public class CourseController {
 
 	}
 
+	/*
+	 * 
+	 * API used to add course by admin
+	 * 
+	 */
 	@PostMapping("/addcourse")
 	public ResponseEntity<String> addCourse(@ModelAttribute @Valid CourseDto acd) throws Exception {
 
@@ -99,6 +110,12 @@ public class CourseController {
 			return new ResponseEntity<String>("Unable To Save Courses", HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	/*
+	 * 
+	 * API used to update course by admin
+	 * 
+	 */
 
 	@PutMapping("/updatecourse/{coursename}/{trainerName}")
 	public ResponseEntity<String> updateCourse(@ModelAttribute CourseUpdateDto cud,
@@ -126,6 +143,12 @@ public class CourseController {
 		}
 	}
 
+	/*
+	 * 
+	 * API used to give access of course to user by admin
+	 * 
+	 */
+
 	@PostMapping("/accesscoursetouser")
 	public ResponseEntity<String> accessCouresToUser(@RequestParam String courseUserEmail,
 			@RequestParam String courseName, @RequestParam String trainerName) {
@@ -139,6 +162,12 @@ public class CourseController {
 
 	}
 
+	/*
+	 * 
+	 * API used to upload videos by admin
+	 * 
+	 */
+
 	@PostMapping("/savevideo")
 	public ResponseEntity<String> saveVideo(@RequestBody @Valid VideoUploadDto videoDto) {
 		boolean addVideoLink = cs.addVideoLink(videoDto);
@@ -150,6 +179,12 @@ public class CourseController {
 		}
 
 	}
+
+	/*
+	 * 
+	 * API used to get course user info of particular user by admin
+	 * 
+	 */
 
 	@GetMapping("/getcourseuserinfo/{userEmail}")
 	public ResponseEntity<CourseUserDto> getCourseUserDetails(@PathVariable("userEmail") String userEmail) {
@@ -164,6 +199,12 @@ public class CourseController {
 		}
 
 	}
+
+	/*
+	 * 
+	 * API used to get all user under the particular course by admin
+	 * 
+	 */
 
 	@GetMapping("/getcourseusers/{courseName}/{trainerName}")
 	public ResponseEntity<List<CourseUsersInfoDto>> getCourses(@PathVariable("courseName") String courseName,
@@ -180,6 +221,12 @@ public class CourseController {
 
 	}
 
+	/*
+	 * 
+	 * API used to delete course by admin
+	 * 
+	 */
+
 	@DeleteMapping("/deletecourse/{courseName}/{trainerName}")
 	public ResponseEntity<String> deleteCourse(@PathVariable("courseName") String courseName,
 			@PathVariable("trainerName") String trainerName) {
@@ -190,6 +237,12 @@ public class CourseController {
 			return new ResponseEntity<String>("UnAble To  Course Deleted", HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	/*
+	 * 
+	 * API used to get all videos of course by admin
+	 * 
+	 */
 
 	@GetMapping("/{courseName}/{trainerName}/getvideos")
 	public ResponseEntity<List<CoursesModuleInfoDto>> getVideos(@PathVariable("courseName") String courseName,
@@ -239,11 +292,23 @@ public class CourseController {
 
 	}
 
+	/*
+	 * 
+	 * API used to get all course by admin
+	 * 
+	 */
+
 	@GetMapping("/getallcourses")
 	public ResponseEntity<List<CoursesListDto>> getAllCourses() {
 		List<CoursesListDto> allCourses = cs.getAllCourses();
 		return new ResponseEntity<List<CoursesListDto>>(allCourses, HttpStatus.OK);
 	}
+
+	/*
+	 * 
+	 * API used to get course info of particular course by admin
+	 * 
+	 */
 
 	@GetMapping("/{courseName}/courseinfo")
 	public ResponseEntity<CourseInfoDto> getCourseInfo(@PathVariable("courseName") String courseName) {
@@ -259,6 +324,12 @@ public class CourseController {
 
 	}
 
+	/*
+	 * 
+	 * API used to get modules of particular course by admin
+	 * 
+	 */
+
 	@GetMapping("/{courseName}/{trainerName}/getmodules")
 	public ResponseEntity<List<CourseModules>> getModules(@PathVariable("courseName") String courseName,
 			@PathVariable String trainerName) {
@@ -272,6 +343,12 @@ public class CourseController {
 		}
 	}
 
+	/*
+	 * 
+	 * API used to update modules of particular course by admin
+	 * 
+	 */
+
 	@PutMapping("/{courseName}/{moduleId}/updatemodules")
 	public ResponseEntity<List<CourseModules>> updateModules(@RequestBody @Valid ModuleUpdateDto mud,
 			@PathVariable("courseName") String courseName, @PathVariable("moduleId") int modulenum) {
@@ -284,6 +361,11 @@ public class CourseController {
 		return new ResponseEntity<List<CourseModules>>(updateModule, HttpStatus.OK);
 	}
 
+	/*
+	 * 
+	 * API used to delete modules of particular course by admin
+	 * 
+	 */
 	@DeleteMapping("/{courseName}/{moduleId}/deletemodule")
 	public ResponseEntity<String> deleteModule(@PathVariable("courseName") String courseName,
 			@PathVariable("moduleId") int modulenum) {

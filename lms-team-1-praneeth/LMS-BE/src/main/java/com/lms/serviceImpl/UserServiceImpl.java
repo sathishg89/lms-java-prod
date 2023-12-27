@@ -173,7 +173,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean deleteUser(String UserEmail) {
 
-		User findByuserEmail = ur.findByuserEmail(UserEmail).orElseThrow(null);
+		User findByuserEmail = ur.findByuserEmail(UserEmail)
+				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 
 		if (findByuserEmail != null) {
 			ur.delete(findByuserEmail);

@@ -70,6 +70,12 @@ public class AdminController {
 		}
 	}
 
+	/*
+	 * 
+	 * API used to import users by admin
+	 * 
+	 */
+
 	@PostMapping("/importusers")
 	@PreAuthorize("hasAuthority('admin')")
 	public ResponseEntity<String> signUpcsv(@RequestParam("file") MultipartFile multipartfile) throws Exception {
@@ -80,7 +86,14 @@ public class AdminController {
 		return new ResponseEntity<String>("Error In Importing Users", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	/*
+	 * 
+	 * API used to update users by admin
+	 * 
+	 */
+
 	@PutMapping("/userupdate/{userEmail}")
+	@PreAuthorize("hasAuthority('admin')")
 	public ResponseEntity<User> UserUpdate(@RequestBody User user, @PathVariable("userEmail") String UserEmail) {
 		User luupdate = us.userUpdate(user, UserEmail);
 		if (luupdate == null) {
@@ -90,7 +103,14 @@ public class AdminController {
 		}
 	}
 
+	/*
+	 * 
+	 * API used to delete user by admin
+	 * 
+	 */
+
 	@DeleteMapping("/userdelete/{userEmail}")
+	@PreAuthorize("hasAuthority('admin')")
 	public ResponseEntity<String> deleteUser(@PathVariable("userEmail") String userEmail) {
 
 		boolean deleteUser = us.deleteUser(userEmail);
@@ -103,6 +123,12 @@ public class AdminController {
 			return new ResponseEntity<String>("User Deletion UnSuccessfully", HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	/*
+	 * 
+	 * API used to remove access for course to user by admin
+	 * 
+	 */
 
 	@PatchMapping("/removecourseaccess/{userEmail}/{courseName}/{trainerName}")
 	public ResponseEntity<String> removeCourseAccess(@PathVariable("userEmail") String userEmail,

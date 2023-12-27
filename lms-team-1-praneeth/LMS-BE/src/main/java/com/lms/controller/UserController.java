@@ -118,8 +118,7 @@ public class UserController {
 	public ResponseEntity<User> UserUpdate(@RequestBody User user, @PathVariable("userEmail") String UserEmail) {
 
 		User luupdate = us.userUpdate(user, UserEmail);
-		if (luupdate != null) {
-
+		if (luupdate == null) {
 			return new ResponseEntity<User>(luupdate, HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<User>(luupdate, HttpStatus.OK);

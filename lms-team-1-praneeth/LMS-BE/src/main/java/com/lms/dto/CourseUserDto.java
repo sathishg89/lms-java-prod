@@ -18,7 +18,7 @@ public class CourseUserDto {
 
 	private String userName;
 	private String userEmail;
-	@JsonIgnoreProperties({ "coursemodule", "courseusers", "courseinsertdate" })
+	@JsonIgnoreProperties({ "courseModule", "courseUsers", "courseCreateDate" })
 	private List<Courses> coursesList;
 
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
+import com.lms.dto.UserUpdateDto;
 import com.lms.dto.UserVerifyDto;
 import com.lms.entity.User;
 import com.lms.exception.details.CustomException;
@@ -94,10 +95,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User userUpdate(User lu, String userEmail) {
+	public User userUpdate(UserUpdateDto lu, String userEmail) throws Exception {
 
 		User lu1;
-		if (lu.getUserEmail() == null && lu.getProfilePhoto() == null && lu.getUserName() == null && lu.getPassword() == null) {
+		if (lu.getUserEmail() == null && lu.getProfilePhoto() == null && lu.getUserName() == null
+				&& lu.getPassword() == null) {
 			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
 					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 
@@ -116,8 +118,8 @@ public class UserServiceImpl implements UserService {
 		if (lu.getUserName() != null && !lu.getUserName().isEmpty()) {
 			lu1.setUserName(lu.getUserName());
 		}
-		if (lu.getProfilePhoto() != null && lu.getProfilePhoto().length != 0) {
-			lu1.setProfilePhoto(lu.getProfilePhoto());
+		if (lu.getProfilePhoto() != null && !lu.getProfilePhoto().isEmpty()) {
+			lu1.setProfilePhoto(lu.getProfilePhoto().getBytes());
 		}
 
 		return ur.save(lu1);

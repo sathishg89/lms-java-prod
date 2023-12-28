@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
+import com.lms.dto.UserUpdateDto;
 import com.lms.entity.User;
 import com.lms.exception.details.NameFoundException;
 import com.lms.service.AdminService;
@@ -94,7 +96,7 @@ public class AdminController {
 
 	@PutMapping("/userupdate/{userEmail}")
 	@PreAuthorize("hasAuthority('admin')")
-	public ResponseEntity<User> UserUpdate(@RequestBody User user, @PathVariable("userEmail") String UserEmail) {
+	public ResponseEntity<User> UserUpdate(@ModelAttribute UserUpdateDto user, @PathVariable("userEmail") String UserEmail) throws Exception {
 		User luupdate = us.userUpdate(user, UserEmail);
 		if (luupdate == null) {
 			return new ResponseEntity<User>(luupdate, HttpStatus.BAD_REQUEST);

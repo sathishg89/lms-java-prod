@@ -29,8 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.CoursesModuleInfoDto;
-import com.lms.dto.UserVerifyDto;
+import com.lms.dto.UserUpdateDto;
 import com.lms.dto.CoursesModuleInfoDto.CoursesModuleInfoDtoBuilder;
+import com.lms.dto.UserVerifyDto;
 import com.lms.entity.CourseLink;
 import com.lms.entity.CourseModules;
 import com.lms.entity.User;
@@ -116,7 +117,7 @@ public class UserController {
 	 */
 
 	@PutMapping("/update/{userEmail}")
-	public ResponseEntity<User> UserUpdate(@ModelAttribute User user, @PathVariable("userEmail") String UserEmail) {
+	public ResponseEntity<User> UserUpdate(@ModelAttribute UserUpdateDto user, @PathVariable("userEmail") String UserEmail) throws Exception {
 
 		User luupdate = us.userUpdate(user, UserEmail);
 		if (luupdate == null) {

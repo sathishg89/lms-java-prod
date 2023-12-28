@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -115,7 +116,7 @@ public class UserController {
 	 */
 
 	@PutMapping("/update/{userEmail}")
-	public ResponseEntity<User> UserUpdate(@RequestBody User user, @PathVariable("userEmail") String UserEmail) {
+	public ResponseEntity<User> UserUpdate(@ModelAttribute User user, @PathVariable("userEmail") String UserEmail) {
 
 		User luupdate = us.userUpdate(user, UserEmail);
 		if (luupdate == null) {

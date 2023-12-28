@@ -39,7 +39,7 @@ public class SecurityConfig {
 		String origins = "*";
 
 		http.csrf(csrf -> csrf.disable());
-		http.cors(cor -> cor.configurationSource(new CorsConfigurationSource() {
+		http.cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
 			@Override
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 				List<String> listoforigin = List.of(origins);
@@ -95,7 +95,7 @@ public class SecurityConfig {
 
 							"/admin/course/{courseName}/{moduleId}/deletemodule").permitAll();
 
-				}).sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				}).sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(ap()).addFilterBefore((Filter) jfl, UsernamePasswordAuthenticationFilter.class);
 
 		http.formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());

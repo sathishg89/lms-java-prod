@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.UserUpdateDto;
+import com.lms.entity.CourseUsers;
 import com.lms.entity.User;
 import com.lms.exception.details.NameFoundException;
 import com.lms.service.AdminService;
@@ -96,9 +97,15 @@ public class AdminController {
 
 	@PutMapping("/userupdate/{userEmail}")
 	@PreAuthorize("hasAuthority('admin')")
-	public ResponseEntity<User> UserUpdate(@ModelAttribute UserUpdateDto user, @PathVariable("userEmail") String UserEmail) throws Exception {
+	public ResponseEntity<User> UserUpdate(@ModelAttribute UserUpdateDto user,
+			@PathVariable("userEmail") String UserEmail) throws Exception {
 		User luupdate = us.userUpdate(user, UserEmail);
-		if (luupdate == null) {
+
+		CourseUsers cs1 = CourseUsers.builder().userEmail(user.getUserEmail()).userName(user.getUserName()).build();
+
+		boolean updateCourseUser = cs.updateCourseUser(cs1, UserEmail);
+
+		if (luupdate == null && !updateCourseUser) {
 			return new ResponseEntity<User>(luupdate, HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<User>(luupdate, HttpStatus.OK);

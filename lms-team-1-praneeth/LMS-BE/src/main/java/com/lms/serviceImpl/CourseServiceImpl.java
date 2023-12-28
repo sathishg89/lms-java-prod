@@ -66,6 +66,32 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
+	public boolean updateCourseUser(CourseUsers courseUsers, String userEmail) {
+
+		if (ucr.existsByuserEmail(userEmail)) {
+			CourseUsers findByuserEmail = ucr.findByuserEmail(userEmail);
+
+			if (courseUsers != null && courseUsers.getUserEmail() != null) {
+				findByuserEmail.setUserEmail(courseUsers.getUserEmail());
+			}
+			if (courseUsers != null && courseUsers.getUserName() != null) {
+				findByuserEmail.setUserName(courseUsers.getUserName());
+			}
+			CourseUsers save = ucr.save(findByuserEmail);
+			if (save == null) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+
+			throw new CustomException(CustomErrorCodes.USER_NOT_FOUND.getErrorMsg(),
+					CustomErrorCodes.USER_NOT_FOUND.getErrorCode());
+		}
+
+	}
+
+	@Override
 	public boolean saveCourses(Courses course) {
 
 		course.setCourseCreateDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
@@ -90,35 +116,43 @@ public class CourseServiceImpl implements CourseService {
 
 		if (cr.existsBycourseName(coursename)) {
 
-			Courses courses = cr.findBycourseNameAndcourseTrainer(coursename, trainerName).get(0);
-			if (course.getCourseName() != null && !course.getCourseName().isEmpty()) {
-				courses.setCourseName(course.getCourseName());
+			List<Courses> lcourses = cr.findBycourseNameAndcourseTrainer(coursename, trainerName);
 
-			}
-			if (course.getCourseTrainer() != null && !course.getCourseTrainer().isEmpty()) {
-				courses.setCourseTrainer(course.getCourseTrainer());
+			if (!lcourses.isEmpty()) {
+				Courses courses = lcourses.get(0);
+				if (course.getCourseName() != null && !course.getCourseName().isEmpty()) {
+					courses.setCourseName(course.getCourseName());
 
-			}
-			if (course.getCourseDescription() != null && !course.getCourseDescription().isEmpty()) {
-				courses.setCourseDescription(course.getCourseDescription());
+				}
+				if (course.getCourseTrainer() != null && !course.getCourseTrainer().isEmpty()) {
+					courses.setCourseTrainer(course.getCourseTrainer());
 
-			}
-			if (course.getCourseImage() != null) {
-				courses.setCourseImage(course.getCourseImage());
-			}
-			if (course.isArchived() != false) {
-				courses.setArchived(course.isArchived());
-			}
+				}
+				if (course.getCourseDescription() != null && !course.getCourseDescription().isEmpty()) {
+					courses.setCourseDescription(course.getCourseDescription());
 
-			log.info("c1 " + courses.getCourseName() + courses.getCourseTrainer() + courses.isArchived());
+				}
+				if (course.getCourseImage() != null) {
+					courses.setCourseImage(course.getCourseImage());
+				}
+				if (course.isArchived() != false) {
+					courses.setArchived(course.isArchived());
+				}
 
-			Courses save = cr.save(courses);
+				log.info("c1 " + courses.getCourseName() + courses.getCourseTrainer() + courses.isArchived());
 
-			if (save == null) {
-				return false;
+				Courses save = cr.save(courses);
+
+				if (save == null) {
+					return false;
+				} else {
+					return true;
+				}
 			} else {
-				return true;
+				throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+						CustomErrorCodes.INVALID_DETAILS.getErrorMsg());
 			}
+
 		} else {
 			throw new CustomException(CustomErrorCodes.COURSE_NOT_FOUND.getErrorMsg(),
 					CustomErrorCodes.COURSE_NOT_FOUND.getErrorCode());
@@ -187,8 +221,8 @@ public class CourseServiceImpl implements CourseService {
 			CourseModules cm = CourseModules.builder().moduleNumber(videoDto.getModuleNumber())
 
 					.moduleName(videoDto.getModuleName())
-					.videoInsertTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy "))).courseLinks(cl1)
-					.build();
+					.videoInsertTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy ")))
+					.courseLinks(cl1).build();
 
 			// if fcn contains
 			if (fcn.size() > 0) {
@@ -495,7 +529,8 @@ public class CourseServiceImpl implements CourseService {
 
 		List<CourseModules> ml = courses.getCourseModule();
 
-		CourseModules courseModules = ml.stream().filter(x -> x.getModuleNumber() == modulenum).findFirst().orElse(null);
+		CourseModules courseModules = ml.stream().filter(x -> x.getModuleNumber() == modulenum).findFirst()
+				.orElse(null);
 
 		if (courseModules != null) {
 			List<CourseLink> clinks = courseModules.getCourseLinks();

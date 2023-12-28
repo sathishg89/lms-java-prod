@@ -137,9 +137,9 @@ public class CourseController {
 		boolean saveUserCourse = cs.updateCourses(cc, courseName, trainerName);
 
 		if (saveUserCourse) {
-			return new ResponseEntity<String>("Courses Saved", HttpStatus.CREATED);
+			return new ResponseEntity<String>("Courses Updation Successful", HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<String>("Unable To Save Courses", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Courses Updation UnSuccessful", HttpStatus.BAD_REQUEST);
 		}
 	}
 

@@ -34,6 +34,7 @@ import com.lms.dto.CoursesModuleInfoDto.CoursesModuleInfoDtoBuilder;
 import com.lms.dto.UserVerifyDto;
 import com.lms.entity.CourseLink;
 import com.lms.entity.CourseModules;
+import com.lms.entity.CourseUsers;
 import com.lms.entity.User;
 import com.lms.exception.details.CustomException;
 import com.lms.service.CourseService;
@@ -117,10 +118,16 @@ public class UserController {
 	 */
 
 	@PutMapping("/update/{userEmail}")
-	public ResponseEntity<User> UserUpdate(@ModelAttribute UserUpdateDto user, @PathVariable("userEmail") String UserEmail) throws Exception {
+	public ResponseEntity<User> UserUpdate(@ModelAttribute UserUpdateDto user,
+			@PathVariable("userEmail") String UserEmail) throws Exception {
 
 		User luupdate = us.userUpdate(user, UserEmail);
-		if (luupdate == null) {
+
+		CourseUsers cs1 = CourseUsers.builder().userEmail(user.getUserEmail()).userName(user.getUserName()).build();
+
+		boolean updateCourseUser = cs.updateCourseUser(cs1, UserEmail);
+
+		if (luupdate == null && !updateCourseUser) {
 			return new ResponseEntity<User>(luupdate, HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<User>(luupdate, HttpStatus.OK);

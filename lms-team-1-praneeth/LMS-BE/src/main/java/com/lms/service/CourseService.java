@@ -52,4 +52,6 @@ public interface CourseService {
 
 	boolean updateCourses(Courses course, String coursename,String trainerName);
 
+	boolean updateCourseUser(CourseUsers courseUsers, String userEmail);
+
 }

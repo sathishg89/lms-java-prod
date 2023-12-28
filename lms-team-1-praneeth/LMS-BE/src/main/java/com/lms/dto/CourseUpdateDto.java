@@ -15,7 +15,7 @@ public class CourseUpdateDto {
 
 	private String courseName;
 	private String courseTrainer;
-	private String description;
+	private String courseDescription;
 	private boolean archived;
 	private MultipartFile courseImage;
 

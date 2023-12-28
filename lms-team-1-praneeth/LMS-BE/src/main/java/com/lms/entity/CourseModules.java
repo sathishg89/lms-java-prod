@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -31,18 +32,22 @@ public class CourseModules {
 	@GeneratedValue(generator = "cmseqgen")
 	@SequenceGenerator(name = "cmseqgen", sequenceName = "cmsg", initialValue = 1, allocationSize = 1)
 	@JsonProperty(access = Access.WRITE_ONLY)
-	private int cmid;
+	@Column(name = "cmid")
+	private int moduleId;
 
-	private int modulenum;
+	@Column(name="modulenumber")
+	private int moduleNumber;
 
 	@NotEmpty(message = "Modulename cannot be empty")
-	private String modulename;
+	@Column(name="modulename")
+	private String moduleName;
 
 	@JsonProperty(access = Access.WRITE_ONLY)
-	private String videoinserttime;
+	@Column(name="videoinserttime")
+	private String videoInsertTime;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "fk_cmid")
-	private List<CourseLink> clinks;
+	private List<CourseLink> courseLinks;
 
 }

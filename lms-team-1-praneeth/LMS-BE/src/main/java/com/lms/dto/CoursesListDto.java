@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class CoursesListDto {
 
 	private String courseName;
-	private String trainerName;
+	private String courseTrainer;
 
 }

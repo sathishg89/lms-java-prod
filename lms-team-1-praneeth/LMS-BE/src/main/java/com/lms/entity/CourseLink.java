@@ -34,16 +34,16 @@ public class CourseLink {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "linkid")
 	@JsonProperty(access = Access.WRITE_ONLY)
-	private Long linkid;
+	private Long linkId;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "courselinks_link", joinColumns = @JoinColumn(name = "fk_linkid"))
-	@Column(name = "link")
-	private List<String> links;
+	@Column(name = "videolink")
+	private List<String> videoLink;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "courselinks_videoname", joinColumns = @JoinColumn(name = "fk_linkid"))
 	@Column(name = "videoname")
-	private List<String> videoname;
+	private List<String> videoName;
 
 }

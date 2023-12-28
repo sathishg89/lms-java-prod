@@ -28,14 +28,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "corseusers")
+@Table(name = "courseusers")
 public class CourseUsers {
 
 	@Id
 	@GeneratedValue(generator = "cuseqgen")
 	@SequenceGenerator(name = "cuseqgen", sequenceName = "LMS.cusg", initialValue = 1001, allocationSize = 1, schema = "LMS")
 	@JsonProperty(access = Access.WRITE_ONLY)
-	private int userid;
+	@Column(name = "userid")
+	private int userId;
 
 	@NotEmpty(message = "username cannot be empty")
 	@Column(name = "username")
@@ -47,7 +48,7 @@ public class CourseUsers {
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "courses_users", joinColumns = @JoinColumn(name = "fk_userid"), inverseJoinColumns = @JoinColumn(name = "fk_courseid"))
-	@JsonIgnoreProperties({ "courseusers", "courseinsertdate" })
+	@JsonIgnoreProperties({ "courseUsers" })
 	private List<Courses> coursesList;
 
 }

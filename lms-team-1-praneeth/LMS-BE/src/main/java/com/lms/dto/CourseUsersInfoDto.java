@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CourseUsersInfoDto {
 
-	private int courseid;
-	private String coursename;
-	private String coursetrainer;
-	private String coursecreatedate;
+	private int courseId;
+	private String courseName;
+	private String courseTrainer;
+	private String courseCreateDate;
 	@JsonIgnoreProperties("coursesList")
-	private List<CourseUsers> courseusers;
+	private List<CourseUsers> courseUsers;
 
 }

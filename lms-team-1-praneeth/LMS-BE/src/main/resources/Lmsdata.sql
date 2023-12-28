@@ -1,7 +1,7 @@
 -- Insert values into the courses table
 -- password is abc123
 
-INSERT INTO user (id, email, username, password, img, is_active, role)
+INSERT INTO user (id, email, username, password, profilephoto, isactive, role)
 VALUES
 (1, 'jessie@digital-edify.com', 'jessie', '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NUll,'1','superadmin'),
 ('2', 'praneeth@gmail.com', 'praneeth',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
@@ -9,13 +9,13 @@ VALUES
 ('4', 'raju@digital-edify.com', 'raju',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'admin'),
 ('5', 'ravi@digital-edify.com', 'ravi',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'admin'),
 ('6', 'farhath@gmail.com', 'farhath',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
-('8', 'nithin@gmail.com', 'nithin',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
-('40', 'ravikiran@gmail.com', 'ravikiran',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'user'),
-('41', 'murali@gmail.com', 'murali',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'user'),
-('43', 'akhil@gmail.com', 'akhil', '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user');
+('7', 'nithin@gmail.com', 'nithin',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
+('8', 'ravikiran@gmail.com', 'ravikiran',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'user'),
+('9', 'murali@gmail.com', 'murali',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'user'),
+('10', 'akhil@gmail.com', 'akhil', '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user');
 
 
-INSERT INTO corseusers (userid, useremail, username)
+INSERT INTO courseusers (userid, useremail, username)
 VALUES
 ('1007', 'yellaiah@gmail.com', 'yellaiah'),
 ('1008', 'mubeen@gmail.com', 'mubeen'),
@@ -27,7 +27,7 @@ VALUES
 
 INSERT INTO cusg (next_val) VALUES ('1034');
 
-INSERT INTO courses (courseid, coursecreatedate, courseimage, coursename, coursetrainer, archived, description)
+INSERT INTO courses (courseid, coursecreatedate, courseimage, coursename, coursetrainer, archived, coursedescription)
 VALUES
 ('103', '02-12-2023 07:13:32', NULL, 'fsbasics2303', 'deepak', '0', NULL),
 ('104', '02-12-2023 07:13:47', NULL, 'fsreact2301', 'raju', '1', NULL),
@@ -65,7 +65,7 @@ VALUES
 ('1018', '120');
 
 
-INSERT INTO coursemodules (cmid, modulename, modulenum, videoinserttime, fk_courseid)
+INSERT INTO coursemodules (cmid, modulename, modulenumber, videoinserttime, fk_courseid)
 VALUES
 ('13', 'updatredmodule1225', '2', '19-12-2023', '104'),
 ('35', 'intro to js', '1', '19-12-2023', '104'),
@@ -82,7 +82,7 @@ VALUES
 ('52', '37'),
 ('53', '38');
 
-INSERT INTO courselinks_link (fk_linkid, link)
+INSERT INTO courselinks_link (fk_linkid, videolink)
 VALUES
 ('25', 'link1'),
 ('25', 'link2'),

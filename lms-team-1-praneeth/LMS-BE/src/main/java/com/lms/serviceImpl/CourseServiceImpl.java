@@ -68,9 +68,9 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean saveCourses(Courses course) {
 
-		course.setCoursecreatedate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
+		course.setCourseCreateDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
 
-		if (!cr.existsBycoursename(course.getCoursename())) {
+		if (!cr.existsBycourseName(course.getCourseName())) {
 			Courses save = cr.save(course);
 
 			if (save == null) {
@@ -88,29 +88,29 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean updateCourses(Courses course, String coursename, String trainerName) {
 
-		if (cr.existsBycoursename(coursename)) {
+		if (cr.existsBycourseName(coursename)) {
 
-			Courses courses = cr.findBycoursenameAndcoursetrainer(coursename, trainerName).get(0);
-			if (course.getCoursename() != null && !course.getCoursename().isEmpty()) {
-				courses.setCoursename(course.getCoursename());
-
-			}
-			if (course.getCoursetrainer() != null && !course.getCoursetrainer().isEmpty()) {
-				courses.setCoursetrainer(course.getCoursetrainer());
+			Courses courses = cr.findBycourseNameAndcourseTrainer(coursename, trainerName).get(0);
+			if (course.getCourseName() != null && !course.getCourseName().isEmpty()) {
+				courses.setCourseName(course.getCourseName());
 
 			}
-			if (course.getDescription() != null && !course.getDescription().isEmpty()) {
-				courses.setDescription(course.getDescription());
+			if (course.getCourseTrainer() != null && !course.getCourseTrainer().isEmpty()) {
+				courses.setCourseTrainer(course.getCourseTrainer());
 
 			}
-			if (course.getCourseimage() != null) {
-				courses.setCourseimage(course.getCourseimage());
+			if (course.getCourseDescription() != null && !course.getCourseDescription().isEmpty()) {
+				courses.setCourseDescription(course.getCourseDescription());
+
+			}
+			if (course.getCourseImage() != null) {
+				courses.setCourseImage(course.getCourseImage());
 			}
 			if (course.isArchived() != false) {
 				courses.setArchived(course.isArchived());
 			}
 
-			log.info("c1 " + courses.getCoursename() + courses.getCoursetrainer() + courses.isArchived());
+			log.info("c1 " + courses.getCourseName() + courses.getCourseTrainer() + courses.isArchived());
 
 			Courses save = cr.save(courses);
 
@@ -130,15 +130,15 @@ public class CourseServiceImpl implements CourseService {
 	public boolean accessCouresToUser(String courseUserEmail, String courseName, String trainerName) {
 
 		boolean userExists = ucr.existsByuserEmail(courseUserEmail);
-		boolean courseExists = cr.existsBycoursename(courseName);
+		boolean courseExists = cr.existsBycourseName(courseName);
 
 		if (userExists && courseExists) {
 
 			CourseUsers fun = ucr.findByuserEmail(courseUserEmail);
-			List<Courses> fcn = cr.findBycoursename(courseName);
+			List<Courses> fcn = cr.findBycourseName(courseName);
 
 			Optional<Courses> courseOptional = fcn.stream()
-					.filter(course -> course.getCoursetrainer().equals(trainerName)).findFirst();
+					.filter(course -> course.getCourseTrainer().equals(trainerName)).findFirst();
 
 			if (!fun.getCoursesList().containsAll(fcn)) {
 				fun.getCoursesList().add(courseOptional.get());
@@ -155,9 +155,9 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean addVideoLink(VideoUploadDto videoDto) {
 
-		LinkedHashSet<String> videolink = videoDto.getVideolink();
+		LinkedHashSet<String> videolink = videoDto.getVideoLink();
 
-		List<String> videoname = videoDto.getVideoname();
+		List<String> videoname = videoDto.getVideoName();
 		List<String> linklist = new ArrayList<>(videolink);
 
 		if (videoname.size() < videolink.size() || videoname.size() > videolink.size()) {
@@ -175,19 +175,19 @@ public class CourseServiceImpl implements CourseService {
 				linkedmap.put(name, link);
 			}
 			// find the details from db using cname, trainername
-			List<Courses> fcn = cr.findBycoursenameAndcoursetrainer(videoDto.getCourseName(),
-					videoDto.getTrainerName());
+			List<Courses> fcn = cr.findBycourseNameAndcourseTrainer(videoDto.getCourseName(),
+					videoDto.getCourseTrainer());
 
-			CourseLink cl = CourseLink.builder().links(linklist).videoname(videoDto.getVideoname()).build();
+			CourseLink cl = CourseLink.builder().videoLink(linklist).videoName(videoDto.getVideoName()).build();
 
 			List<CourseLink> cl1 = new ArrayList<>();
 			cl1.add(cl);
 
 			// converting the details into cm object
-			CourseModules cm = CourseModules.builder().modulenum(videoDto.getModulenumber())
+			CourseModules cm = CourseModules.builder().moduleNumber(videoDto.getModuleNumber())
 
-					.modulename(videoDto.getModulename())
-					.videoinserttime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy "))).clinks(cl1)
+					.moduleName(videoDto.getModuleName())
+					.videoInsertTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy "))).courseLinks(cl1)
 					.build();
 
 			// if fcn contains
@@ -195,11 +195,11 @@ public class CourseServiceImpl implements CourseService {
 
 				// by using tname gettiing the course object
 				Courses courses = fcn.stream()
-						.filter(course -> course.getCoursetrainer().equals(videoDto.getTrainerName())).findFirst()
+						.filter(course -> course.getCourseTrainer().equals(videoDto.getCourseTrainer())).findFirst()
 						.get();
 
 				// getting the coursemodules from courses
-				List<CourseModules> existingModules = courses.getCoursemodule();
+				List<CourseModules> existingModules = courses.getCourseModule();
 
 				// if courses are already exist the it goes inside else outside
 				if (existingModules.size() > 0) {
@@ -207,7 +207,7 @@ public class CourseServiceImpl implements CourseService {
 					// check the modulenum from db and from client if both are same then return the
 					// coursemodule list
 					Optional<CourseModules> em = existingModules.stream()
-							.filter(module -> module.getModulenum() == videoDto.getModulenumber()).findFirst();
+							.filter(module -> module.getModuleNumber() == videoDto.getModuleNumber()).findFirst();
 
 					// add the videolink to set of link if the module if present or else add the
 					// builder to existingmocules list
@@ -216,15 +216,15 @@ public class CourseServiceImpl implements CourseService {
 
 						CourseModules cm1 = em.get();
 
-						List<CourseLink> clinks = cm1.getClinks();
+						List<CourseLink> clinks = cm1.getCourseLinks();
 
 						log.info("" + clinks);
 
 						if (clinks.size() > 0) {
 							for (CourseLink existingCl : clinks) {
 								log.info("" + existingCl);
-								existingCl.getLinks().addAll(cl.getLinks());
-								existingCl.getVideoname().addAll(cl.getVideoname());
+								existingCl.getVideoLink().addAll(cl.getVideoLink());
+								existingCl.getVideoName().addAll(cl.getVideoName());
 							}
 						} else {
 
@@ -242,7 +242,7 @@ public class CourseServiceImpl implements CourseService {
 					existingModules.add(cm);
 				}
 				// set the course object with new setcoursemodule
-				courses.setCoursemodule(existingModules);
+				courses.setCourseModule(existingModules);
 				cr.save(courses);
 
 				return true;
@@ -259,8 +259,8 @@ public class CourseServiceImpl implements CourseService {
 		try {
 			CourseUsers fun = ucr.findByuserEmail(courseUserEmail);
 
-			CourseUserDto ucd = CourseUserDto.builder().username(fun.getUserName()).useremail(fun.getUserEmail())
-					.courseslist(fun.getCoursesList()).build();
+			CourseUserDto ucd = CourseUserDto.builder().userName(fun.getUserName()).userEmail(fun.getUserEmail())
+					.coursesList(fun.getCoursesList()).build();
 
 			return ucd;
 		} catch (Exception e) {
@@ -274,12 +274,12 @@ public class CourseServiceImpl implements CourseService {
 	public List<CourseUsersInfoDto> getCourses(String courseName, String trainerName) {
 
 		try {
-			List<Courses> findByusername = cr.findBycoursename(courseName);
+			List<Courses> findByusername = cr.findBycourseName(courseName);
 
 			List<CourseUsersInfoDto> collect = findByusername.stream()
-					.filter(fil -> fil.getCoursetrainer().equals(trainerName))
-					.map(c -> new CourseUsersInfoDto(c.getCourseid(), c.getCoursename(), c.getCoursetrainer(),
-							c.getCoursecreatedate(), c.getCourseusers()))
+					.filter(fil -> fil.getCourseTrainer().equals(trainerName))
+					.map(c -> new CourseUsersInfoDto(c.getCourseId(), c.getCourseName(), c.getCourseTrainer(),
+							c.getCourseCreateDate(), c.getCourseUsers()))
 					.collect(Collectors.toList());
 			return collect;
 		} catch (Exception e) {
@@ -315,7 +315,7 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean deleteCourse(String courseName, String trainerName) {
 
-		List<Courses> findBycoursenameAndcoursetrainer = cr.findBycoursenameAndcoursetrainer(courseName, trainerName);
+		List<Courses> findBycoursenameAndcoursetrainer = cr.findBycourseNameAndcourseTrainer(courseName, trainerName);
 
 		if (!findBycoursenameAndcoursetrainer.isEmpty()) {
 			Courses courses = findBycoursenameAndcoursetrainer.get(0);
@@ -337,8 +337,8 @@ public class CourseServiceImpl implements CourseService {
 		if (findByuserEmail != null) {
 			List<Courses> coursesList = findByuserEmail.getCoursesList();
 
-			coursesList.removeIf(course -> course.getCoursename().equals(courseName)
-					&& course.getCoursetrainer().equals(trainerName));
+			coursesList.removeIf(course -> course.getCourseName().equals(courseName)
+					&& course.getCourseTrainer().equals(trainerName));
 
 			findByuserEmail.setCoursesList(coursesList);
 
@@ -360,7 +360,7 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public List<CourseModules> getCourseModules(String courseName, String trainerName) {
 
-		boolean existsBycoursename = cr.existsBycoursename(courseName);
+		boolean existsBycoursename = cr.existsBycourseName(courseName);
 
 		if (existsBycoursename) {
 			List<CourseModules> collect = cr.findCourseModulesByCourseName(courseName, trainerName);
@@ -387,9 +387,9 @@ public class CourseServiceImpl implements CourseService {
 				.collect(Collectors.toList());
 
 		CourseInfoDto courseInfoDto = courseDetails.stream().findFirst()
-				.map(result -> CourseInfoDto.builder().coursename((String) result[0]).coursetrainer((String) result[1])
-						.courseimage((byte[]) result[2]).description((String) result[3]).modulenum(modulenumList)
-						.build())
+				.map(result -> CourseInfoDto.builder().courseName((String) result[0]).courseTrainer((String) result[1])
+						.courseImage((byte[]) result[2]).courseDescription((String) result[3])
+						.moduleNumber(modulenumList).build())
 				.get();
 
 		return courseInfoDto;
@@ -444,7 +444,7 @@ public class CourseServiceImpl implements CourseService {
 
 		LocalDateTime now = LocalDateTime.now();
 
-		Courses courses = cr.findBycoursename(courseName).get(0);
+		Courses courses = cr.findBycourseName(courseName).get(0);
 
 		if (courses == null) {
 
@@ -453,35 +453,35 @@ public class CourseServiceImpl implements CourseService {
 
 		}
 
-		List<CourseModules> ml = courses.getCoursemodule();
+		List<CourseModules> ml = courses.getCourseModule();
 
-		Optional<CourseModules> optionalCourseModules = ml.stream().filter(x -> x.getModulenum() == modulenum)
+		Optional<CourseModules> optionalCourseModules = ml.stream().filter(x -> x.getModuleNumber() == modulenum)
 				.findFirst();
 
 		if (optionalCourseModules.isPresent()) {
 			CourseModules courseModules = optionalCourseModules.get();
 
-			courseModules.setModulename(mud.getModulename());
-			courseModules.setModulenum(modulenum);
-			courseModules.setVideoinserttime(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+			courseModules.setModuleName(mud.getModuleName());
+			courseModules.setModuleNumber(modulenum);
+			courseModules.setVideoInsertTime(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-			List<CourseLink> clinks = courseModules.getClinks();
+			List<CourseLink> clinks = courseModules.getCourseLinks();
 
 			if (!clinks.isEmpty()) {
 				CourseLink courseLink = clinks.get(0);
 
-				if (mud.getLinks() != null) {
-					courseLink.setLinks(mud.getLinks());
+				if (mud.getVideoLink() != null) {
+					courseLink.setVideoLink(mud.getVideoLink());
 
 				}
-				if (mud.getVideoname() != null) {
-					courseLink.setVideoname(mud.getVideoname());
+				if (mud.getVideoName() != null) {
+					courseLink.setVideoName(mud.getVideoName());
 				}
 
 			}
 
 			Courses save = cr.save(courses);
-			return save.getCoursemodule();
+			return save.getCourseModule();
 		} else {
 
 			throw new CustomException(CustomErrorCodes.MISSING_MODULE.getErrorMsg(),
@@ -491,28 +491,28 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	public boolean deleteModule(String courseName, int modulenum) {
-		Courses courses = cr.findBycoursename(courseName).get(0);
+		Courses courses = cr.findBycourseName(courseName).get(0);
 
-		List<CourseModules> ml = courses.getCoursemodule();
+		List<CourseModules> ml = courses.getCourseModule();
 
-		CourseModules courseModules = ml.stream().filter(x -> x.getModulenum() == modulenum).findFirst().orElse(null);
+		CourseModules courseModules = ml.stream().filter(x -> x.getModuleNumber() == modulenum).findFirst().orElse(null);
 
 		if (courseModules != null) {
-			List<CourseLink> clinks = courseModules.getClinks();
+			List<CourseLink> clinks = courseModules.getCourseLinks();
 
 			if (!clinks.isEmpty()) {
 				CourseLink courseLink = clinks.get(0);
 
-				courseLink.getLinks().clear();
-				courseLink.getVideoname().clear();
+				courseLink.getVideoLink().clear();
+				courseLink.getVideoName().clear();
 
-				if (courseLink.getLinks().isEmpty() && courseLink.getVideoname().isEmpty()) {
+				if (courseLink.getVideoLink().isEmpty() && courseLink.getVideoName().isEmpty()) {
 					clinks.remove(courseLink);
 				}
 			}
 
 			ml.remove(courseModules);
-			courses.setCoursemodule(ml);
+			courses.setCourseModule(ml);
 			cr.save(courses);
 
 			return true;

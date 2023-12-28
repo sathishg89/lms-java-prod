@@ -259,19 +259,19 @@ public class UserController {
 
 		List<CourseModules> getcourse = cs.getCourseModules(courseName, trainerName);
 
-		List<Integer> mn = getcourse.stream().map(x -> x.getModulenum()).collect(Collectors.toList());
+		List<Integer> mn = getcourse.stream().map(x -> x.getModuleNumber()).collect(Collectors.toList());
 
-		List<String> mname = getcourse.stream().map(x -> x.getModulename()).collect(Collectors.toList());
+		List<String> mname = getcourse.stream().map(x -> x.getModuleName()).collect(Collectors.toList());
 
-		List<List<CourseLink>> collect = getcourse.stream().map(x -> x.getClinks()).collect(Collectors.toList());
+		List<List<CourseLink>> collect = getcourse.stream().map(x -> x.getCourseLinks()).collect(Collectors.toList());
 
 		List<List<CourseLink>> findFirst = collect.stream().toList();
 
-		List<List<String>> listoflinks = findFirst.stream().flatMap(clinks -> clinks.stream().map(CourseLink::getLinks))
-				.collect(Collectors.toList());
+		List<List<String>> listoflinks = findFirst.stream()
+				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoLink)).collect(Collectors.toList());
 
 		List<List<String>> listofvideonames = findFirst.stream()
-				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoname)).collect(Collectors.toList());
+				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoName)).collect(Collectors.toList());
 
 		List<Map<String, String>> resultMapList = new ArrayList<>();
 
@@ -291,7 +291,7 @@ public class UserController {
 
 		List<CoursesModuleInfoDtoBuilder> combinedList = IntStream
 				.range(0, Math.min(mn.size(), resultMapList.size())).mapToObj(i -> CoursesModuleInfoDto.builder()
-						.modulenum(mn.get(i)).modulename(mname.get(i)).videos(resultMapList.get(i)))
+						.moduleNumber(mn.get(i)).moduleName(mname.get(i)).videoInfo(resultMapList.get(i)))
 				.collect(Collectors.toList());
 
 		List<CoursesModuleInfoDto> list = combinedList.stream().map(CoursesModuleInfoDtoBuilder::build)

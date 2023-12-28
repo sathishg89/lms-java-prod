@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		try {
-			op.setImg(mp.getBytes());
+			op.setProfilePhoto(mp.getBytes());
 			ur.save(op);
 			return "Image File Uploaded Successfully :" + mp.getOriginalFilename().toLowerCase();
 		} catch (IOException e) {
@@ -85,10 +85,10 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 
-		if (img.getImg() != null) {
-			return img.getImg();
+		if (img.getProfilePhoto() != null) {
+			return img.getProfilePhoto();
 		} else {
-			return img.getImg();
+			return img.getProfilePhoto();
 		}
 
 	}
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 	public User userUpdate(User lu, String userEmail) {
 
 		User lu1;
-		if (lu.getUserEmail() == null && lu.getImg() == null && lu.getUserName() == null && lu.getPassword() == null) {
+		if (lu.getUserEmail() == null && lu.getProfilePhoto() == null && lu.getUserName() == null && lu.getPassword() == null) {
 			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
 					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 
@@ -116,8 +116,8 @@ public class UserServiceImpl implements UserService {
 		if (lu.getUserName() != null && !lu.getUserName().isEmpty()) {
 			lu1.setUserName(lu.getUserName());
 		}
-		if (lu.getImg() != null && lu.getImg().length != 0) {
-			lu1.setImg(lu.getImg());
+		if (lu.getProfilePhoto() != null && lu.getProfilePhoto().length != 0) {
+			lu1.setProfilePhoto(lu.getProfilePhoto());
 		}
 
 		return ur.save(lu1);

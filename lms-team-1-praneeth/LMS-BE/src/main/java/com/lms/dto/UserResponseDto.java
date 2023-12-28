@@ -16,7 +16,7 @@ public class UserResponseDto {
 	private String userEmail;
 	private String jwtToken;
 	private String userRole;
-	private String userImage;
+	private String profilePhoto;
 	@JsonIgnoreProperties({ "useremail", "username" })
 	private CourseUserDto userCourses;
 

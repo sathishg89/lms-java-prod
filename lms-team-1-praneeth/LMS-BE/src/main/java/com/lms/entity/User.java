@@ -45,11 +45,11 @@ public class User {
 	private String role;
 
 	@Lob
-	@Column(columnDefinition = "LONGBLOB")
+	@Column(columnDefinition = "LONGBLOB",name = "profilephoto")
 	@Hidden
-	private byte[] img;
+	private byte[] profilePhoto;
 
-	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
+	@Column(nullable = false, columnDefinition = "TINYINT", length = 1,name = "isactive")
 	private boolean isActive;
 
 }

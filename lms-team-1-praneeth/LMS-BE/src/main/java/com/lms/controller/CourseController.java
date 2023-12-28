@@ -95,11 +95,11 @@ public class CourseController {
 
 		Courses cc;
 		if (acd.getCourseImage() != null && acd.getCourseImage().getBytes() != null) {
-			cc = Courses.builder().coursename(acd.getCourseName()).coursetrainer(acd.getCourseTrainer())
-					.courseimage(acd.getCourseImage().getBytes()).description(acd.getDescription()).build();
+			cc = Courses.builder().courseName(acd.getCourseName()).courseTrainer(acd.getCourseTrainer())
+					.courseImage(acd.getCourseImage().getBytes()).courseDescription(acd.getCourseDescription()).build();
 		} else {
-			cc = Courses.builder().coursename(acd.getCourseName()).coursetrainer(acd.getCourseTrainer())
-					.description(acd.getDescription()).build();
+			cc = Courses.builder().courseName(acd.getCourseName()).courseTrainer(acd.getCourseTrainer())
+					.courseDescription(acd.getCourseDescription()).build();
 		}
 
 		boolean saveUserCourse = cs.saveCourses(cc);
@@ -124,13 +124,13 @@ public class CourseController {
 		Courses cc;
 		if (cud.getCourseImage() != null && cud.getCourseImage().getBytes() != null) {
 
-			cc = Courses.builder().coursename(cud.getCourseName()).coursetrainer(cud.getCourseTrainer())
-					.courseimage(cud.getCourseImage().getBytes()).description(cud.getDescription())
+			cc = Courses.builder().courseName(cud.getCourseName()).courseTrainer(cud.getCourseTrainer())
+					.courseImage(cud.getCourseImage().getBytes()).courseDescription(cud.getCourseDescription())
 					.archived(cud.isArchived()).build();
 		} else {
 
-			cc = Courses.builder().coursename(cud.getCourseName()).coursetrainer(cud.getCourseTrainer())
-					.description(cud.getDescription()).archived(cud.isArchived()).build();
+			cc = Courses.builder().courseName(cud.getCourseName()).courseTrainer(cud.getCourseTrainer())
+					.courseDescription(cud.getCourseDescription()).archived(cud.isArchived()).build();
 
 		}
 
@@ -250,19 +250,19 @@ public class CourseController {
 
 		List<CourseModules> getcourse = cs.getCourseModules(courseName, trainerName);
 
-		List<Integer> mn = getcourse.stream().map(x -> x.getModulenum()).collect(Collectors.toList());
+		List<Integer> mn = getcourse.stream().map(x -> x.getModuleNumber()).collect(Collectors.toList());
 
-		List<String> mname = getcourse.stream().map(x -> x.getModulename()).collect(Collectors.toList());
+		List<String> mname = getcourse.stream().map(x -> x.getModuleName()).collect(Collectors.toList());
 
-		List<List<CourseLink>> collect = getcourse.stream().map(x -> x.getClinks()).collect(Collectors.toList());
+		List<List<CourseLink>> collect = getcourse.stream().map(x -> x.getCourseLinks()).collect(Collectors.toList());
 
 		List<List<CourseLink>> findFirst = collect.stream().toList();
 
-		List<List<String>> listoflinks = findFirst.stream().flatMap(clinks -> clinks.stream().map(CourseLink::getLinks))
+		List<List<String>> listoflinks = findFirst.stream().flatMap(clinks -> clinks.stream().map(CourseLink::getVideoLink))
 				.collect(Collectors.toList());
 
 		List<List<String>> listofvideonames = findFirst.stream()
-				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoname)).collect(Collectors.toList());
+				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoName)).collect(Collectors.toList());
 
 		List<Map<String, String>> resultMapList = new ArrayList<>();
 
@@ -282,7 +282,7 @@ public class CourseController {
 
 		List<CoursesModuleInfoDtoBuilder> combinedList = IntStream
 				.range(0, Math.min(mn.size(), resultMapList.size())).mapToObj(i -> CoursesModuleInfoDto.builder()
-						.modulenum(mn.get(i)).modulename(mname.get(i)).videos(resultMapList.get(i)))
+						.moduleNumber(mn.get(i)).moduleName(mname.get(i)).videoInfo(resultMapList.get(i)))
 				.collect(Collectors.toList());
 
 		List<CoursesModuleInfoDto> list = combinedList.stream().map(CoursesModuleInfoDtoBuilder::build)

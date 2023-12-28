@@ -32,28 +32,33 @@ public class Courses {
 	@Id
 	@GeneratedValue(generator = "cseqgen")
 	@SequenceGenerator(name = "cseqgen", sequenceName = "csg", initialValue = 101, allocationSize = 1)
-	private int courseid;
+	@Column(name = "courseid")
+	private int courseId;
 
-	private String coursename;
+	@Column(name = "coursename")
+	private String courseName;
 
-	private String coursetrainer;
+	@Column(name = "coursetrainer")
+	private String courseTrainer;
 
-	private String coursecreatedate;
+	@Column(name = "coursecreatedate")
+	private String courseCreateDate;
 
 	@Lob
-	@Column(columnDefinition = "LONGBLOB")
-	private byte[] courseimage;
+	@Column(columnDefinition = "LONGBLOB",name = "courseimage")
+	private byte[] courseImage;
 
-	private String description;
+	@Column(name = "coursedescription")
+	private String courseDescription;
 
-	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
+	@Column(nullable = false, columnDefinition = "TINYINT", length = 1,name = "archived")
 	private boolean archived;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name = "fk_courseid", referencedColumnName = "courseid", nullable = false)
-	private List<CourseModules> coursemodule;
+	@JoinColumn(name = "fk_courseid", referencedColumnName = "courseId", nullable = false)
+	private List<CourseModules> courseModule;
 
 	@ManyToMany(mappedBy = "coursesList", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("courseslist")
-	private List<CourseUsers> courseusers;
+	@JsonIgnoreProperties("coursesList")
+	private List<CourseUsers> courseUsers;
 }

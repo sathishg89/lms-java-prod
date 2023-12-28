@@ -18,7 +18,7 @@ public class CourseDto {
 	private String courseName;
 	@NotEmpty(message = "courseTrainer cannot be empty")
 	private String courseTrainer;
-	private String description;
+	private String courseDescription;
 	private MultipartFile courseImage;
 
 }

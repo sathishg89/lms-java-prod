@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CourseUserDto {
 
-	private String username;
-	private String useremail;
+	private String userName;
+	private String userEmail;
 	@JsonIgnoreProperties({ "coursemodule", "courseusers", "courseinsertdate" })
-	private List<Courses> courseslist;
+	private List<Courses> coursesList;
 
 }

@@ -23,14 +23,16 @@ public class Resume {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@Column(name = "resumeid")
+	private int resumeId;
 
 	@NotEmpty(message = "email cannot be empty")
+	@Column(name = "useremail")
 	private String userEmail;
 
 	@NotEmpty(message = "file cannot be empty")
 	@Lob
-	@Column(columnDefinition = "LONGBLOB")
+	@Column(columnDefinition = "LONGBLOB", name = "resume")
 	private byte[] resume;
 
 }

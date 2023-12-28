@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CoursesModuleInfoDto {
 
-	private int modulenum;
-	private String modulename;
-	private Map<String, String> videos;
+	private int moduleNumber;
+	private String moduleName;
+	private Map<String, String> videoInfo;
 
 }

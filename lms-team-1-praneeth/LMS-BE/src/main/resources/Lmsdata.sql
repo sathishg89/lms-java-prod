@@ -89,13 +89,13 @@ VALUES
 ('50', 'link1'),
 ('50', 'link2'),
 ('50', 'https://www.youtube.com/embed/MKqJBhOgapM?si=NYjVVjoH8C_as8C4'),
-('52', 'link1'),
-('52', 'link2'),
-('52', 'link3'),
-('52', 'link4'),
-('53', 'link1'),
-('53', 'link2'),
-('53', 'link3');
+('52', 'https://www.youtube.com/embed/5b36UTNRmtI?si=PBIhvskDD1aZ8oK-'),
+('52', 'https://www.youtube.com/embed/8eVXTyIZ1Hs?si=OKI25yytfv42binv'),
+('52', 'https://www.youtube.com/embed/9TycLR0TqFA?si=NpZ5XumzsrEEwevU'),
+('52', 'https://www.youtube.com/embed/vMdSqMf6BPY?si=8zH0Kpqy3ViaDHIi'),
+('53', 'https://www.youtube.com/embed/9TycLR0TqFA?si=NpZ5XumzsrEEwevU'),
+('53', 'https://www.youtube.com/embed/8eVXTyIZ1Hs?si=OKI25yytfv42binv'),
+('53', 'https://www.youtube.com/embed/vMdSqMf6BPY?si=8zH0Kpqy3ViaDHIi');
 
 
 INSERT INTO courselinks_videoname (fk_linkid, videoname)

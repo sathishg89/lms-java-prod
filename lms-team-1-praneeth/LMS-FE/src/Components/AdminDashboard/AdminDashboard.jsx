@@ -6,11 +6,17 @@ import { Link } from 'react-router-dom';
 import { url } from '../../utils';
 import MainModule from '../Modules/MainModule';
 import AddingCourses from '../AddingCourses/AddingCourses';
+import Users from '../Modules/Users';
 const AdminDashboard = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedCourse, setSelectedCourse] = useState('');
     const [allCourses, setAllCourses] = useState([]);
-    const [searchInput,setSearchInput]=useState('');
+    const [showCourses, setShowCourses] = useState(true);
+    const [searchInput, setSearchInput] = useState('');
+    const [reload, setReload] = useState(false);
+    const triggerReload = () => {
+        setReload((prevReload) => !prevReload);
+    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -22,41 +28,48 @@ const AdminDashboard = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [reload]);
     const filteredCourses = allCourses.filter((course) => {
         const courseName = course.courseName.toLowerCase();
         return courseName.includes(searchInput.toLowerCase());
-    });                       
+    });
     return (
         <div>
-            <Header/>
+            <Header />
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-sm-2 nav">
                         <div className="row left">
-                            <a className="col-sm-8 courses" href="courses">
+                            <p className="col-sm-8 m-0 courses"
+                                onClick={() => {
+                                    setShowCourses(true);
+                                    setSelectedOption(false);
+                                }}>
                                 Courses
-                            </a>
+                            </p>
                             <button onClick={() => {
                                 setSelectedOption('addcourse');
                                 setSelectedCourse(false);
                             }} className="col-sm-4 add">+ ADD</button>
                         </div>
-
                         <div className="row left">
-                            <a className="col-sm-8 users" href="users">
+                            <p className="col-sm-8  m-0 users" onClick={() => {
+                                setSelectedOption('users');
+                                setSelectedCourse(false);
+                                setShowCourses(false);
+                            }}>
                                 Users
-                            </a>
+                            </p>
                         </div>
                     </div>
-                    <div className="col-sm-2 list">
+                    {showCourses ? <div className="col-sm-2 list">
                         <input
                             className="search"
                             type="text"
                             placeholder="Search Courses"
-                         value={searchInput}
-                         onChange={(e)=> setSearchInput(e.target.value)}
-                         />
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                        />
                         {filteredCourses.map((singleCourse, index) => (
                             <div className="title" key={index}>
                                 <Link onClick={() => {
@@ -65,17 +78,15 @@ const AdminDashboard = () => {
                                 }}><p>{singleCourse.courseName}</p></Link>
                             </div>
                         ))}
-                    </div>
+                    </div> : <></>}
                     <div className="editcourse col-sm-7 mt-5 ms-2 ps-2">
                         {selectedCourse ? <MainModule selectedCourse={selectedCourse} /> : <></>}
-                        {selectedOption === 'addcourse' ? <AddingCourses/> : <></>}
-
+                        {selectedOption === 'addcourse' ? <AddingCourses onReload={triggerReload} /> : <></>}
+                        {selectedOption === 'users' ? <Users /> : <></>}
                     </div>
-
                 </div>
             </div>
         </div>
     );
 };
-
 export default AdminDashboard;

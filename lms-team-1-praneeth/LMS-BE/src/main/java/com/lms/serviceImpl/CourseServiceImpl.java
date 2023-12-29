@@ -166,6 +166,8 @@ public class CourseServiceImpl implements CourseService {
 		boolean userExists = ucr.existsByuserEmail(courseUserEmail);
 		boolean courseExists = cr.existsBycourseName(courseName);
 
+		
+		
 		if (userExists && courseExists) {
 
 			CourseUsers fun = ucr.findByuserEmail(courseUserEmail);
@@ -173,6 +175,20 @@ public class CourseServiceImpl implements CourseService {
 
 			Optional<Courses> courseOptional = fcn.stream()
 					.filter(course -> course.getCourseTrainer().equals(trainerName)).findFirst();
+
+			
+			List<CourseUsers> userEmail = courseOptional.get().getCourseUsers();
+			
+			Optional<CourseUsers> collect = userEmail.stream().filter(x->x.getUserEmail().equals(courseUserEmail)).findAny();
+					
+			
+			
+			
+			//.getCourseUsers().get(0).getUserEmail();
+
+			log.info("mm " + collect.get().getUserEmail());
+			log.info("mm " + fun.getCoursesList().containsAll(fcn));
+			
 
 			if (!fun.getCoursesList().containsAll(fcn)) {
 				fun.getCoursesList().add(courseOptional.get());
@@ -436,41 +452,55 @@ public class CourseServiceImpl implements CourseService {
 
 		Resume r = Resume.builder().userEmail(userEmail).resume(file).build();
 
-		Resume resume = rr.findByUserEmail(userEmail)
-				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
-						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
-		if (resume == null) {
-			rr.save(r);
+		CourseUsers findByuserEmail = ucr.findByuserEmail(userEmail);
+
+		if (findByuserEmail != null) {
+			List<Resume> resume = rr.findByUserEmail(userEmail);
+
+			if (resume.isEmpty()) {
+				rr.save(r);
+				return true;
+			} else {
+				resume.get(0).setResume(multipart.getBytes());
+				return true;
+			}
 
 		} else {
-			resume.setResume(file);
-			rr.save(resume);
+			throw new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
+
 		}
-		return true;
+
 	}
 
 	@Override
 	public byte[] getResume(String userEmail) {
 
-		Resume resume = rr.findByUserEmail(userEmail)
-				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
-						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
+		List<Resume> resume = rr.findByUserEmail(userEmail);
 
-		return resume.getResume();
+		if (resume.isEmpty()) {
+			throw new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
+
+		} else {
+			return resume.get(0).getResume();
+		}
 
 	}
 
 	@Override
 	public boolean deleteResume(String userEmail) {
 
-		Resume resume = rr.findByUserEmail(userEmail)
-				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
-						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
+		List<Resume> resume = rr.findByUserEmail(userEmail);
 
-		resume.setResume(null);
-		rr.save(resume);
+		if (resume.isEmpty()) {
+			throw new CustomException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
+					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
+		} else {
+			rr.delete(resume.get(0));
+			return true;
+		}
 
-		return true;
 	}
 
 	@Override

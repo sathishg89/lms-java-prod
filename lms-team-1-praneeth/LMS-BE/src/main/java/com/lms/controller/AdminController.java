@@ -139,10 +139,11 @@ public class AdminController {
 	 * 
 	 */
 
-	@PatchMapping("/removecourseaccess/{userEmail}/{courseName}/{trainerName}")
+	@PatchMapping("/removecourseaccess/{userEmail}/{courseName}/{courseTrainer}")
+	@PreAuthorize("hasAuthority('admin')")
 	public ResponseEntity<String> removeCourseAccess(@PathVariable("userEmail") String userEmail,
-			@PathVariable("courseName") String courseName, @PathVariable("trainerName") String trainerName) {
-		boolean removeCourseAccess = cs.removeCourseAccess(userEmail, courseName, trainerName);
+			@PathVariable("courseName") String courseName, @PathVariable("courseTrainer") String courseTrainer) {
+		boolean removeCourseAccess = cs.removeCourseAccess(userEmail, courseName, courseTrainer);
 		if (removeCourseAccess) {
 			return new ResponseEntity<String>("Access Removed", HttpStatus.OK);
 		} else {

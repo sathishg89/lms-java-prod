@@ -79,10 +79,10 @@ public class UserController {
 	 */
 
 	@PostMapping("/uploadimage/{userEmail}")
-	public ResponseEntity<String> uploadImage(@RequestParam("file") @Valid MultipartFile multiPartFile,
+	public ResponseEntity<String> uploadImage(@RequestParam("photo") @Valid MultipartFile photo,
 			@PathVariable("userEmail") String userEmail) throws Exception {
 
-		String uploadImage = us.saveImg(multiPartFile, userEmail);
+		String uploadImage = us.saveImg(photo, userEmail);
 
 		if (uploadImage.equals(null)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed");
@@ -206,9 +206,9 @@ public class UserController {
 
 	@PostMapping("/{userEmail}/uploadresume")
 	public ResponseEntity<String> saveResume(@PathVariable("userEmail") String userEmail,
-			@RequestBody MultipartFile multipart) throws Exception {
+			@RequestBody MultipartFile resume) throws Exception {
 
-		boolean saveResume = cs.saveResume(userEmail, multipart);
+		boolean saveResume = cs.saveResume(userEmail, resume);
 
 		if (saveResume) {
 			return new ResponseEntity<String>("Resume Saved", HttpStatus.OK);
@@ -223,7 +223,7 @@ public class UserController {
 	 */
 
 	@GetMapping("/{userEmail}/getresume")
-	public ResponseEntity<byte[]> getResumes(@PathVariable("email") String userEmail) {
+	public ResponseEntity<byte[]> getResumes(@PathVariable("userEmail") String userEmail) {
 
 		byte[] resume = cs.getResume(userEmail);
 		HttpHeaders headers = new HttpHeaders();
@@ -261,11 +261,11 @@ public class UserController {
 	 * 
 	 */
 
-	@GetMapping("/{courseName}/{trainerName}/getvideos")
+	@GetMapping("/{courseName}/{courseTrainer}/getvideos")
 	public ResponseEntity<List<CoursesModuleInfoDto>> getVideos(@PathVariable("courseName") String courseName,
-			@PathVariable("trainerName") String trainerName) {
+			@PathVariable("courseTrainer") String courseTrainer) {
 
-		List<CourseModules> getcourse = cs.getCourseModules(courseName, trainerName);
+		List<CourseModules> getcourse = cs.getCourseModules(courseName, courseTrainer);
 
 		List<Integer> mn = getcourse.stream().map(x -> x.getModuleNumber()).collect(Collectors.toList());
 

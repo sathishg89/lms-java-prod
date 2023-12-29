@@ -117,9 +117,9 @@ public class CourseController {
 	 * 
 	 */
 
-	@PutMapping("/updatecourse/{coursename}/{trainerName}")
+	@PutMapping("/updatecourse/{coursename}/{courseTrainer}")
 	public ResponseEntity<String> updateCourse(@ModelAttribute CourseUpdateDto cud,
-			@PathVariable("coursename") String courseName, @PathVariable String trainerName) throws Exception {
+			@PathVariable("coursename") String courseName, @PathVariable String courseTrainer) throws Exception {
 
 		Courses cc;
 		if (cud.getCourseImage() != null && cud.getCourseImage().getBytes() != null) {
@@ -134,7 +134,7 @@ public class CourseController {
 
 		}
 
-		boolean saveUserCourse = cs.updateCourses(cc, courseName, trainerName);
+		boolean saveUserCourse = cs.updateCourses(cc, courseName, courseTrainer);
 
 		if (saveUserCourse) {
 			return new ResponseEntity<String>("Courses Updation Successful", HttpStatus.CREATED);
@@ -150,9 +150,9 @@ public class CourseController {
 	 */
 
 	@PostMapping("/accesscoursetouser")
-	public ResponseEntity<String> accessCouresToUser(@RequestParam String courseUserEmail,
-			@RequestParam String courseName, @RequestParam String trainerName) {
-		boolean accessTocoures = cs.accessCouresToUser(courseUserEmail, courseName, trainerName);
+	public ResponseEntity<String> accessCouresToUser(@RequestParam String userEmail, @RequestParam String courseName,
+			@RequestParam String courseTrainer) {
+		boolean accessTocoures = cs.accessCouresToUser(userEmail, courseName, courseTrainer);
 
 		if (accessTocoures) {
 			return new ResponseEntity<String>("Course Added To User", HttpStatus.OK);
@@ -206,11 +206,11 @@ public class CourseController {
 	 * 
 	 */
 
-	@GetMapping("/getcourseusers/{courseName}/{trainerName}")
+	@GetMapping("/getcourseusers/{courseName}/{courseTrainer}")
 	public ResponseEntity<List<CourseUsersInfoDto>> getCourses(@PathVariable("courseName") String courseName,
-			@PathVariable("trainerName") String trainerName) {
+			@PathVariable("courseTrainer") String courseTrainer) {
 
-		List<CourseUsersInfoDto> uc = cs.getCourses(courseName, trainerName);
+		List<CourseUsersInfoDto> uc = cs.getCourses(courseName, courseTrainer);
 
 		if (uc.size() == 0) {
 			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
@@ -227,11 +227,11 @@ public class CourseController {
 	 * 
 	 */
 
-	@DeleteMapping("/deletecourse/{courseName}/{trainerName}")
+	@DeleteMapping("/deletecourse/{courseName}/{courseTrainer}")
 	public ResponseEntity<String> deleteCourse(@PathVariable("courseName") String courseName,
-			@PathVariable("trainerName") String trainerName) {
+			@PathVariable("courseTrainer") String courseTrainer) {
 
-		if (cs.deleteCourse(courseName, trainerName)) {
+		if (cs.deleteCourse(courseName, courseTrainer)) {
 			return new ResponseEntity<String>("Course Deleted", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("UnAble To  Course Deleted", HttpStatus.BAD_REQUEST);
@@ -244,11 +244,11 @@ public class CourseController {
 	 * 
 	 */
 
-	@GetMapping("/{courseName}/{trainerName}/getvideos")
+	@GetMapping("/{courseName}/{courseTrainer}/getvideos")
 	public ResponseEntity<List<CoursesModuleInfoDto>> getVideos(@PathVariable("courseName") String courseName,
-			@PathVariable("trainerName") String trainerName) {
+			@PathVariable("courseTrainer") String courseTrainer) {
 
-		List<CourseModules> getcourse = cs.getCourseModules(courseName, trainerName);
+		List<CourseModules> getcourse = cs.getCourseModules(courseName, courseTrainer);
 
 		List<Integer> mn = getcourse.stream().map(x -> x.getModuleNumber()).collect(Collectors.toList());
 
@@ -258,8 +258,8 @@ public class CourseController {
 
 		List<List<CourseLink>> findFirst = collect.stream().toList();
 
-		List<List<String>> listoflinks = findFirst.stream().flatMap(clinks -> clinks.stream().map(CourseLink::getVideoLink))
-				.collect(Collectors.toList());
+		List<List<String>> listoflinks = findFirst.stream()
+				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoLink)).collect(Collectors.toList());
 
 		List<List<String>> listofvideonames = findFirst.stream()
 				.flatMap(clinks -> clinks.stream().map(CourseLink::getVideoName)).collect(Collectors.toList());
@@ -330,11 +330,11 @@ public class CourseController {
 	 * 
 	 */
 
-	@GetMapping("/{courseName}/{trainerName}/getmodules")
+	@GetMapping("/{courseName}/{courseTrainer}/getmodules")
 	public ResponseEntity<List<CourseModules>> getModules(@PathVariable("courseName") String courseName,
-			@PathVariable String trainerName) {
+			@PathVariable String courseTrainer) {
 
-		List<CourseModules> courseModules = cs.getCourseModules(courseName, trainerName);
+		List<CourseModules> courseModules = cs.getCourseModules(courseName, courseTrainer);
 
 		if (courseModules.size() > 0) {
 			return new ResponseEntity<List<CourseModules>>(courseModules, HttpStatus.OK);

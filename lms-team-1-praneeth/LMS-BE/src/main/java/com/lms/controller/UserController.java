@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 import java.util.zip.DataFormatException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,12 +27,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lms.constants.CustomErrorCodes;
 import com.lms.dto.CoursesModuleInfoDto;
-import com.lms.dto.UserUpdateDto;
 import com.lms.dto.CoursesModuleInfoDto.CoursesModuleInfoDtoBuilder;
+import com.lms.dto.UserUpdateDto;
 import com.lms.dto.UserVerifyDto;
 import com.lms.entity.CourseLink;
 import com.lms.entity.CourseModules;
@@ -45,7 +47,6 @@ import com.lms.serviceImpl.OtpService;
 
 import jakarta.validation.Valid;
 
-//@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -79,14 +80,37 @@ public class UserController {
 	 * 
 	 */
 
+	@Value("${spring.servlet.multipart.max-file-size}")
+	private String maxFileSize;
+
+	private long parseSize(String size) {
+		size = size.toUpperCase();
+		long multiplier = 1;
+		if (size.endsWith("KB")) {
+			multiplier = 1024;
+			size = size.substring(0, size.length() - 2);
+		} else if (size.endsWith("MB")) {
+			multiplier = 1024 * 1024;
+			size = size.substring(0, size.length() - 2);
+		} else if (size.endsWith("GB")) {
+			multiplier = 1024 * 1024 * 1024;
+			size = size.substring(0, size.length() - 2);
+		}
+		return Long.parseLong(size) * multiplier;
+	}
+
 	@PostMapping("/uploadimage/{userEmail}")
 	public ResponseEntity<String> uploadImage(@RequestParam("photo") @Valid MultipartFile photo,
 			@PathVariable("userEmail") String userEmail) throws Exception {
 
+		long parseSize = parseSize(maxFileSize);
+
 		String uploadImage = us.saveImg(photo, userEmail);
 
-		if (uploadImage.equals(null)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed");
+		if (parseSize < photo.getSize()) {
+			throw new MaxUploadSizeExceededException(photo.getSize());
+		} else if (uploadImage.equals(null)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed To Upload Image");
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
 		}

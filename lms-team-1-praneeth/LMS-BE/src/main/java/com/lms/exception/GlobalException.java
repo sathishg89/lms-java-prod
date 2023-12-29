@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.lms.dto.CustomDto;
 import com.lms.exception.details.CustomException;
@@ -42,4 +43,10 @@ public class GlobalException {
 		return new ResponseEntity<CustomDto>(cd, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File size exceeds the allowed limit ");
+	}
 }

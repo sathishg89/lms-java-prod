@@ -15,6 +15,8 @@ public interface CoursesRepo extends JpaRepository<Courses, Integer> {
 	List<Courses> findBycourseName(String courseName);
 
 	boolean existsBycourseName(String courseName);
+	
+	boolean existsBycourseNameAndCourseTrainer(String courseName,String courseTrainer);
 
 	@Query("SELECT c FROM Courses c WHERE c.courseName = :courseName AND c.courseTrainer = :courseTrainer")
 	List<Courses> findBycourseNameAndcourseTrainer(String courseName, String courseTrainer);

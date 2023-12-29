@@ -3,6 +3,7 @@ package com.lms.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,12 +99,15 @@ public class UserController {
 	 */
 
 	@GetMapping("/downloadimage/{userEmail}")
-	public ResponseEntity<byte[]> downloadImage(@PathVariable("userEmail") String userEmail)
+	public ResponseEntity<String> downloadImage(@PathVariable("userEmail") String userEmail)
 			throws IOException, DataFormatException {
 		byte[] imageData = us.downloadImage(userEmail);
 
+		String encodeToString = Base64.getEncoder().encodeToString(imageData);
+		String img = "data:image/png;base64," + encodeToString;
+
 		if (imageData != null) {
-			return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(imageData);
+			return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_PLAIN).body(img);
 		} else {
 			throw new CustomException(CustomErrorCodes.MISSING_IMAGE.getErrorMsg(),
 					CustomErrorCodes.MISSING_IMAGE.getErrorCode());

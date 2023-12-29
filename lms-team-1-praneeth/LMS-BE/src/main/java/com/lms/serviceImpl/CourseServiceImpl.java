@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CourseServiceImpl implements CourseService {
 
 	@Autowired
-	private CourseUsersRepo ucr;
+	private CourseUsersRepo cur;
 
 	@Autowired
 	private CoursesRepo cr;
@@ -50,8 +50,8 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean saveCourseUser(CourseUsers courseUsers) {
 
-		if (!ucr.existsByuserEmail(courseUsers.getUserEmail())) {
-			CourseUsers save = ucr.save(courseUsers);
+		if (!cur.existsByuserEmail(courseUsers.getUserEmail())) {
+			CourseUsers save = cur.save(courseUsers);
 			if (save == null) {
 				return false;
 			} else {
@@ -68,8 +68,8 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean updateCourseUser(CourseUsers courseUsers, String userEmail) {
 
-		if (ucr.existsByuserEmail(userEmail)) {
-			CourseUsers findByuserEmail = ucr.findByuserEmail(userEmail);
+		if (cur.existsByuserEmail(userEmail)) {
+			CourseUsers findByuserEmail = cur.findByuserEmail(userEmail);
 
 			if (courseUsers != null && courseUsers.getUserEmail() != null) {
 				findByuserEmail.setUserEmail(courseUsers.getUserEmail());
@@ -77,7 +77,7 @@ public class CourseServiceImpl implements CourseService {
 			if (courseUsers != null && courseUsers.getUserName() != null) {
 				findByuserEmail.setUserName(courseUsers.getUserName());
 			}
-			CourseUsers save = ucr.save(findByuserEmail);
+			CourseUsers save = cur.save(findByuserEmail);
 			if (save == null) {
 				return false;
 			} else {
@@ -161,44 +161,41 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean accessCouresToUser(String courseUserEmail, String courseName, String trainerName) {
+	public boolean accessCouresToUser(String userEmail, String courseName, String trainerName) {
 
-		boolean userExists = ucr.existsByuserEmail(courseUserEmail);
-		boolean courseExists = cr.existsBycourseName(courseName);
+		boolean userExists = cur.existsByuserEmail(userEmail);
+		boolean courseExists = cr.existsBycourseNameAndCourseTrainer(courseName,trainerName);
 
-		
-		
 		if (userExists && courseExists) {
 
-			CourseUsers fun = ucr.findByuserEmail(courseUserEmail);
-			List<Courses> fcn = cr.findBycourseName(courseName);
+			CourseUsers fun = cur.findByuserEmail(userEmail);
+			List<Courses> fcn = cr.findBycourseNameAndcourseTrainer(courseName, trainerName);
 
-			Optional<Courses> courseOptional = fcn.stream()
-					.filter(course -> course.getCourseTrainer().equals(trainerName)).findFirst();
+			Courses courses = fcn.get(0);
 
-			
-			List<CourseUsers> userEmail = courseOptional.get().getCourseUsers();
-			
-			Optional<CourseUsers> collect = userEmail.stream().filter(x->x.getUserEmail().equals(courseUserEmail)).findAny();
-					
-			
-			
-			
-			//.getCourseUsers().get(0).getUserEmail();
+			List<CourseUsers> courseUsers = courses.getCourseUsers();
 
-			log.info("mm " + collect.get().getUserEmail());
-			log.info("mm " + fun.getCoursesList().containsAll(fcn));
-			
+			Optional<CourseUsers> findFirst = courseUsers.stream().filter(x -> x.getUserEmail().equals(userEmail))
+					.findFirst();
 
-			if (!fun.getCoursesList().containsAll(fcn)) {
-				fun.getCoursesList().add(courseOptional.get());
-				ucr.save(fun);
-				return true;
+			if (findFirst.isPresent()) {
+				throw new CustomException(CustomErrorCodes.USER_ALREADY_ENROLLED.getErrorMsg(),
+						CustomErrorCodes.USER_ALREADY_ENROLLED.getErrorCode());
 			} else {
-				return false;
+
+				if (!fun.getCoursesList().containsAll(fcn)) {
+					fun.getCoursesList().add(courses);
+					cur.save(fun);
+					return true;
+				} else {
+					return false;
+				}
+
 			}
+
 		} else {
-			return false;
+			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 		}
 	}
 
@@ -307,7 +304,7 @@ public class CourseServiceImpl implements CourseService {
 	public CourseUserDto getCourseUsers(String courseUserEmail) {
 
 		try {
-			CourseUsers fun = ucr.findByuserEmail(courseUserEmail);
+			CourseUsers fun = cur.findByuserEmail(courseUserEmail);
 
 			CourseUserDto ucd = CourseUserDto.builder().userName(fun.getUserName()).userEmail(fun.getUserEmail())
 					.coursesList(fun.getCoursesList()).build();
@@ -344,14 +341,14 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean deleterCourseUser(String email) {
 
-		CourseUsers user = ucr.findByuserEmail(email);
+		CourseUsers user = cur.findByuserEmail(email);
 
 		if (user != null) {
 			user.getCoursesList().clear();
 
-			ucr.save(user);
+			cur.save(user);
 
-			ucr.delete(user);
+			cur.delete(user);
 
 			return true;
 		}
@@ -382,7 +379,7 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public boolean removeCourseAccess(String userEmail, String courseName, String trainerName) {
 
-		CourseUsers findByuserEmail = ucr.findByuserEmail(userEmail);
+		CourseUsers findByuserEmail = cur.findByuserEmail(userEmail);
 
 		if (findByuserEmail != null) {
 			List<Courses> coursesList = findByuserEmail.getCoursesList();
@@ -392,7 +389,7 @@ public class CourseServiceImpl implements CourseService {
 
 			findByuserEmail.setCoursesList(coursesList);
 
-			ucr.save(findByuserEmail);
+			cur.save(findByuserEmail);
 			return true;
 		} else {
 			return false;
@@ -452,7 +449,7 @@ public class CourseServiceImpl implements CourseService {
 
 		Resume r = Resume.builder().userEmail(userEmail).resume(file).build();
 
-		CourseUsers findByuserEmail = ucr.findByuserEmail(userEmail);
+		CourseUsers findByuserEmail = cur.findByuserEmail(userEmail);
 
 		if (findByuserEmail != null) {
 			List<Resume> resume = rr.findByUserEmail(userEmail);

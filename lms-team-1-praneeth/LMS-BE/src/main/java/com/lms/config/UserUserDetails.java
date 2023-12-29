@@ -15,13 +15,13 @@ public class UserUserDetails implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	private String email;
-	private String pass;
+	private String userEmail;
+	private String password;
 	private List<GrantedAuthority> authorites;
 
 	public UserUserDetails(User lud) {
-		email = lud.getUserEmail();
-		pass = lud.getPassword();
+		userEmail = lud.getUserEmail();
+		password = lud.getPassword();
 		authorites = Arrays.stream(lud.getRole().split(",")).map(role -> new SimpleGrantedAuthority(role))
 				.collect(Collectors.toList());
 	}
@@ -33,12 +33,12 @@ public class UserUserDetails implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return pass;
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		return email;
+		return userEmail;
 	}
 
 	@Override

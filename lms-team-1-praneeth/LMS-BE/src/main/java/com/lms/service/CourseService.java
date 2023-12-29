@@ -18,40 +18,40 @@ public interface CourseService {
 
 	boolean saveCourseUser(CourseUsers courseUsers);
 
-	boolean saveCourses(Courses course);
-
-	boolean accessCouresToUser(String courseUserEmail, String courseName, String trainerName);
-
-	boolean addVideoLink(VideoUploadDto videoDto);
-
 	CourseUserDto getCourseUsers(String courseUserName);
 
-	List<CourseUsersInfoDto> getCourses(String courseName, String trainerName);
+	boolean updateCourseUser(CourseUsers courseUsers, String userEmail);
 
 	boolean deleterCourseUser(String email);
 
-	boolean deleteCourse(String courseName, String trainerName);
+	boolean saveCourses(Courses course);
 
-	boolean removeCourseAccess(String userEmail, String courseName, String trainerName);
+	boolean updateCourses(Courses course, String coursename, String trainerName);
 
 	List<CoursesListDto> getAllCourses();
 
-	List<CourseModules> getCourseModules(String courseName, String trainerName);
-
-	boolean saveResume(String userEmail, MultipartFile multipart) throws Exception;
-
 	CourseInfoDto getCourseInfo(String courseName);
 
-	byte[] getResume(String userEmail);
+	List<CourseUsersInfoDto> getCourses(String courseName, String trainerName);
 
-	boolean deleteResume(String userEmail);
+	boolean deleteCourse(String courseName, String trainerName);
+
+	boolean accessCouresToUser(String courseUserEmail, String courseName, String trainerName);
+
+	boolean removeCourseAccess(String userEmail, String courseName, String trainerName);
+
+	boolean addVideoLink(VideoUploadDto videoDto);
+
+	List<CourseModules> getCourseModules(String courseName, String trainerName);
 
 	List<CourseModules> updateModule(String courseName, int modulenum, ModuleUpdateDto mud);
 
 	boolean deleteModule(String courseName, int modulenum);
 
-	boolean updateCourses(Courses course, String coursename,String trainerName);
+	boolean saveResume(String userEmail, MultipartFile multipart) throws Exception;
 
-	boolean updateCourseUser(CourseUsers courseUsers, String userEmail);
+	byte[] getResume(String userEmail);
+
+	boolean deleteResume(String userEmail);
 
 }

@@ -92,12 +92,12 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean saveCourses(Courses course) {
+	public boolean saveCourses(Courses courses) {
 
-		course.setCourseCreateDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
+		courses.setCourseCreateDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
 
-		if (!cr.existsBycourseName(course.getCourseName())) {
-			Courses save = cr.save(course);
+		if (!cr.existsBycourseName(courses.getCourseName())) {
+			Courses save = cr.save(courses);
 
 			if (save == null) {
 				return false;
@@ -112,36 +112,34 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean updateCourses(Courses course, String coursename, String trainerName) {
+	public boolean updateCourses(Courses courses, String courseName, String courseTrainer) {
 
-		if (cr.existsBycourseName(coursename)) {
+		if (cr.existsBycourseName(courseName)) {
 
-			List<Courses> lcourses = cr.findBycourseNameAndcourseTrainer(coursename, trainerName);
+			List<Courses> lcourses = cr.findBycourseNameAndcourseTrainer(courseName, courseTrainer);
 
 			if (!lcourses.isEmpty()) {
-				Courses courses = lcourses.get(0);
-				if (course.getCourseName() != null && !course.getCourseName().isEmpty()) {
-					courses.setCourseName(course.getCourseName());
+				Courses courses1 = lcourses.get(0);
+				if (courses.getCourseName() != null && !courses.getCourseName().isEmpty()) {
+					courses1.setCourseName(courses.getCourseName());
 
 				}
-				if (course.getCourseTrainer() != null && !course.getCourseTrainer().isEmpty()) {
-					courses.setCourseTrainer(course.getCourseTrainer());
+				if (courses.getCourseTrainer() != null && !courses.getCourseTrainer().isEmpty()) {
+					courses1.setCourseTrainer(courses.getCourseTrainer());
 
 				}
-				if (course.getCourseDescription() != null && !course.getCourseDescription().isEmpty()) {
-					courses.setCourseDescription(course.getCourseDescription());
+				if (courses.getCourseDescription() != null && !courses.getCourseDescription().isEmpty()) {
+					courses1.setCourseDescription(courses.getCourseDescription());
 
 				}
-				if (course.getCourseImage() != null) {
-					courses.setCourseImage(course.getCourseImage());
+				if (courses.getCourseImage() != null) {
+					courses1.setCourseImage(courses.getCourseImage());
 				}
-				if (course.isArchived() != false) {
-					courses.setArchived(course.isArchived());
+				if (courses.isArchived() != false) {
+					courses1.setArchived(courses.isArchived());
 				}
 
-				log.info("c1 " + courses.getCourseName() + courses.getCourseTrainer() + courses.isArchived());
-
-				Courses save = cr.save(courses);
+				Courses save = cr.save(courses1);
 
 				if (save == null) {
 					return false;
@@ -161,15 +159,15 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean accessCouresToUser(String userEmail, String courseName, String trainerName) {
+	public boolean accessCouresToUser(String userEmail, String courseName, String courseTrainer) {
 
 		boolean userExists = cur.existsByuserEmail(userEmail);
-		boolean courseExists = cr.existsBycourseNameAndCourseTrainer(courseName,trainerName);
+		boolean courseExists = cr.existsBycourseNameAndCourseTrainer(courseName, courseTrainer);
 
 		if (userExists && courseExists) {
 
 			CourseUsers fun = cur.findByuserEmail(userEmail);
-			List<Courses> fcn = cr.findBycourseNameAndcourseTrainer(courseName, trainerName);
+			List<Courses> fcn = cr.findBycourseNameAndcourseTrainer(courseName, courseTrainer);
 
 			Courses courses = fcn.get(0);
 
@@ -301,10 +299,10 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public CourseUserDto getCourseUsers(String courseUserEmail) {
+	public CourseUserDto getCourseUsers(String userEmail) {
 
 		try {
-			CourseUsers fun = cur.findByuserEmail(courseUserEmail);
+			CourseUsers fun = cur.findByuserEmail(userEmail);
 
 			CourseUserDto ucd = CourseUserDto.builder().userName(fun.getUserName()).userEmail(fun.getUserEmail())
 					.coursesList(fun.getCoursesList()).build();
@@ -318,13 +316,13 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public List<CourseUsersInfoDto> getCourses(String courseName, String trainerName) {
+	public List<CourseUsersInfoDto> getCourses(String courseName, String courseTrainer) {
 
 		try {
 			List<Courses> findByusername = cr.findBycourseName(courseName);
 
 			List<CourseUsersInfoDto> collect = findByusername.stream()
-					.filter(fil -> fil.getCourseTrainer().equals(trainerName))
+					.filter(fil -> fil.getCourseTrainer().equals(courseTrainer))
 					.map(c -> new CourseUsersInfoDto(c.getCourseId(), c.getCourseName(), c.getCourseTrainer(),
 							c.getCourseCreateDate(), c.getCourseUsers()))
 					.collect(Collectors.toList());
@@ -339,9 +337,9 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean deleterCourseUser(String email) {
+	public boolean deleterCourseUser(String userEmail) {
 
-		CourseUsers user = cur.findByuserEmail(email);
+		CourseUsers user = cur.findByuserEmail(userEmail);
 
 		if (user != null) {
 			user.getCoursesList().clear();
@@ -360,9 +358,9 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean deleteCourse(String courseName, String trainerName) {
+	public boolean deleteCourse(String courseName, String courseTrainer) {
 
-		List<Courses> findBycoursenameAndcoursetrainer = cr.findBycourseNameAndcourseTrainer(courseName, trainerName);
+		List<Courses> findBycoursenameAndcoursetrainer = cr.findBycourseNameAndcourseTrainer(courseName, courseTrainer);
 
 		if (!findBycoursenameAndcoursetrainer.isEmpty()) {
 			Courses courses = findBycoursenameAndcoursetrainer.get(0);
@@ -377,7 +375,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean removeCourseAccess(String userEmail, String courseName, String trainerName) {
+	public boolean removeCourseAccess(String userEmail, String courseName, String courseTrainer) {
 
 		CourseUsers findByuserEmail = cur.findByuserEmail(userEmail);
 
@@ -385,7 +383,7 @@ public class CourseServiceImpl implements CourseService {
 			List<Courses> coursesList = findByuserEmail.getCoursesList();
 
 			coursesList.removeIf(course -> course.getCourseName().equals(courseName)
-					&& course.getCourseTrainer().equals(trainerName));
+					&& course.getCourseTrainer().equals(courseTrainer));
 
 			findByuserEmail.setCoursesList(coursesList);
 
@@ -405,12 +403,12 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public List<CourseModules> getCourseModules(String courseName, String trainerName) {
+	public List<CourseModules> getCourseModules(String courseName, String courseTrainer) {
 
 		boolean existsBycoursename = cr.existsBycourseName(courseName);
 
 		if (existsBycoursename) {
-			List<CourseModules> collect = cr.findCourseModulesByCourseName(courseName, trainerName);
+			List<CourseModules> collect = cr.findCourseModulesByCourseName(courseName, courseTrainer);
 
 			if (!collect.isEmpty()) {
 				return collect;
@@ -443,22 +441,22 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean saveResume(String userEmail, MultipartFile multipart) throws Exception {
+	public boolean saveResume(String userEmail, MultipartFile resume) throws Exception {
 
-		byte[] file = multipart.getBytes();
+		byte[] file = resume.getBytes();
 
 		Resume r = Resume.builder().userEmail(userEmail).resume(file).build();
 
 		CourseUsers findByuserEmail = cur.findByuserEmail(userEmail);
 
 		if (findByuserEmail != null) {
-			List<Resume> resume = rr.findByUserEmail(userEmail);
+			List<Resume> lresume = rr.findByUserEmail(userEmail);
 
-			if (resume.isEmpty()) {
+			if (lresume.isEmpty()) {
 				rr.save(r);
 				return true;
 			} else {
-				resume.get(0).setResume(multipart.getBytes());
+				lresume.get(0).setResume(resume.getBytes());
 				return true;
 			}
 
@@ -501,7 +499,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public List<CourseModules> updateModule(String courseName, int modulenum, ModuleUpdateDto mud) {
+	public List<CourseModules> updateModule(String courseName, int moduleNumber, ModuleUpdateDto mud) {
 
 		LocalDateTime now = LocalDateTime.now();
 
@@ -516,14 +514,14 @@ public class CourseServiceImpl implements CourseService {
 
 		List<CourseModules> ml = courses.getCourseModule();
 
-		Optional<CourseModules> optionalCourseModules = ml.stream().filter(x -> x.getModuleNumber() == modulenum)
+		Optional<CourseModules> optionalCourseModules = ml.stream().filter(x -> x.getModuleNumber() == moduleNumber)
 				.findFirst();
 
 		if (optionalCourseModules.isPresent()) {
 			CourseModules courseModules = optionalCourseModules.get();
 
 			courseModules.setModuleName(mud.getModuleName());
-			courseModules.setModuleNumber(modulenum);
+			courseModules.setModuleNumber(moduleNumber);
 			courseModules.setVideoInsertTime(now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
 			List<CourseLink> clinks = courseModules.getCourseLinks();
@@ -551,12 +549,12 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean deleteModule(String courseName, int modulenum) {
+	public boolean deleteModule(String courseName, int moduleNumber) {
 		Courses courses = cr.findBycourseName(courseName).get(0);
 
 		List<CourseModules> ml = courses.getCourseModule();
 
-		CourseModules courseModules = ml.stream().filter(x -> x.getModuleNumber() == modulenum).findFirst()
+		CourseModules courseModules = ml.stream().filter(x -> x.getModuleNumber() == moduleNumber).findFirst()
 				.orElse(null);
 
 		if (courseModules != null) {

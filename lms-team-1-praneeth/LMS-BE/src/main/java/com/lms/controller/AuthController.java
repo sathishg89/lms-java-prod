@@ -66,7 +66,7 @@ public class AuthController {
 				String genJwtToken = js.genJwtToken(userDto.getUserEmail());
 				Optional<User> output = us.fingbyemail(userDto.getUserEmail());
 
-				byte[] downloadImage = us.downloadImage(userDto.getUserEmail());
+				byte[] downloadImage = us.getProfilePhoto(userDto.getUserEmail());
 				String encodeToString = "";
 				String img = "";
 

@@ -32,7 +32,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping({ "/admin" })
+@RequestMapping("/admin")
 public class AdminController {
 
 	@Autowired
@@ -81,10 +81,10 @@ public class AdminController {
 
 	@PostMapping("/importusers")
 	@PreAuthorize("hasAuthority('admin')")
-	public ResponseEntity<String> signUpcsv(@RequestParam("file") MultipartFile multipartfile) throws Exception {
-		boolean userImport = as.userImport(multipartfile);
+	public ResponseEntity<String> signUpcsv(@RequestParam("file") MultipartFile csvFile) throws Exception {
+		boolean userImport = as.userImport(csvFile);
 		if (userImport) {
-			return new ResponseEntity<String>("User Imported", HttpStatus.OK);
+			return new ResponseEntity<String>("User Imported  Successfull", HttpStatus.OK);
 		}
 		return new ResponseEntity<String>("Error In Importing Users", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -126,7 +126,7 @@ public class AdminController {
 		boolean deleterCourseUser = cs.deleterCourseUser(userEmail);
 
 		if (deleterCourseUser && deleteUser) {
-			return new ResponseEntity<String>("User Deleted Successfully", HttpStatus.OK);
+			return new ResponseEntity<String>("User Deletion Successfully", HttpStatus.OK);
 
 		} else {
 			return new ResponseEntity<String>("User Deletion UnSuccessfully", HttpStatus.BAD_REQUEST);
@@ -145,9 +145,9 @@ public class AdminController {
 			@PathVariable("courseName") String courseName, @PathVariable("courseTrainer") String courseTrainer) {
 		boolean removeCourseAccess = cs.removeCourseAccess(userEmail, courseName, courseTrainer);
 		if (removeCourseAccess) {
-			return new ResponseEntity<String>("Access Removed", HttpStatus.OK);
+			return new ResponseEntity<String>("Course Access Removal  Successful", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<String>("Unable To Access Removed", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Course Access Removal  UnSuccessful", HttpStatus.BAD_REQUEST);
 		}
 	}
 

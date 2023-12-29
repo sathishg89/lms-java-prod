@@ -31,7 +31,7 @@ public class Courses {
 
 	@Id
 	@GeneratedValue(generator = "cseqgen")
-	@SequenceGenerator(name = "cseqgen", sequenceName = "csg", initialValue = 101, allocationSize = 1)
+	@SequenceGenerator(name = "cseqgen", sequenceName = "csg", initialValue = 114, allocationSize = 1)
 	@Column(name = "courseid")
 	private int courseId;
 

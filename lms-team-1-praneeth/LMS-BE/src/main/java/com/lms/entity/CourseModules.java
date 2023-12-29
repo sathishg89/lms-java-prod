@@ -30,7 +30,7 @@ public class CourseModules {
 
 	@Id
 	@GeneratedValue(generator = "cmseqgen")
-	@SequenceGenerator(name = "cmseqgen", sequenceName = "cmsg", initialValue = 1, allocationSize = 1)
+	@SequenceGenerator(name = "cmseqgen", sequenceName = "cmsg", initialValue = 5, allocationSize = 1)
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(name = "cmid")
 	private int moduleId;

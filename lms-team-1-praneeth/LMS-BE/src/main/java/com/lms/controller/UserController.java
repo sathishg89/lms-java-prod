@@ -100,15 +100,15 @@ public class UserController {
 	}
 
 	@PostMapping("/uploadimage/{userEmail}")
-	public ResponseEntity<String> uploadImage(@RequestParam("photo") @Valid MultipartFile photo,
+	public ResponseEntity<String> uploadImage(@RequestParam("photo") @Valid MultipartFile profilePhoto,
 			@PathVariable("userEmail") String userEmail) throws Exception {
 
 		long parseSize = parseSize(maxFileSize);
 
-		String uploadImage = us.saveImg(photo, userEmail);
+		String uploadImage = us.saveProfilePhoto(profilePhoto, userEmail);
 
-		if (parseSize < photo.getSize()) {
-			throw new MaxUploadSizeExceededException(photo.getSize());
+		if (parseSize < profilePhoto.getSize()) {
+			throw new MaxUploadSizeExceededException(profilePhoto.getSize());
 		} else if (uploadImage.equals(null)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed To Upload Image");
 		} else {
@@ -125,7 +125,7 @@ public class UserController {
 	@GetMapping("/downloadimage/{userEmail}")
 	public ResponseEntity<String> downloadImage(@PathVariable("userEmail") String userEmail)
 			throws IOException, DataFormatException {
-		byte[] imageData = us.downloadImage(userEmail);
+		byte[] imageData = us.getProfilePhoto(userEmail);
 
 		String encodeToString = Base64.getEncoder().encodeToString(imageData);
 		String img = "data:image/png;base64," + encodeToString;
@@ -146,12 +146,13 @@ public class UserController {
 	 */
 
 	@PutMapping("/update/{userEmail}")
-	public ResponseEntity<User> UserUpdate(@ModelAttribute UserUpdateDto user,
+	public ResponseEntity<User> UserUpdate(@ModelAttribute UserUpdateDto userUpdateDto,
 			@PathVariable("userEmail") String UserEmail) throws Exception {
 
-		User luupdate = us.userUpdate(user, UserEmail);
+		User luupdate = us.userUpdate(userUpdateDto, UserEmail);
 
-		CourseUsers cs1 = CourseUsers.builder().userEmail(user.getUserEmail()).userName(user.getUserName()).build();
+		CourseUsers cs1 = CourseUsers.builder().userEmail(userUpdateDto.getUserEmail())
+				.userName(userUpdateDto.getUserName()).build();
 
 		boolean updateCourseUser = cs.updateCourseUser(cs1, UserEmail);
 
@@ -181,9 +182,9 @@ public class UserController {
 		boolean saveotp = us.saveotp(userVerifyDto);
 
 		if (saveotp) {
-			return new ResponseEntity<String>("OTP SENT", HttpStatus.OK);
+			return new ResponseEntity<String>("OTP Sent Successful", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<String>("OTP NOT SENT", HttpStatus.BAD_GATEWAY);
+			return new ResponseEntity<String>("OTP Sent UnSuccessful", HttpStatus.BAD_GATEWAY);
 		}
 
 	}
@@ -214,14 +215,14 @@ public class UserController {
 
 	@PutMapping("/resetpassword")
 	public ResponseEntity<String> saveNewPassword(@RequestParam("password") String password,
-			@RequestParam("verifypassword") String verifypassword, @RequestParam("id") long id) {
+			@RequestParam("verifypassword") String verifyPassword, @RequestParam("id") long userId) {
 
-		boolean resetPassword = us.resetPassword(password, verifypassword, id);
+		boolean resetPassword = us.resetPassword(password, verifyPassword, userId);
 
 		if (resetPassword) {
-			return new ResponseEntity<String>("Reset Password Done", HttpStatus.OK);
+			return new ResponseEntity<String>("Reset Password Successful", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<String>("Unable To Reset Password", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Reset Password UnSuccessful", HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -239,9 +240,9 @@ public class UserController {
 		boolean saveResume = cs.saveResume(userEmail, resume);
 
 		if (saveResume) {
-			return new ResponseEntity<String>("Resume Saved", HttpStatus.OK);
+			return new ResponseEntity<String>("Resume Saved Successful", HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("Resume Not Saved", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<String>("Resume Saving UnSuccessful", HttpStatus.BAD_REQUEST);
 	}
 
 	/*

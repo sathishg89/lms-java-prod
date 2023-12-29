@@ -47,6 +47,6 @@ public class GlobalException {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException exc) {
 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File size exceeds the allowed limit ");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File Size Exceeds The Allowed Limit 6MB ");
 	}
 }

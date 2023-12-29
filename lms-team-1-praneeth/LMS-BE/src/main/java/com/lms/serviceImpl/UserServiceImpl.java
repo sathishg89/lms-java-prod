@@ -37,11 +37,11 @@ public class UserServiceImpl implements UserService {
 	private OtpRepo or;
 
 	@Override
-	public Optional<User> fingbyemail(String email) {
+	public Optional<User> fingbyemail(String userEmail) {
 
 		Optional<User> findByemail;
 		try {
-			findByemail = ur.findByuserEmail(email);
+			findByemail = ur.findByuserEmail(userEmail);
 			return findByemail;
 		} catch (Exception e) {
 			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
@@ -50,28 +50,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUser(User lu) {
-
-		Optional<User> findByemail = ur.findByuserEmail(lu.getUserEmail());
-		if (findByemail.isEmpty()) {
-			throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
-					CustomErrorCodes.INVALID_EMAIL.getErrorCode());
-		} else {
-
-			return findByemail.get();
-		}
-	}
-
-	@Override
-	public String saveImg(MultipartFile mp, String userEmail) throws Exception {
+	public String saveProfilePhoto(MultipartFile photo, String userEmail) throws Exception {
 
 		User op = ur.findByuserEmail(userEmail)
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		try {
-			op.setProfilePhoto(mp.getBytes());
+			op.setProfilePhoto(photo.getBytes());
 			ur.save(op);
-			return "Image File Uploaded Successfully :" + mp.getOriginalFilename().toLowerCase();
+			return "Image File Uploaded Successfully :" + photo.getOriginalFilename().toLowerCase();
 		} catch (IOException e) {
 			throw new CustomException(CustomErrorCodes.MISSING_IMAGE.getErrorMsg(),
 					CustomErrorCodes.MISSING_IMAGE.getErrorCode());
@@ -80,9 +67,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public byte[] downloadImage(String email) throws IOException, DataFormatException {
+	public byte[] getProfilePhoto(String userEmail) throws IOException, DataFormatException {
 
-		User img = ur.findByuserEmail(email)
+		User img = ur.findByuserEmail(userEmail)
 				.orElseThrow(() -> new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
 						CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 
@@ -95,11 +82,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User userUpdate(UserUpdateDto lu, String userEmail) throws Exception {
+	public User userUpdate(UserUpdateDto userUpdateDto, String userEmail) throws Exception {
 
 		User lu1;
-		if (lu.getUserEmail() == null && lu.getProfilePhoto() == null && lu.getUserName() == null
-				&& lu.getPassword() == null) {
+		if (userUpdateDto.getUserEmail() == null && userUpdateDto.getProfilePhoto() == null
+				&& userUpdateDto.getUserName() == null && userUpdateDto.getPassword() == null) {
 			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
 					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 
@@ -109,17 +96,17 @@ public class UserServiceImpl implements UserService {
 							CustomErrorCodes.INVALID_EMAIL.getErrorCode()));
 		}
 
-		if (lu.getUserEmail() != null && !lu.getUserEmail().isEmpty()) {
-			lu1.setUserEmail(lu.getUserEmail());
+		if (userUpdateDto.getUserEmail() != null && !userUpdateDto.getUserEmail().isEmpty()) {
+			lu1.setUserEmail(userUpdateDto.getUserEmail());
 		}
-		if (lu.getPassword() != null && !lu.getPassword().isEmpty()) {
-			lu1.setPassword(pe.encode(lu.getPassword()));
+		if (userUpdateDto.getPassword() != null && !userUpdateDto.getPassword().isEmpty()) {
+			lu1.setPassword(pe.encode(userUpdateDto.getPassword()));
 		}
-		if (lu.getUserName() != null && !lu.getUserName().isEmpty()) {
-			lu1.setUserName(lu.getUserName());
+		if (userUpdateDto.getUserName() != null && !userUpdateDto.getUserName().isEmpty()) {
+			lu1.setUserName(userUpdateDto.getUserName());
 		}
-		if (lu.getProfilePhoto() != null && !lu.getProfilePhoto().isEmpty()) {
-			lu1.setProfilePhoto(lu.getProfilePhoto().getBytes());
+		if (userUpdateDto.getProfilePhoto() != null && !userUpdateDto.getProfilePhoto().isEmpty()) {
+			lu1.setProfilePhoto(userUpdateDto.getProfilePhoto().getBytes());
 		}
 
 		return ur.save(lu1);
@@ -127,9 +114,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean saveotp(UserVerifyDto uvt) {
+	public boolean saveotp(UserVerifyDto userVerifyDto) {
 
-		if (!or.save(uvt).equals(null)) {
+		if (!or.save(userVerifyDto).equals(null)) {
 			return true;
 		} else {
 			return false;
@@ -158,13 +145,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean resetPassword(String password, String verifypassword, long id) {
+	public boolean resetPassword(String password, String verifyPassword, long userId) {
 
-		User findById = ur.findById(id)
+		User findById = ur.findById(userId)
 				.orElseThrow(() -> new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
 						CustomErrorCodes.INVALID_DETAILS.getErrorCode()));
-		if (password.equals(verifypassword)) {
-			findById.setPassword(pe.encode(verifypassword));
+		if (password.equals(verifyPassword)) {
+			findById.setPassword(pe.encode(verifyPassword));
 
 			log.info("");
 			return true;

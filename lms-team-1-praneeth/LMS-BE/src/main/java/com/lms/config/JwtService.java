@@ -20,16 +20,16 @@ public class JwtService {
 
 	public final String secret = "d441f2b0bb2c04a6640113a639481037eb281c853ac7511a8f56bf324a1847fe";
 
-	public String genJwtToken(String username) {
+	public String genJwtToken(String userName) {
 
 		Map<String, Object> claims = new HashMap<>();
 
-		return createJwtToken(claims, username);
+		return createJwtToken(claims, userName);
 	}
 
-	private String createJwtToken(Map<String, Object> claims, String username) {
+	private String createJwtToken(Map<String, Object> claims, String userName) {
 
-		return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
+		return Jwts.builder().setClaims(claims).setSubject(userName).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() +  5*60*60*1000   /* 5hrs 60 min 60sec 1000 millsec */ ))
 				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 	}

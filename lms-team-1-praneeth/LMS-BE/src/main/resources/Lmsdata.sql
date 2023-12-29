@@ -4,14 +4,14 @@
 INSERT INTO user (id, email, username, password, profilephoto, isactive, role)
 VALUES
 (1, 'jessie@digital-edify.com', 'jessie', '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NUll,'1','superadmin'),
-('2', 'praneeth@gmail.com', 'praneeth',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
+('2', 'praneeth@gmail.com', 'praneeth',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'admin'),
 ('3', 'varun@gmail.com', 'varun',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
 ('4', 'raju@digital-edify.com', 'raju',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'admin'),
 ('5', 'ravi@digital-edify.com', 'ravi',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'admin'),
 ('6', 'farhath@gmail.com', 'farhath',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
 ('7', 'nithin@gmail.com', 'nithin',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user'),
 ('8', 'ravikiran@gmail.com', 'ravikiran',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'user'),
-('9', 'murali@gmail.com', 'murali',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'user'),
+('9', 'murali@gmail.com', 'murali',  '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '0', 'admin'),
 ('10', 'akhil@gmail.com', 'akhil', '$2a$12$lbwy2DULFi87.iqKiV6zduCnzM6hxdq5abaa1ID5HO/jADt7y4PMm', NULL, '1', 'user');
 
 
@@ -31,7 +31,7 @@ VALUES
 ('1012', 'akhil@gmail.com', 'akhil'),
 ('1013', 'praneeth@gmail.com', 'praneeth');
 
-INSERT INTO cusg (next_val) VALUES ('1014');
+-- INSERT INTO cusg (next_val) VALUES ('1014');
 
 INSERT INTO courses (courseid, coursecreatedate, courseimage, coursename, coursetrainer, archived, coursedescription)
 VALUES
@@ -49,7 +49,7 @@ VALUES
 ('112', '15-12-2023 11:29:06', NULL, 'fscorejava2302', 'sajeed', '1', NULL),
 ('113', '21-12-2023 10:50:11', NULL, 'fsadvjava2303', 'sajeed', '0', NULL);
 
-INSERT INTO csg (next_val) VALUES ('114');
+-- INSERT INTO csg (next_val) VALUES ('114');
 
 INSERT INTO courses_users (fk_userid, fk_courseid)
 VALUES
@@ -79,7 +79,7 @@ VALUES
 ('4', 'fs fundamentals 1', '1', '20-12-2023', '101');
 
 
-INSERT INTO cmsg (next_val) VALUES ('5');
+-- INSERT INTO cmsg (next_val) VALUES ('5');
 
 INSERT INTO courselinks (linkid, fk_cmid)
 VALUES

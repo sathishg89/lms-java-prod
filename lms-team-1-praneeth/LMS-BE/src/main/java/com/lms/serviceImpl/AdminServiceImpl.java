@@ -42,10 +42,10 @@ public class AdminServiceImpl implements AdminService {
 	private PasswordEncoder pe;
 
 	@Override
-	public User saveUser(User lu) {
+	public User saveUser(User user) {
 
-		User lu1 = User.builder().userName(lu.getUserName()).userEmail(lu.getUserEmail())
-				.password(pe.encode(lu.getPassword())).role(lu.getRole()).isActive(true).build();
+		User lu1 = User.builder().userName(user.getUserName()).userEmail(user.getUserEmail())
+				.password(pe.encode(user.getPassword())).role(user.getRole()).isActive(true).build();
 
 		boolean findByName = ur.existsByuserEmail(lu1.getUserEmail());
 
@@ -58,11 +58,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public boolean userImport(MultipartFile mp) throws Exception {
+	public boolean userImport(MultipartFile csvFile) throws Exception {
 
 		Iterable<CSVRecord> records;
 		Iterator<CSVRecord> iterator;
-		BufferedReader reader = new BufferedReader(new InputStreamReader(mp.getInputStream()));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(csvFile.getInputStream()));
 
 		records = CSVFormat.DEFAULT.parse(reader);
 		iterator = records.iterator();

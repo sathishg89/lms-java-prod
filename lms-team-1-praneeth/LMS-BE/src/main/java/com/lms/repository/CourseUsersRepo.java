@@ -11,11 +11,10 @@ public interface CourseUsersRepo extends JpaRepository<CourseUsers, Integer> {
 
 	CourseUsers findByuserEmail(String userEmail);
 
+
 	boolean existsByuserEmail(String userEmail);
 
 	@Query("select cu from CourseUsers cu ")
 	List<CourseUsers> getbycouser();
 
-	
-	
 }

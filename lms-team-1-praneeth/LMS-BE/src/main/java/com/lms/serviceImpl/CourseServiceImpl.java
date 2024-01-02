@@ -302,6 +302,7 @@ public class CourseServiceImpl implements CourseService {
 	public CourseUserDto getCourseUsers(String userEmail) {
 
 		try {
+
 			CourseUsers fun = cur.findByuserEmail(userEmail);
 
 			CourseUserDto ucd = CourseUserDto.builder().userName(fun.getUserName()).userEmail(fun.getUserEmail())

@@ -26,10 +26,9 @@ VALUES
 ('1007', 'praneeth@gmail.com', 'praneeth'),
 ('1008', 'raju@digital-edify.com', 'raju'),
 ('1009', 'ravi@digital-edify.com', 'ravi'),
-('1010', 'ravikiran@gmail.com', 'ravikiran'),
-('1011', 'murali@gmail.com', 'murali'),
-('1012', 'akhil@gmail.com', 'akhil'),
-('1013', 'praneeth@gmail.com', 'praneeth');
+('1010', 'murali@gmail.com', 'murali'),
+('1011', 'akhil@gmail.com', 'akhil'),
+('1012', 'praneeth@gmail.com', 'praneeth');
 
 -- INSERT INTO cusg (next_val) VALUES ('1014');
 

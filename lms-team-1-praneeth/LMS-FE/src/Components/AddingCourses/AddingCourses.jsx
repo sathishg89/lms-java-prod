@@ -31,18 +31,27 @@ const AddingCourses = ({ onReload }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Send the data to the backend
-            const response = await axios.post(`${url}admin/course/addcourse`, formData);
+            const headers = {
+                Authorization: `Bearer ${localStorage.getItem('JWT Token')}`,
+            };
+            const backFormData = new FormData();
+            backFormData.append('courseName', formData.courseName);
+            backFormData.append('courseTrainer', formData.courseTrainer);
+            backFormData.append('courseDescription', formData.courseDescription);
 
-            // Handle the response as needed (e.g., show a success message)
+            if (formData.courseImage) {
+                backFormData.append('courseImage', formData.courseImage);
+            }
+
+            const response = await axios.post(`${url}admin/course/addcourse`, backFormData, { headers });
+
             console.log('Backend response:', response.data);
             onReload();
-
         } catch (error) {
             console.error('Error submitting form:', error);
-            // Handle the error (e.g., show an error message to the user)
         }
     };
+
 
     return (
         <div>
@@ -75,7 +84,7 @@ const AddingCourses = ({ onReload }) => {
                         placeholder="Description"
                         rows="12"
                         className="w-100 p-2 px-3 enter"
-                        name="description"
+                        name="courseDescription"
                         value={formData.courseDescription}
                         onChange={handleChange}
                     ></textarea>

@@ -20,10 +20,11 @@ function MainModule(props) {
     };
 
     function updateData(moduleIndex) {
+        console.log(data[moduleIndex].moduleNumber)
         const finalData = {
-            modulename: data[moduleIndex].modulename,
-            links: Object.values(data[moduleIndex].videos),
-            videoname: Object.keys(data[moduleIndex].videos)
+            moduleName: data[moduleIndex].moduleName,
+            videoLink: Object.values(data[moduleIndex].videoInfo),
+            videoName: Object.keys(data[moduleIndex].videoInfo)
 
         };
         console.log(finalData);
@@ -42,19 +43,23 @@ function MainModule(props) {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${url}admin/course/${props.selectedCourse.courseName}/${props.selectedCourse.courseTrainer}/getvideos`);
-                setData(response.data);
-                setModuleLength(response.data.length);
+                const newData = response.data.sort((a, b) => a.moduleNumber - b.moduleNumber);
+
+                setModuleLength(newData.length);
+
+                // Check if data has changed before updating state
+                if (JSON.stringify(newData) !== JSON.stringify(data)) {
+                    setData(newData);
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setData([]);
                 setModuleLength(0);
             }
         };
+
         fetchData();
     }, [props.selectedCourse.courseName, props.selectedCourse.courseTrainer, reload]);
-    console.log(data);
-
-
 
 
     const [newModuleName, setNewModuleName] = useState('');
@@ -62,25 +67,27 @@ function MainModule(props) {
     const [tempVideoLink, setVideoLink] = useState('');
     const addModule = () => {
         const tempData = {
-            modulenum: data?.length + 1,
-            modulename: newModuleName,
-            videos: {
+            moduleNumber: data?.length + 1,
+            moduleName: newModuleName,
+            videoInfo: {
                 [tempvideoName]: tempVideoLink,
             }
-        }
-        setData((data) => [...data, tempData])
-        setModuleLength((prevLength) => prevLength + 1);
+        };
 
-    }
+        setData((prevData) => [...prevData, tempData]);
+        setModuleLength((prevLength) => prevLength + 1);
+    };
+
+
 
     const saveModule = () => {
         const finalData = {
             courseName: props.selectedCourse.courseName,
-            trainerName: props.selectedCourse.courseTrainer,
-            modulename: newModuleName,
-            modulenumber: data?.length + 1,
-            videoname: [tempvideoName],
-            videolink: [tempVideoLink]
+            courseTrainer: props.selectedCourse.courseTrainer,
+            moduleName: newModuleName,
+            moduleNumber: data?.length + 1,
+            videoName: [tempvideoName],
+            videoLink: [tempVideoLink]
 
         };
         console.log(finalData);
@@ -97,7 +104,7 @@ function MainModule(props) {
 
     const deleteVideo = (moduleIndex, videoKey) => {
         const newData = [...data];
-        newData[moduleIndex].videos = { ...newData[moduleIndex].videoInfo };
+        newData[moduleIndex].videoInfo = { ...newData[moduleIndex].videoInfo };
         delete newData[moduleIndex].videoInfo[videoKey];
         setData(newData);
 
@@ -108,8 +115,8 @@ function MainModule(props) {
         const newData = [...data];
         const videoKey = `Video ${Object.keys(newData[moduleIndex].videoInfo).length + 1}`;
 
-        newData[moduleIndex].videos = {
-            ...newData[moduleIndex].videos,
+        newData[moduleIndex].videoInfo = {
+            ...newData[moduleIndex].videoInfo,
             [videoKey]: ''
         };
         setData(newData);
@@ -136,9 +143,9 @@ function MainModule(props) {
     const handleVideoNameChange = (moduleIndex, videoKey, newName) => {
         setData((prevData) => {
             const newData = [...prevData];
-            newData[moduleIndex].videos = { ...newData[moduleIndex].videoInfo };
-            newData[moduleIndex].videos[newName] = newData[moduleIndex].videoInfo[videoKey];
-            delete newData[moduleIndex].videos[videoKey];
+            newData[moduleIndex].videoInfo = { ...newData[moduleIndex].videoInfo };
+            newData[moduleIndex].videoInfo[newName] = newData[moduleIndex].videoInfo[videoKey];
+            delete newData[moduleIndex].videoInfo[videoKey];
             return newData;
         });
     };
@@ -146,7 +153,7 @@ function MainModule(props) {
 
     const handleVideoLinkChange = (moduleIndex, videoKey, newLink) => {
         const newData = [...data];
-        newData[moduleIndex].videos[videoKey] = newLink;
+        newData[moduleIndex].videoInfo[videoKey] = newLink;
         setData(newData);
     };
 
@@ -296,7 +303,7 @@ function MainModule(props) {
                     <Resume />
                 )}
 
-{selectedOption === 'editcourse' && (
+                {selectedOption === 'editcourse' && (
                     <Edit courseName={props.selectedCourse.courseName} />
                 )}
 

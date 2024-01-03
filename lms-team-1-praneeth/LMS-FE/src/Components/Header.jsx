@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 import './Header.css';
 function Header() {
     const userRole = useSelector((state) => state.login.role)
-    const userEmail = localStorage.getItem('Email')
+    const userImage = useSelector((state) => state.login.userImage);
     console.log()
     return (
 
@@ -14,10 +14,12 @@ function Header() {
             </div>
             <div className="d-flex  justify-content-center align-items-center">
                 {
-                    userRole === 'admin' && <div className='me-4'><Link to='/admindashboard'><p className="m-0 p-0">Admin Portal <i class="fa-solid fa-location-arrow"></i></p></Link></div>
+                    userRole === 'admin' && <div className='me-4'><Link to='/admindashboard'><p className="m-0 p-0 text-primary">Admin Portal <i class="fa-solid fa-location-arrow"></i></p></Link></div>
                 }
                 <div className='position-relative'>
-                    <h3 className="rounded-circle bg-secondary text-white fs-5 m-0" style={{ padding: '15px 17px', fontWeight: '400' }}>{userEmail[0]?.toUpperCase()}{userEmail[1]?.toUpperCase()}</h3>
+                    {userImage?.length === 2 ?
+                        <h3 className="rounded-circle bg-secondary text-white fs-5 m-0" style={{ padding: '14px 16px', fontWeight: '400' }}>{userImage}</h3>
+                        : <img src={userImage} alt="profile pic" width={'50px'} height={'50px'} style={{ borderRadius: '50%' }} />}
                     <div className="profile-popup bg-white ">
                         <Link className='text-decoration-none text-dark' to='/myprofile'><p><i class="fa-solid fa-user me-2" />My Profile</p></Link>
                         <Link className='text-decoration-none text-dark' to='/' onClick={() => localStorage.clear()}><p><i class="fa-solid fa-right-from-bracket me-2" />Sign Out</p></Link>

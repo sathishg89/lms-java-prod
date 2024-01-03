@@ -37,12 +37,12 @@ const CourseDashboard = () => {
                 <h2 className="accordion-header" id={`panelsStayOpen-heading${index}`}>
                   <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#panelsStayOpen-collapse${index}`} aria-expanded="false" aria-controls={`panelsStayOpen-collapse${index}`}>
                     <p className='bg-primary rounded-circle m-0 px-2 py-1'>{index + 1}</p>
-                    <p className='m-0 ms-1'>{singleMoudle.modulename}</p>
+                    <p className='m-0 ms-1'>{singleMoudle.moduleName}</p>
                   </button>
                 </h2>
                 <div id={`panelsStayOpen-collapse${index}`} className="accordion-collapse collapse" aria-labelledby={`panelsStayOpen-heading${index}`}>
-                  {Object.keys(singleMoudle.videos).map((videoKey, index) => (
-                    <div className="accordion-body border" key={`video${index}${videoKey}`} style={{ cursor: 'pointer' }} onClick={() => setvideoLink(singleMoudle.videos[videoKey])}>
+                  {Object.keys(singleMoudle.videoInfo).map((videoKey, index) => (
+                    <div className="accordion-body border" key={`video${index}${videoKey}`} style={{ cursor: 'pointer' }} onClick={() => setvideoLink(singleMoudle.videoInfo[videoKey])}>
                       <p className='m-0 text-start'>{videoKey}</p>
                     </div>
                   ))}

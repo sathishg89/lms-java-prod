@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../Header';
 import { useSelector, useDispatch } from 'react-redux';  // Updated import statement
 import axios from 'axios';
@@ -14,7 +14,7 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
 
   // useEffect(() => {
-    // Update header with new profile picture and login credentials
+  // Update header with new profile picture and login credentials
   //   dispatch({ type: 'UPDATE_PROFILE', payload: { name, email, image } });
   // }, [name, email, image, dispatch]);
 
@@ -26,16 +26,16 @@ const Profile = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     console.log('Selected File:', file);
-    setImage(null); 
+    setImage(null);
     setImage(file);
   };
-  
+
   const handleSave = async () => {
-      try {
-        const formData = new FormData();
-        formData.append('userName', name);
-        formData.append('userEmail', email);
-  
+    try {
+      const formData = new FormData();
+      formData.append('userName', name);
+      formData.append('userEmail', email);
+
       const response = await axios.put(`${url}user/update/${localStorage.getItem('Email')}`, formData);
       if (response.status === 200) {
         console.log('Data changed successfully');
@@ -47,23 +47,23 @@ const Profile = () => {
     }
   };
 
-  const uploadImage = async()=>{
+  const uploadImage = async () => {
     const formImgData = new FormData();
-    formImgData.append('file', image);
+    formImgData.append('photo', image);
     console.log('Image State:', image);
 
-    try{
+    try {
       const response = await axios.post(`${url}user/uploadimage/${localStorage.getItem('Email')}`, formImgData);
       if (response.status === 200) {
         console.log('Data changed successfully');
       } else {
         console.error('Error changing data');
-        
+
       }
-    }catch (error) {
+    } catch (error) {
       console.error('Error:', error);
     }
-    
+
   };
 
   const handleResetPassword = async () => {
@@ -86,7 +86,7 @@ const Profile = () => {
     <div>
       <Header />
       <div className='container pt-5'>
-        <div className='col-sm-4 m-auto text-start'>
+        <div className='col-sm-5 m-auto text-start'>
           <h3 className='h3'>Edit Profile</h3>
           <p className='name mb-0'>Name:</p>
           <input
@@ -107,7 +107,7 @@ const Profile = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <p className='picture'>Profile Picture:</p>
-          <div className='bg-white col-4' style={{ height: '120px', backgroundImage: `url(${image && URL.createObjectURL(image)})` }}></div>
+          <div className='bg-white col-4' style={{ height: '120px', backgroundImage: `url(${image && URL.createObjectURL(image)})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}></div>
           <input
             type='file'
             className='file btn-sm mb-3 '
@@ -115,7 +115,7 @@ const Profile = () => {
             name='picture'
             onChange={handleFileChange}
           />
-          <button className='btn btn-primary pb-3 pt-3' onClick={uploadImage}>upload Image</button>
+          <button className='btn btn-primary pb-3 ms-3 pt-3' onClick={uploadImage}>upload Image</button>
           <div className='buttons'>
             <button className='bt1 p-2 col-12 border-0 text-white' onClick={handleSave}>
               Save

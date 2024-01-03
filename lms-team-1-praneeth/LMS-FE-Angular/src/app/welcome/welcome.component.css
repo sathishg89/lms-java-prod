@@ -1,0 +1,53 @@
+.wel {
+  width: 100%;
+  height: 100vh;
+  /* background-image: url(../../assets/welcome.jpg); */
+  background-size: contain;
+  /* background-repeat: no-repeat; */
+  /* object-fit: cover; */
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 30px;
+  padding-top: 130px;
+}
+
+p {
+  color: #6b7290;
+  font-size: 16px;
+  margin-top: 7px;
+}
+
+.btn-signin {
+  color: white;
+  background-color: #570df8;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 98px;
+  width: 16rem;
+  margin-top: 46px;
+  /* box-shadow: none; */
+}
+
+.btn-signin:hover {
+  background-color: #4507cd;
+}
+
+.section-1 {
+  padding-top: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.section-1 a {
+  color: #4507cd;
+  font-weight: 600;
+}
+
+.right {
+  position: relative;
+  padding-right: 0px;
+  /* margin-right: 0px; */
+}

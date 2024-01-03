@@ -1,0 +1,141 @@
+<app-navbar></app-navbar>
+<div class="container-fluid page">
+  <div class="row text-center">
+    <h1 class="title">{{ courseTitle }}</h1>
+  </div>
+  <div class="row video">
+    <div class="col-sm-4 left">
+      <!-- <div class="row" *ngFor="let module of modules; let i = index">
+        <div class="module d-flex flex-row" (click)="expand(i)">
+          <div class="d-flex flex-row">
+            <p class="index">{{ i + 1 }}</p>
+            <p>{{ module.name }}</p>
+          </div>
+          <div class="arrow">
+            <fa-icon class="icon" [icon]="darrow"></fa-icon>
+          </div>
+        </div>
+        <div class="subtopics px-0" *ngIf="modules[i].isShowTopic">
+          <div
+            class="record d-flex flex-row"
+            *ngFor="let subtopic of courseList; let j = index"
+            (click)="showVideo(subtopic)"
+          >
+            <p class="inside-index">{{ j + 1 }}</p>
+            <p class="inside">{{ subtopic.name }}</p>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="row" *ngFor="let module of courseList; let i = index">
+        <div class="module d-flex flex-row" (click)="expand(i)">
+          <div class="d-flex flex-row">
+            <p class="index">{{ module.moduleNumber }}</p>
+            <p>{{ module.moduleName }}</p>
+          </div>
+          <div class="arrow">
+            <fa-icon class="icon" [icon]="darrow"></fa-icon>
+          </div>
+        </div>
+        <div class="subtopics px-0" *ngIf="modules[i].isShowTopic">
+          <div
+            class="record d-flex flex-row"
+            *ngFor="let video of module.videoInfo | keyvalue; let j = index"
+            (click)="showVideo(video.value)"
+          >
+            <p class="inside-index">{{ j + 1 }}</p>
+            <p class="inside">{{ video.key }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="row ">
+        <div class="module d-flex flex-row" (click)="expand()">
+          <p class="index">1</p>
+          <p class="">HTML & CSS</p>
+        </div>
+        <div class="subtopics px-0" *ngIf="!isShowTopic">
+          <div class="record d-flex flex-row">
+            <p class="inside-index">1</p>
+            <p class="inside">19 June 2023</p>
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="col-sm-8 right" *ngIf="!isShowVideo">
+      <h3>Select a topic to start watching</h3>
+    </div>
+    <!-- <div class="col-sm-8 ms-4 right" *ngIf="isShowVideo">
+      <div class="right" *ngFor="let session of subtopics">
+        <iframe
+          src="https://www.youtube.com/embed/qz0aGYrrlhU?si=vRsgyREVzuyaMbGT"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div> -->
+
+    <div class="col-sm-8 ms-4 right" *ngIf="isShowVideo">
+      <div class="videoBox">
+        <iframe
+          *ngIf="safeVideoUrl"
+          [src]="safeVideoUrl"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="row below">
+    <div class="col-sm-5">
+      <div class="row options d-flex flex-row">
+        <p [ngStyle]="style('courseInfo')" (click)="active('courseInfo')">
+          Course Info
+        </p>
+        <p [ngStyle]="style('resources')" (click)="active('resources')">
+          Resources
+        </p>
+        <p [ngStyle]="style('projects')" (click)="active('projects')">
+          Projects
+        </p>
+        <p [ngStyle]="style('resume')" (click)="active('resume')">Resume</p>
+        <p [ngStyle]="style('askAI')" (click)="active('askAI')">Ask AI</p>
+      </div>
+      <div class="course" *ngIf="tabStates['courseInfo']">
+        <p><b>Name</b>: {{ courseTitle }}</p>
+        <p><b>Description</b>: {{ courseTrainer }}</p>
+        <p><b>Modules</b>: {{ moduleLength }}</p>
+        <p class="w-75">
+          <b>Live class</b>:
+          <a
+            href="https://us06web.zoom.us/j/88321236274?pwd=QnVsTDBKNWZJV3BYUWNlTm45UE9aUT09"
+            >https://us06web.zoom.us/j/88321236274?pwd=QnVsTDBKNWZJV3BYUWNlTm45UE9aUT09</a
+          >
+        </p>
+        <a class="ps-1" *ngIf="role === 'admin'"
+          >Edit <fa-icon class="icon" [icon]="edit"></fa-icon
+        ></a>
+      </div>
+      <div class="resources" *ngIf="tabStates['resources']">
+        <p>No resource available for this topic.</p>
+      </div>
+      <div class="projects" *ngIf="tabStates['projects']">
+        <p>No projects available for this course.</p>
+      </div>
+      <div class="resume" *ngIf="tabStates['resume']">
+        <p>No resume templates are updated for this course.</p>
+      </div>
+      <div class="askAI" *ngIf="tabStates['askAI']">
+        <p>
+          Sorry, AI responses are not available currently. Please contact
+          support team for any further assistance.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

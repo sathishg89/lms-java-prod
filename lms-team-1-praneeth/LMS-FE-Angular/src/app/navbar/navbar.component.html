@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a (click)="dashboard()">
+            <img src="../../DL-logo.png" alt="logo.png" />
+          </a>
+        </li>
+      </ul>
+      <div class="right">
+        <a
+          (click)="admin()"
+          *ngIf="authority === 'admin' && router.url !== '/admin'"
+          >Admin portal <fa-icon [icon]="falink"></fa-icon>
+        </a>
+
+        <div class="dropdown">
+          <!-- <div class="profile">
+            <div
+              class="profile-picture"
+              id="dropdownMenuButton"
+              data-mdb-toggle="dropdown"
+            >
+              <img class="pp" [src]="emailData" alt="" />
+              {{ emailData }}
+            </div>
+          </div> -->
+          <div class="profile">
+            <div
+              class="profile-picture"
+              id="dropdownMenuButton"
+              data-mdb-toggle="dropdown"
+            >
+              <img
+                *ngIf="myProfile"
+                class="pp"
+                [src]="image"
+                alt="Profile.jpg"
+              />
+              <div *ngIf="!myProfile">{{ image }}</div>
+            </div>
+          </div>
+          <!-- <div class="profile" >
+          <div
+            class="profile-picture"
+            id="dropdownMenuButton"
+            data-mdb-toggle="dropdown"
+          >
+            
+          </div>
+        </div> -->
+
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li>
+              <a class="dropdown-item prf" (click)="profile()"
+                ><fa-icon class="icon" [icon]="fauser"></fa-icon> My Profile</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item prf" (click)="signOut()">
+                <fa-icon class="icon" [icon]="fasignout"></fa-icon>
+                Sign out</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

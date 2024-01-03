@@ -1,0 +1,528 @@
+<app-navbar> </app-navbar>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2 nav">
+      <div class="row left">
+        <a class="col-sm-8 courses" (click)="course()">Courses</a>
+        <button class="col-sm-4 add" (click)="add()">+ ADD</button>
+      </div>
+      <div class="row left">
+        <a class="col-sm-12 users" (click)="users()">Users</a>
+      </div>
+    </div>
+    <div class="col-sm-2 list" *ngIf="courselist">
+      <input
+        #searched
+        class="search"
+        type="text"
+        placeholder="Search Courses"
+        (input)="search(searched.value)"
+      />
+      <div class="title" *ngFor="let course of searchItems; let i = index">
+        <p
+          [ngClass]="{ active: i === selectedListItem }"
+          (click)="selectListItem(i)"
+          (click)="listItem(course.courseName, course.courseTrainer)"
+        >
+          {{ course.courseName }}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-sm-4 courseEdit text mx-auto my-2" *ngIf="courseEdit">
+      <h1>Edit course</h1>
+      <form
+        #editCourse="ngForm"
+        (submit)="editExistingCourse(editCourse.value)"
+        ngNativeValidate
+        #form
+        class="form"
+      >
+        <label class="mt-2" for="">Title</label>
+        <input
+          name="courseName"
+          id="courseName"
+          class="w-100 p-2 px-3 enter"
+          type="text"
+          placeholder="Title"
+          required
+          ngModel
+          [(ngModel)]="cname"
+        />
+        <label class="mt-2" for="">Trainer Name</label>
+        <input
+          name="courseTrainer"
+          id="courseTrainer"
+          class="w-100 p-2 px-3 enter"
+          type="text"
+          placeholder="Trainer Name"
+          required
+          ngModel
+          [(ngModel)]="tname"
+        />
+        <label class="mt-3">Description</label>
+        <textarea
+          name="courseDescription"
+          id="courseDescription"
+          required
+          ngModel
+          [(ngModel)]="description"
+          placeholder="courseDescription"
+          rows="12"
+          class="w-100 p-2 px-3 enter"
+        ></textarea>
+        <label class="mt-2">Picture</label>
+        <input
+          class="w-100 file"
+          type="file"
+          (change)="onFileSelected($event)"
+        />
+        <p class="mt-3 mb-0">Current Picture</p>
+        <button type="submit" class="mt-3 w-100">UPDATE COURSE</button>
+      </form>
+    </div>
+
+    <div class="editcourse col-sm-6 mt-5 ms-2 ps-2" *ngIf="isShowEdit">
+      <!-- <h1>Hello</h1> -->
+      <div class="options d-flex flex-row">
+        <p [ngStyle]="style('courseInfo')" (click)="active('courseInfo')">
+          Course Info
+        </p>
+        <p [ngStyle]="style('modules')" (click)="active('modules')">Modules</p>
+        <p [ngStyle]="style('projects')" (click)="active('projects')">
+          Projects
+        </p>
+        <p [ngStyle]="style('resources')" (click)="active('resources')">
+          Resources
+        </p>
+        <p [ngStyle]="style('enrolled')" (click)="active('enrolled')">
+          Enrolled
+        </p>
+        <p [ngStyle]="style('resume')" (click)="active('resume')">Resume</p>
+      </div>
+
+      <!-- tabs data  -->
+
+      <div class="course px-3" *ngIf="tabStates['courseInfo']">
+        <p><b>Name</b>: {{ cname }}</p>
+        <p><b>Trainer name</b>: {{ tname }}</p>
+        <p><b>Description</b>: {{ description }}</p>
+        <p><b>Modules</b>: {{ moduleLength }}</p>
+        <p class="w-75"><b>Live class</b>: NA</p>
+        <p class="classlink">
+          <input class="col-sm-6" type="text" /><button>
+            Save Live Class Link
+            <fa-icon class="icon ps-3" [icon]="camera"></fa-icon>
+          </button>
+        </p>
+        <p class="archive">
+          <button (click)="deleteCourse(cname, tname)">
+            <fa-icon class="icon pe-2" [icon]="delete"></fa-icon> Delete Course
+          </button>
+        </p>
+        <a class="ps-1" (click)="editCourse()"
+          >Edit <fa-icon class="icon ps-2" [icon]="edit"></fa-icon
+        ></a>
+      </div>
+      <div class="modules px-3" *ngIf="tabStates['modules']">
+        <div class="mod-header d-flex justify-content-between">
+          <h1>{{ cname }}</h1>
+          <button class="btn-mod" (click)="addModule()">Add Module</button>
+        </div>
+
+        <!-- Add module section  -->
+
+        <div class="modulesBox container" *ngIf="newModule">
+          <form
+            #newModuleForm="ngForm"
+            (submit)="createModule(newModuleData, cname, tname)"
+            ngNativeValidate
+            #form
+            class="form"
+          >
+            <div class="moduleData d-flex justify-content-start">
+              <input
+                type="text"
+                placeholder="Module Name"
+                name="moduleName"
+                id="moduleName"
+                required
+                ngModel
+                [(ngModel)]="newModuleData.moduleName"
+              />
+              <input
+                type="text"
+                placeholder="Module Number"
+                name="moduleNumber"
+                id="moduleNumber"
+                required
+                ngModel
+                [(ngModel)]="newModuleData.moduleNumber"
+              />
+            </div>
+            <div class="video-box container">
+              <div class="row videoHeader">
+                <h2 class="col-sm-5">Video Name</h2>
+                <h2 class="col-sm-5">Video Link</h2>
+                <fa-icon
+                  class="icon ps-3 col-sm-1 btn-vid"
+                  [icon]="Plus"
+                  (click)="createAddVideo()"
+                ></fa-icon>
+              </div>
+              <hr />
+
+              <div
+                class="row videoData"
+                *ngFor="let video of newModuleData.videoInfo; let i = index"
+              >
+                <p class="col-sm-5">
+                  <input
+                    type="text"
+                    placeholder="Video Name"
+                    name="videoName{{ i }}"
+                    required
+                    ngModel
+                    [(ngModel)]="video.videoName"
+                  />
+                </p>
+                <p class="col-sm-5">
+                  <input
+                    type="text"
+                    placeholder="Video Link"
+                    name="videoLink{{ i }}"
+                    required
+                    ngModel
+                    [(ngModel)]="video.videoLink"
+                  />
+                </p>
+                <fa-icon
+                  class="icon ps-3 col-sm-1 text-danger"
+                  (click)="removeVideo(i)"
+                  [icon]="delete"
+                ></fa-icon>
+              </div>
+            </div>
+            <button type="submit" class="btn-mod my-3">Create Module</button>
+          </form>
+        </div>
+
+        <!-- Display Present modules -->
+
+        <div
+          class="modulesBox container mb-4"
+          *ngFor="let module of courseData; let j = index"
+        >
+          <form
+            #moduleForm="ngForm"
+            (submit)="
+              editModule(moduleForm.value, module.moduleNumber, cname, tname)
+            "
+            ngNativeValidate
+            #form
+            class="form"
+          >
+            <div class="moduleData d-flex justify-content-between">
+              <h1>
+                {{ module.moduleNumber }}
+                <input
+                  type="text"
+                  placeholder="Module Name"
+                  name="moduleName"
+                  id="moduleName"
+                  required
+                  [(ngModel)]="module.moduleName"
+                />
+              </h1>
+              <button
+                class="mod-delete"
+                type="button"
+                (click)="deleteModule(cname, module.moduleNumber)"
+              >
+                Delete Module
+              </button>
+            </div>
+            <div class="video-box container">
+              <div class="row videoHeader">
+                <h2 class="col-sm-5">Video Name</h2>
+                <h2 class="col-sm-5">Video Link</h2>
+                <button
+                  class="col-sm-2 btn-vid"
+                  type="button"
+                  (click)="AddNewVideo(j)"
+                >
+                  Add Video
+                </button>
+              </div>
+              <hr />
+
+              <div
+                class="row videoData"
+                *ngFor="let video of module.videoInfo | keyvalue; let i = index"
+              >
+                <p class="col-sm-5">
+                  <input
+                    type="text"
+                    placeholder="Video Name"
+                    name="videoName{{ i }}"
+                    id="videoName{{ i }}"
+                    required
+                    [(ngModel)]="video.key"
+                  />
+                </p>
+                <p class="col-sm-5">
+                  <input
+                    type="text"
+                    placeholder="Video Link"
+                    name="videoLink{{ i }}"
+                    id="videoLink{{ i }}"
+                    required
+                    [(ngModel)]="video.value"
+                  />
+                </p>
+                <fa-icon
+                  class="icon ps-3 col-sm-1 text-danger"
+                  [icon]="delete"
+                  (click)="removeExistingVideo(j, video.key)"
+                ></fa-icon>
+              </div>
+              <button type="submit" class="btn-mod my-2">Save</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Pop ups  -->
+
+        <div class="popup" *ngIf="popup">
+          <p>{{ message }}</p>
+        </div>
+        <!-- <div class="popup" *ngIf="moduleUpdated">
+          <p>Module Updated succesfully!</p>
+        </div>
+        <div class="popup" *ngIf="userDeleted">
+          <p>User Removed succesfully!</p>
+        </div>
+        <div class="popup" *ngIf="moduleCreated">
+          <p>Module Creaated succesfully!</p>
+        </div> -->
+      </div>
+
+      <div class="projects px-3" *ngIf="tabStates['projects']">
+        <p class="common">
+          <fa-icon class="icon pe-2" [icon]="info"></fa-icon>
+          No projects found. You can add projects by uploading them using the
+          form below.
+        </p>
+        <label for="">Upload new Project</label> <br />
+        <input type="file" name="" id="" class="mt-2 file" /> <br />
+        <button class="upload mt-3">Upload</button>
+      </div>
+      <div class="resources px-3" *ngIf="tabStates['resources']">
+        <p class="common">
+          <fa-icon class="icon pe-2" [icon]="info"></fa-icon>
+          No resources found. You can add resources by uploading them using the
+          form below.
+        </p>
+        <label for="">Upload new Resource</label> <br />
+        <input type="file" name="" id="" class="mt-2 file" /> <br />
+        <button class="upload mt-3">Upload</button>
+      </div>
+      <div class="enrolled px-3" *ngIf="tabStates['enrolled']">
+        <h4>Add user to {{ cname }}</h4>
+
+        <form
+          #accessUser="ngForm"
+          (submit)="enrollUser(accessUser.value, cname, tname)"
+          ngNativeValidate
+          #form
+          class="form my-3"
+        >
+          <div class="enroll row">
+            <div class="input-box col-sm-8">
+              <input
+                type="text"
+                id="email"
+                class="form-input px-1 py-1"
+                name="userEmail"
+                required
+                ngModel
+              />
+              <label>Email address</label>
+            </div>
+            <button type="submit" class="col-sm-2 form-btn py-1 px-1">
+              Enroll
+            </button>
+          </div>
+        </form>
+
+        <!-- display users enrolled in the course  -->
+        <div *ngFor="let user of courseUsers">
+          <div *ngIf="user.courseUsers && user.courseUsers.length > 0">
+            <div class="row pb-2">
+              <div class="col-sm-3">
+                <label><strong>Username</strong></label>
+              </div>
+              <div class="col-sm-6">
+                <label><strong>Email</strong></label>
+              </div>
+              <div class="col-sm-2">
+                <label><strong>Remove User</strong></label>
+              </div>
+            </div>
+            <div *ngFor="let courseUser of user.courseUsers" class="row ps-2">
+              <div class="col-sm-3 data">
+                {{ courseUser.userName }}
+              </div>
+              <div class="col-sm-6 data">
+                {{ courseUser.userEmail }}
+              </div>
+              <div class="col-sm-2 data text-center text-danger">
+                <fa-icon
+                  class="icon ps-3"
+                  [icon]="delete"
+                  (click)="
+                    removeUserAccess(
+                      courseUser.userEmail,
+                      user.courseName,
+                      user.courseTrainer
+                    )
+                  "
+                ></fa-icon>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="!user.courseUsers || user.courseUsers.length === 0"
+            class="row"
+          >
+            <div class="col-sm-12">
+              <p class="common">
+                <fa-icon class="icon pe-2" [icon]="info"></fa-icon>
+                No Students Enrolled under this Course
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resume px-3" *ngIf="tabStates['resume']">
+        <p class="common">
+          <fa-icon class="icon pe-2" [icon]="info"></fa-icon> No resume
+          templates are updated for this course.
+        </p>
+        <label for="">Upload new Resume</label> <br />
+        <input type="file" name="" id="" class="mt-2 file" /> <br />
+        <button class="upload mt-3">Upload</button>
+      </div>
+    </div>
+
+    <div class="col-sm-4 addcourse mx-auto" *ngIf="isShowAdd">
+      <h1>Create course</h1>
+
+      <form
+        #newCourse="ngForm"
+        (submit)="createCourse(newCourse.value)"
+        ngNativeValidate
+        #form
+        class="form"
+      >
+        <label class="mt-2" for="">Title</label>
+        <input
+          name="courseName"
+          id="courseName"
+          class="w-100 p-2 px-3 enter"
+          type="text"
+          placeholder="Title"
+          required
+          ngModel
+        />
+        <label class="mt-2" for="">Trainer Name</label>
+        <input
+          name="courseTrainer"
+          id="courseTrainer"
+          class="w-100 p-2 px-3 enter"
+          type="text"
+          placeholder="Trainer Name"
+          required
+          ngModel
+        />
+        <label class="mt-3">Description</label>
+        <textarea
+          name="courseDescription"
+          id="courseDescription"
+          required
+          ngModel
+          placeholder="Description"
+          rows="12"
+          class="w-100 p-2 px-3 enter"
+        ></textarea>
+        <label class="mt-2">Picture</label>
+        <!-- <input class="w-100 file" type="file" /> -->
+        <p class="mt-3 mb-0">Current Picture</p>
+        <button type="submit" class="mt-3 w-100">CREATE</button>
+      </form>
+    </div>
+
+    <!-- Users Section -->
+
+    <div class="user col-sm-5 mt-5 mx-auto" *ngIf="user">
+      <div class="import d-flex flex-column">
+        <h1 class="text-center">Import Users</h1>
+        <label class="mt-2" for="">Upload users file</label>
+        <a class="sample">Sample-users.csv</a>
+        <input type="file" name="" id="" class="mt-2 file col-sm-8" /> <br />
+        <button class="btn-user">Upload</button>
+      </div>
+      <div class="find d-flex flex-column">
+        <h1 class="text-center">Find User Information</h1>
+        <label for="" class="mt-2">Enter user email </label>
+        <form
+          #findUser="ngForm"
+          (submit)="userFind(findUser.value)"
+          ngNativeValidate
+          #form
+        >
+          <input
+            type="text"
+            id="email"
+            placeholder="student_name@digital-lync.com"
+            class="my-2"
+            name="email"
+            required
+            [(ngModel)]="email"
+          />
+          <br />
+          <button type="submit" class="btn-user mt-4">Find user</button>
+        </form>
+        <div *ngIf="table" class="row mb-5 mt-3">
+          <div class="col-sm-2 data">
+            <label class="">Username</label>
+            <hr />
+            {{ userInfo.userName }}
+          </div>
+          <div class="col-sm-6 data">
+            <label class="">User Email</label>
+            <hr />
+            {{ userInfo.userEmail }}
+          </div>
+          <div class="col-sm-4 data">
+            <label class="">Courses Enrolled </label>
+            <hr />
+            <div
+              class="row d-flex flex-row"
+              *ngFor="let course of userInfo.coursesList; let i = index"
+            >
+              <p>{{ i + 1 }} - {{ course.courseName }}</p>
+            </div>
+            <!-- {{ userInfo.password }} -->
+          </div>
+        </div>
+        <div class="" *ngIf="find">
+          <div class="text-danger mt-2" *ngIf="!table">
+            No User Found!!! Enter email again
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

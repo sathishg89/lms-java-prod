@@ -1,0 +1,38 @@
+<app-navbar></app-navbar>
+
+<!-- dashboard -->
+
+<div class="banner"><h1>Welcome to Kona LMS! 🚀</h1></div>
+
+<div class="row title">
+  <div class="col-sm-8">
+    <h1>Your courses</h1>
+  </div>
+</div>
+
+<div class="row courses" *ngFor="let data of course">
+  <div class="col-sm-8">
+    <div class="box">
+      <div class="row left">
+        <div class="col-sm-3">
+          <img [src]="'data:image/jpeg;base64,' + data.courseImage" alt="test.jpeg" />
+        </div>
+        <div class="col-sm-6 inner">
+          <h1>{{ data.courseName }}</h1>
+          <p>{{ data.courseTrainer }}</p>
+        </div>
+        <div class="col-sm-3 right">
+          <button
+            class="con"
+            (click)="continue(data.courseName, data.courseTrainer)"
+          >
+            Continue <fa-icon class="icon" [icon]="right"></fa-icon>
+          </button>
+          <button class="live">
+            Live class <fa-icon class="icon" [icon]="camera"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

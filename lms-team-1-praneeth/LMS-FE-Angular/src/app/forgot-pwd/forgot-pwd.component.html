@@ -1,0 +1,31 @@
+<div class="login row">
+  <div class="form-box col-sm-3">
+    <img class="logo pt-5" src="../../assets/DL-logo.png" alt="" />
+    <h1 class="pt-3">Forgot Your Password?</h1>
+    <p class="text-center pt-3">
+      Enter your email address and we will send you instructions to reset your
+      password.
+    </p>
+    <form #userLogin="ngForm" class="form text-center">
+      <!-- <p class="error-p">{{ authError }}</p> -->
+      <div class="input-box mt-3">
+        <input
+          type="text"
+          class="form-input px-3 py-3"
+          name="email"
+          ngModel
+          #email="ngModel"
+          required
+          email
+        />
+        <label>Email address</label>
+        <!-- <p class="invalid">
+          <span *ngIf="email.invalid && email.touched">Invalid email! </span>
+        </p> -->
+      </div>
+
+      <button class="form-btn py-3 mt-4 mb-2">Continue</button>
+      <a class="back" (click)="back()">Back to Digita Lync LMS</a>
+    </form>
+  </div>
+</div>

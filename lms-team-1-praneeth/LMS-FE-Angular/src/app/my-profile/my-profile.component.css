@@ -1,0 +1,113 @@
+.form {
+  margin: 40px auto;
+  padding: 0px 30px;
+}
+
+.form h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.field {
+  width: 100% !important;
+}
+
+.form label {
+  margin: 10px 0px;
+  margin-top: 20px;
+}
+
+.field input {
+  width: 100% !important;
+  padding: 10px;
+  border: 1px solid #570df8;
+}
+
+input:focus {
+  border: 1px solid #570df8;
+}
+
+.tick {
+  color: #50d9a6;
+  font-size: 14px;
+  cursor: default;
+}
+
+.verify {
+  color: #f000b8;
+  font-size: 14px;
+  cursor: default;
+}
+
+.profile {
+  margin: 0px;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-picture {
+  color: white;
+  font-size: 70px;
+  background-color: #95a5a6;
+  width: 140px;
+  height: 140px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pp {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* width: fit-content; */
+}
+
+#file {
+  border: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.upload {
+  color: white;
+  border: none;
+  background-color: #570df8;
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+.upload:hover {
+  background-color: #4506cb;
+}
+
+.bt {
+  color: white;
+  width: 100%;
+  border: none;
+  margin: 12px 0px;
+  padding: 12px 0px;
+}
+
+.btn-save {
+  margin-top: 24px;
+  background-color: #570df8;
+}
+
+.btn-reset {
+  background-color: #f000b8;
+}
+
+.btn-save:hover {
+  background-color: #4506cb;
+}
+
+.btn-reset:hover {
+  background-color: #cb009c;
+}
+
+.delete {
+  cursor: pointer;
+  color: red;
+}

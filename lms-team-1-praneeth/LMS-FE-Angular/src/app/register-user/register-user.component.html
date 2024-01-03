@@ -1,0 +1,93 @@
+<div class="register row">
+  <div class="form-box col-sm-3">
+    <img class="logo pt-2" src="../../assets/DL-logo.png" alt="" />
+    <h1 class="pt-4">User Sign-Up</h1>
+    <p class="text-center pt-3">
+      Sign UP to Digital Lync to continue to Digita Lync LMS.
+    </p>
+    <form
+      (submit)="register()"
+      class="form"
+      ngNativeValidate
+      #form
+      class="form"
+    >
+      <div class="input-box">
+        <input
+          type="text"
+          class="form-input px-3 py-3"
+          name="name"
+          id="name"
+          required
+          [(ngModel)]="username"
+        />
+        <label>User Name</label>
+      </div>
+      <div class="input-box">
+        <input
+          type="text"
+          class="form-input px-3 py-3"
+          name="email"
+          id="email"
+          [(ngModel)]="email"
+          required
+        />
+        <label>Email Address</label>
+      </div>
+      <div class="input-box">
+        <input
+          type="password"
+          id="password"
+          class="form-input px-3 py-3"
+          name="password"
+          required
+          [(ngModel)]="password"
+        />
+        <label>Password</label>
+      </div>
+
+      <button type="submit" class="form-btn py-3 mt-4 mb-3">Sign Up</button>
+    </form>
+    <p class="sucess" *ngIf="add">{{ user }}</p>
+
+    <p>
+      Have an Account Already ? <a class="login" (click)="login()">Login</a>
+    </p>
+  </div>
+</div>
+
+<!-- <div class="register">
+  <h1>User Sign-Up</h1>
+  <form (submit)="register()" class="form" ngNativeValidate #form>
+    <input
+      type="text"
+      class="form-input"
+      name="name"
+      id="name"
+      placeholder="Enter UserName"
+      required
+      [(ngModel)]="username"
+    />
+    <input
+      type="text"
+      class="form-input"
+      name="email"
+      id="email"
+      placeholder="Enter Email"
+      [(ngModel)]="email"
+      required
+    />
+    <input
+      type="password"
+      class="form-input"
+      name="password"
+      id="password"
+      placeholder="Enter Password"
+      [(ngModel)]="password"
+      required
+    />
+    <button type="submit" class="form-button">Sign Up</button>
+  </form>
+
+  <p class="sucess" *ngIf="add">{{ user }}</p>
+</div> -->

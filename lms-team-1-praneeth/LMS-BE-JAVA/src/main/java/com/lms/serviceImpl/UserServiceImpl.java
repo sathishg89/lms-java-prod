@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public String saveProfilePhoto(MultipartFile photo, String userEmail) throws Exception {
 

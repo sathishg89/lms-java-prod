@@ -10,9 +10,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,12 +93,12 @@ public class AuthController {
 
 				return ResponseEntity.ok().headers(headers).body(ld2);
 			} else {
-				throw new EmailNotFoundException(CustomErrorCodes.INVALID_EMAIL.getErrorMsg(),
-						CustomErrorCodes.INVALID_EMAIL.getErrorCode());
+				throw new EmailNotFoundException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+						CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 			}
-		} catch (BadCredentialsException ex) {
-			throw new CustomException(CustomErrorCodes.INVALID_PASSWORD.getErrorMsg(),
-					CustomErrorCodes.INVALID_PASSWORD.getErrorCode());
+		} catch (AuthenticationException ex) {
+			throw new CustomException(CustomErrorCodes.INVALID_DETAILS.getErrorMsg(),
+					CustomErrorCodes.INVALID_DETAILS.getErrorCode());
 		}
 	}
 

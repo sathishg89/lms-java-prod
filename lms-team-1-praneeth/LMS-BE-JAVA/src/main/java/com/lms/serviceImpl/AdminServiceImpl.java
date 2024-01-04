@@ -90,6 +90,7 @@ public class AdminServiceImpl implements AdminService {
 
 					Resume res = Resume.builder().userEmail(userEmail).build();
 
+					ur.save(user);
 					cs.saveCourseUser(cu);
 					rr.save(res);
 

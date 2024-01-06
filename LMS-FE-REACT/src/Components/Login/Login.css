@@ -1,0 +1,11 @@
+.background-img{
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-signin{
+    border-radius: 5px;
+    width: 400px;
+}

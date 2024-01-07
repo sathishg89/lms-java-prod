@@ -1,127 +1,18 @@
-# LMS-JAVA MINIKUBE DEPLOYMENT
-## STEPS:
-- Launch Server
-- Install Software
-- Create K8S Manifest files
-- Deploy K8S files
-
-## STEP-1: Launch Server
-- Guide - https://minikube.sigs.k8s.io/docs/start/
-- Requirements —-------t2.medium instance in AWS
-- 2 CPUs or more
-- 2GB of free ram memory
-- 30GB of free disk space
-
-## STEP-2: Install Softwares
-### Update system
-- sudo apt update
-### Docker setup
-- Visit: https://get.docker.com/
-- curl -fsSL https://get.docker.com -o install-docker.sh
-- sudo sh install-docker.sh
-- sudo usermod -aG docker ubuntu
-- newgrp docker
-- docker -v 
-### Kubectl setup
-- Visit: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-binary-with-curl-on-linux
-- curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-- sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-- chmod +x kubectl
-- sudo mv kubectl /usr/local/bin/kubectl
-- kubectl version
-### Minikube setup
-- Visit: https://minikube.sigs.k8s.io/docs/start/
-- curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-- sudo install minikube-linux-amd64 /usr/local/bin/minikube
-- minikube version
-- minikube status
-- minikube start
-
-## STEP-3: Create K8S Manifest files
-- Code: git clone -b minikube-1 https://github.com/muralialakuntla3/lms-java.git
-- token: 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
-
-## STEP-4: Deploy K8S files
-### Database:
-- to encrypt the password
-- **echo -n password | base64**
-- **encrypted-pw**
-#### mysql k8s deployment
-- kubectl apply -f mysql-secret.yml
-- kubectl apply -f mysql-deployment.yml
-- kubectl apply -f mysql-cluster-ip.yml
-
-### Docker login:
-- generate PAT in docker hub
-- My Account -> settings -> New Access Token
-- login to your server
-- docker login -u muralialakuntla3
-- password: dckr_pat_T_p3YGsUgYgDKejQbR2K5rYqDGk
-### Backend:
-- cd LMS-BE
-- chmod +x mvnw
-- docker build -t muralialakuntla3/lms-java-be .
-- docker push muralialakuntla3/lms-java-be
-- kubectl apply -f backend-configmap.yml
-- kubectl apply -f backend-deployment.yml
-- kubectl apply -f backend-service.yml
-
-#### to check backend use port-forward cmd
-- kubectl port-forward service/backend-service **32323:8080** --address 0.0.0.0
-- check in browser: **pub-ip:32315/user/login**
-  
-### Frontend:
-#### Connect frontend with backend  : 
-    cd lms-fe/lmsv1/src/Components/
-    sudo vi Home.jsx
-   ** line-10:** const response = await axios.get("**http://pub-ip:8080/user/login**");
-#### frontend deployment
-- docker build -t muralialakuntla3/lms-java-fe .
-- docker push muralialakuntla3/lms-java-fe
-- kubectl apply -f frontend-deployment.yml
-- kubectl apply -f frontend-service.yml
-#### to check backend use port-forward cmd
-- kubectl port-forward service/frontend-service **31374:80** --address 0.0.0.0
-- check in browser: **pub-ip:31374**
-
------------------------------------------------------------------------------------------------------
-# LMS-JAVA Application Docker Deployment
-## Server setup:
-    Server type: T2.medium server
-    Ports: 22,80,8080,3306
-## Setup Docker:
-    sudo apt update
-    curl -fsSL https://get.docker.com -o install-docker.sh
-    sudo sh install-docker.sh
-    sudo usermod -aG docker $USER
-    newgrp docker
-
-## DOCKER NETWORK setup:
-- docker network create -d bridge lmsnetwork
-    
-## DATABASE setup:
-- docker run -d --name mysql --network lmsnetwork -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Qwerty@123 -e MYSQL_DATABASE=lmsdb mysql
-
-## BACKEND setup:
-- cd LMS-BE
-- docker build -t lmsbe .
-- docker run -d --name be --network lmsnetwork -e DB_HOST=mysql -e DB_PORT=3306 -e DB_NAME=lmsdb -e DB_USERNAME=root -e DB_PASSWORD=Qwerty@123 -p 8080:8080 lmsbe
-### Check backend in browser
-- browse : pub-ip:8080/user/login
-
-## FRONTEND Server setup:
-
-### Connect frontend with backend  : 
-    cd lms-fe/lmsv1/src/Components/
-    sudo vi Home.jsx
-   ** line-10:** const response = await axios.get("**http://pub-ip:8080/user/login**");
-
-### build frontend:
-- cd lms-spring/lms-fe/lmsv1
-- docker build -t lmsfe .
-- docker run -d --name fe --network lmsnetwork -p 80:80 lmsfe
-- docker ps
-### Check frontend in browser
-- browse : pub-ip:80
-- click on **Test**
-- it will show **Connected To Back-End**
+# LMS deployment with Terraform
+## launch server and install terraform
+- visit: https://developer.hashicorp.com/terraform/install
+- wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+- echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+- sudo apt update && sudo apt install terraform
+## install aws cli
+- sudo apt  install awscli
+- aws configure
+- aws s3 ls
+## deploy infra and application
+- clone the code from this branch
+- update provider.tf details
+- terraform init
+- terraform validate
+- terraform plan
+- terraform apply
+- terraform destroy

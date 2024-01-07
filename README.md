@@ -24,7 +24,7 @@
 
 ### To save terraform output details 
 - terraform output -json > vpc_outputs.json
-- vpc_outputs.json
+- cat vpc_outputs.json
 
 ## Backend deployment
 - update vpc id in backend-firewall.tf   --> vpc-07f90316611fbbb50

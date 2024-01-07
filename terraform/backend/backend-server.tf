@@ -10,7 +10,7 @@ resource "aws_instance" "backend" {
   }
 
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
-  subnet_id             = "subnet-acdf850"
+  subnet_id             = "subnet-02ced4604c2c029c0"     # you will get this subnet-id when subnet created with terraform
 
   tags = {
     Name = "lms-backend"

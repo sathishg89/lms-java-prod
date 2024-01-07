@@ -1,7 +1,7 @@
 resource "aws_instance" "frontend" {
   ami             = "ami-0da7657fe73215c0c"  # replace with your desired AMI ID
   instance_type   = "t2.medium"
-  key_name        = "unv-california.pem"  # replace with your key pair name
+  key_name        = "unv-california"  # replace with your key pair name
 
   root_block_device {
     volume_type           = "gp2"

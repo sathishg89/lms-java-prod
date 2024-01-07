@@ -29,3 +29,4 @@ resource "aws_instance" "backend" {
               sudo docker run -d --name be --network lmsnetwork -e DB_HOST=mysql -e DB_PORT=3306 -e DB_NAME=lmsdb -e DB_USERNAME=root -e DB_PASSWORD=Qwerty@123 -p 8080:8080 muralialakuntla3/terraform-be
               EOF
 }
+

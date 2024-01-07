@@ -2,8 +2,8 @@
 sudo apt-get update -y
 sudo apt-get install -y curl git
 
-sudo curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
+sudo curl -fsSL https://get.docker.com -o install-docker.sh
+sudo sh install-docker.sh
 sudo usermod -aG docker ubuntu  # Add ubuntu user to docker group
 
 sudo git clone -b terraform https://github.com/muralialakuntla3/lms-java.git /home/ubuntu/lms-java

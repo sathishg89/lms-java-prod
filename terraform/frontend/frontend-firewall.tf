@@ -2,7 +2,7 @@ resource "aws_security_group" "frontend_sg" {
   name        = "allow_all"
   description = "Allow all inbound and outbound traffic"
 
-  vpc_id = "vpc-06082df6a4b78dea1"  # Replace with your VPC ID, you will get while creating VPC with terraform
+  vpc_id = "vpc-07f90316611fbbb50"  # Replace with your VPC ID, you will get while creating VPC with terraform
 
   ingress {
     from_port = 0

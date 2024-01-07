@@ -1,5 +1,5 @@
 resource "aws_instance" "backend" {
-  ami           = "ami-0da7657fe73215c0c"  # Replace with your desired AMI ID
+  ami           = "ami-0da7657fe73215c0c"  # Replace with your desired AMI ID, this ami-id: ubuntu-20.04
   instance_type = "t2.medium"
   key_name      = "unv-california"  # Replace with your key pair name
 

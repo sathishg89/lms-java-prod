@@ -1,4 +1,4 @@
-resource "aws_instance" "my_ec2_instance" {
+resource "aws_instance" "backend" {
   ami             = "ami-0da7657fe73215c0c"  # replace with your desired AMI ID
   instance_type   = "t2.medium"
   key_name        = "unv-california.pem"  # replace with your key pair name
@@ -31,10 +31,10 @@ resource "aws_instance" "my_ec2_instance" {
       "cd ~/lms-java/LMS-BE",
       "sudo docker build -t lmsbe .",
       "sudo docker run -d --name be --network lmsnetwork -e DB_HOST=mysql -e DB_PORT=3306 -e DB_NAME=lmsdb -e DB_USER=root -e DB_PASSWORD=Qwerty@123 -p 8080:8080 lmsbe",
-      "cd ~/lms-java/LMS-FE",
-      "sudo docker build -t lmsfe .",
-      "sudo docker run -d --name fe --network lmsnetwork -p 80:80 lmsfe",
     ]
+  }
+  tags = {
+    Name = "lms-backend"
   }
 }
 

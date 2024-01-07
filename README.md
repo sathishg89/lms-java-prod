@@ -14,11 +14,10 @@
 - docker network create -d bridge lmsnetwork
     
 ## DATABASE setup:
-- docker run -dt --name mysql --network lmsnetwork -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Qwerty@123 -e MYSQL_DATABASE=lmsdb mysql
+- docker run -dt --name mysql --network lmsnetwork -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Qwerty@123 mysql
 
 ## BACKEND setup:
-- cd LMS-BE
-- chmod +x mvnw
+- cd ~/lms-java/LMS-BE
 - docker build -t lmsbe .
 - docker run -dt --name be --network lmsnetwork -e DB_HOST=mysql -e DB_PORT=3306 -e DB_NAME=lmsdb -e DB_USER=root -e DB_PASSWORD=Qwerty@123 -p 8080:8080 lmsbe
 ### Check backend in browser
@@ -27,12 +26,12 @@
 ## FRONTEND Server setup:
 
 ### Connect frontend with backend  : 
-- cd LMS-FE/src/
+- cd ~/lms-java/LMS-FE/src/
 - sudo vi utils.js
 - export const url =("**http://pub-ip:8080/user/**");
 
 ### build frontend:
-- cd LMS-FE
+- cd ~/lms-java/LMS-FE
 - docker build -t lmsfe .
 - docker run -dt --name fe --network lmsnetwork -p 80:80 lmsfe
 - docker ps

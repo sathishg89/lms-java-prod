@@ -7,7 +7,7 @@ sudo curl -fsSL https://get.docker.com -o install-docker.sh
 sudo sh install-docker.sh
 sudo usermod -aG docker ubuntu
 
-sudo git clone -b terraform https://github.com/muralialakuntla3/lms-java.git /home/ubuntu/lms-java
+sudo git clone -b terraform-v1 https://github.com/muralialakuntla3/lms-java.git /home/ubuntu/lms-java
 sudo chown -R ubuntu:ubuntu /home/ubuntu/lms-java
 
 sudo docker network create -d bridge lmsnetwork

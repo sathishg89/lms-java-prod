@@ -31,4 +31,7 @@ resource "aws_instance" "frontend" {
       "sudo docker run -d --name fe --network lmsnetwork -p 80:80 lmsfe",
     ]
   }
+  tags = {
+    Name = "lms-frontend"
+  }
 }

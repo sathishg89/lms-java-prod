@@ -14,7 +14,7 @@ resource "aws_instance" "my_ec2_instance" {
   connection {
     type        = "ssh"
     user        = "ubuntu"  # Replace with your EC2 instance's user (Ubuntu default user is 'ubuntu')
-    private_key = file("~/lms-java/terraform/mkrishna.pem")  # Replace with your private key file path
+    private_key = file("~/lms-java/terraform/unv-california.pem")  # Replace with your private key file path
     host        = self.public_ip  # If your instance has a public IP, else use 'private_ip'
   }
 

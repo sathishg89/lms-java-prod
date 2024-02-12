@@ -31,6 +31,7 @@
     Java --version
 ### build backend:
     Change to backend directory: cd lms-be/
+    sudo chmod +x mvnw
     ./mvnw clean package
 - you will get target folder
 - For manually running the application:

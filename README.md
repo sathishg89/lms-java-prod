@@ -33,9 +33,10 @@
     Change to backend directory: cd lms-be/
     sudo chmod +x mvnw
     ./mvnw clean package
-- you will get target folder
-- For manually running the application:
+- you will get **target** folder
+- **For manually running the application**:
     java -jar target/LMS-0.0.1-SNAPSHOT.jar
+- Check backend in browser: http://pub-ip:8080/user/login
 ### Backend service setup:
 - backend service file to run the application in background
 - sudo vi /etc/systemd/system/lms-be.service

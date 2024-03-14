@@ -2,19 +2,21 @@ pipeline {
     agent any
     
     stages {
-        stage('Build') {
+        stage('Sonar') {
             steps {
-                // Checkout source code from version control
-                git 'https://github.com/your/repository.git'
-                
                 // Maven clean and verify
-                sh 'mvn clean verify sonar:sonar ' +
-                   '-Dsonar.projectKey=lms-java ' +
-                   "-Dsonar.projectName='lms-java' " +
-                   '-Dsonar.host.url=http://35.173.127.98:9000 ' +
-                   '-Dsonar.token=sqp_e6ec342d1253e1dbca9d1d508c08f2c6c18a6ee4' +
-                   "-DskipTests"
+                script {
+                    sh 'cd LMS-BE/ && mvn clean verify sonar:sonar ' +
+                       '-Dsonar.projectKey=lms-java ' +
+                       "-Dsonar.projectName='lms-java' " +
+                       '-Dsonar.host.url=http://35.173.127.98:9000 ' +
+                       '-Dsonar.token=sqp_e6ec342d1253e1dbca9d1d508c08f2c6c18a6ee4 ' +
+                       "-DskipTests"
+                }
             }
         }
     }
 }
+
+
+

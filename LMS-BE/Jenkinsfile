@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     stages {
-        stage('Sonar') {
+        stage('Sonarqube analysis') {
             steps {
                 // Maven clean and verify
                 script {

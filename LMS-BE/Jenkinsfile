@@ -19,6 +19,9 @@ pipeline {
     
     post {
         always {
+            // Compressing the build log file
+            sh 'zip -r build_logs.zip ${env.BUILD_ID}/console.log'
+            
             // Compressing a file
             sh 'zip -r compressed_file.zip file_to_compress'
             
@@ -27,7 +30,8 @@ pipeline {
                       subject: '${currentBuild.result}: SonarQube Analysis Notification', 
                       to: 'chetan1993k@gmail.com',
                       attachLog: true,
-                      attachmentsPattern: 'compressed_file.zip'
+                      compressLog: true,
+                      attachmentsPattern: 'build_logs.zip,compressed_file.zip'
         }
     }
 }

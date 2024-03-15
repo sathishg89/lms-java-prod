@@ -19,10 +19,11 @@ pipeline {
     
     post {
         always {
-            // Email notification with log file attachment and compressLog=true
+            // Email notification with log file attachment and compressLog=true, along with cc recipients
             emailext body: 'project: ${env.JOB_NAME} \n build number : ${env.BUILD_NUMBER} \n URL: ${env.BUILD_URL}', 
                       subject: '${currentBuild.result}: SonarQube Analysis Notification', 
                       to: 'chetan1993k@gmail.com',
+                      cc: 'sathishgodavarthi@gmail.com,muralialakuntla3@gmail.com',
                       attachLog: true,
                       compressLog: true
         }

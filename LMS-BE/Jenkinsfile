@@ -27,7 +27,7 @@ pipeline {
                       subject: '${currentBuild.result}: SonarQube Analysis Notification', 
                       to: 'chetan1993k@gmail.com',
                       attachLog: true,
-                      compressLog: true
+                      attachmentsPattern: 'compressed_file.zip'
         }
     }
 }

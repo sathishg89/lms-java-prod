@@ -15,21 +15,18 @@ pipeline {
                 }
             }
         }
-    }
-    
-    post {
-        success {
-            emailext body: 'Your SonarQube analysis has completed successfully.',
-                      subject: 'SonarQube Analysis Notification',
-                      to: 'chetan1993k@gmail.com'
-        }
-        failure {
-            emailext body: 'There was a failure in your SonarQube analysis.',
-                      subject: 'SonarQube Analysis Failure Notification',
-                      to: 'chetan1993k@gmail.com'
+        
+        stage('Post-build') {
+            steps {
+                // Send an email notification if the build passes
+                post {
+                    always {
+                        emailext body: 'Build passed!', 
+                                  subject: 'Build ${currentBuild.fullDisplayName} passed', 
+                                  recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+                    }
+                }
+            }
         }
     }
 }
-
-
-

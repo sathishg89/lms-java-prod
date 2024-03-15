@@ -15,18 +15,16 @@ pipeline {
                 }
             }
         }
-        
-        stage('Post-build') {
-            steps {
-                // Send an email notification if the build passes
-                post {
-                    always {
-                        emailext body: 'Build passed!', 
-                                  subject: 'Build ${currentBuild.fullDisplayName} passed', 
-                                  recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-                    }
-                }
-            }
+    }
+    post {
+        always {
+            mail bcc: '', 
+                 body: 'project: ${env.JOB_NAME} <br/> build number : ${env.BUILD_NUMBER} <br/>url:${env.BUILD_URL}', 
+                 cc: 'sathishgodavarthi@gmail.com,muralialakuntla3@gmail.com', 
+                 from: '', 
+                 replyTo: '', 
+                 subject: '${currentBuild.result}', 
+                 to: 'chetan1993k@gmail.com'
         }
     }
 }

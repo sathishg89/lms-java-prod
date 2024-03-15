@@ -19,19 +19,12 @@ pipeline {
     
     post {
         always {
-            // Compressing the build log file
-            sh 'zip -r build_logs.zip ${env.BUILD_ID}/console.log'
-            
-            // Compressing a file
-            sh 'zip -r compressed_file.zip file_to_compress'
-            
-            // Email notification with log file and compressed file attachment
+            // Email notification with log file attachment and compressLog=true
             emailext body: 'project: ${env.JOB_NAME} \n build number : ${env.BUILD_NUMBER} \n URL: ${env.BUILD_URL}', 
                       subject: '${currentBuild.result}: SonarQube Analysis Notification', 
                       to: 'chetan1993k@gmail.com',
                       attachLog: true,
-                      compressLog: true,
-                      attachmentsPattern: 'build_logs.zip,compressed_file.zip'
+                      compressLog: true
         }
     }
 }

@@ -23,7 +23,7 @@ pipeline {
             emailext body: 'project: ${env.JOB_NAME} \n build number : ${env.BUILD_NUMBER} \n URL: ${env.BUILD_URL}', 
                       subject: '${currentBuild.result}: SonarQube Analysis Notification', 
                       to: 'chetan1993k@gmail.com',
-                      cc: 'sathishgodavarthi@gmail.com,muralialakuntla3@gmail.com',
+                      cc: 'sathishgodavarthi@gmail.com, muralialakuntla3@gmail.com',
                       attachLog: true,
                       compressLog: true
         }

@@ -16,15 +16,18 @@ pipeline {
             }
         }
     }
+    
     post {
         always {
-            mail bcc: '', 
-                 body: 'project: ${env.JOB_NAME} <br/> build number : ${env.BUILD_NUMBER} <br/>url:${env.BUILD_URL}', 
-                 cc: 'sathishgodavarthi@gmail.com,muralialakuntla3@gmail.com', 
-                 from: '', 
-                 replyTo: '', 
-                 subject: '${currentBuild.result}', 
-                 to: 'chetan1993k@gmail.com'
+            // Compressing a file
+            sh 'zip -r compressed_file.zip file_to_compress'
+            
+            // Email notification with log file and compressed file attachment
+            emailext body: 'project: ${env.JOB_NAME} \n build number : ${env.BUILD_NUMBER} \n URL: ${env.BUILD_URL}', 
+                      subject: '${currentBuild.result}: SonarQube Analysis Notification', 
+                      to: 'chetan1993k@gmail.com',
+                      attachLog: true,
+                      compressLog: true
         }
     }
 }

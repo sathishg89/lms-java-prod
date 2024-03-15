@@ -9,13 +9,28 @@ pipeline {
                     sh 'cd LMS-BE/ && mvn clean verify sonar:sonar ' +
                        '-Dsonar.projectKey=lms-java ' +
                        "-Dsonar.projectName='lms-java' " +
-                       '-Dsonar.host.url=http://35.173.127.98:9000 ' +
-                       '-Dsonar.token=sqp_e6ec342d1253e1dbca9d1d508c08f2c6c18a6ee4 ' +
+                       '-Dsonar.host.url=http://54.152.141.60:9000 ' +
+                       '-Dsonar.token=sqp_936474d0e8493d4885e019a44471c54c07c2f33b ' +
                        "-DskipTests"
                 }
             }
         }
     }
+    
+    post {
+        success {
+            emailext body: 'Your SonarQube analysis has completed successfully.',
+                      subject: 'SonarQube Analysis Notification',
+                      to: 'chetan1993k@gmail.com'
+        }
+        failure {
+            emailext body: 'There was a failure in your SonarQube analysis.',
+                      subject: 'SonarQube Analysis Failure Notification',
+                      to: 'chetan1993k@gmail.com'
+        }
+    }
+}
+
 }
 
 

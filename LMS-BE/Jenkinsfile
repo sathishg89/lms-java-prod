@@ -50,7 +50,7 @@ pipeline {
         
         stage('Docker Container') {
             steps {
-                sh 'docker container run -dt --name be --network lmsnetwork -p 9393:8080 backend'
+                sh 'docker container run -dt --name be --network lmsnetwork -p 9090:8080 backend'
             }
         }
     }

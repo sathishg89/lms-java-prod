@@ -23,6 +23,3 @@ EXPOSE 8080
 
 # Command to run the Spring Boot application when the container starts 
 CMD ["java", "-jar", "target/LMS-0.0.1-SNAPSHOT.jar"]
-
-
-fifth

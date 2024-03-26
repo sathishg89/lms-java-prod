@@ -14,10 +14,9 @@ COPY . .
 # ARG SPRING_DATASOURCE_URL 
 # ARG SPRING_DATASOURCE_USERNAME 
 # ARG SPRING_DATASOURCE_PASSWORD 
-RUN apt-get update && apt-get install -y maven
 
 # Build the application using Maven wrapper 
-RUN ./mvnw package 
+RUN ./mvnw clean package -DskipTests
 
 # Expose port 8080 
 EXPOSE 8080 

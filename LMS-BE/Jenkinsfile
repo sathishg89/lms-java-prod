@@ -1,7 +1,6 @@
 pipeline {
-    agent {
-        label 'n1'
-    }
+    agent any
+
     stages {
         stage('Check Docker Network') {
             steps {
